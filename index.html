@@ -222,6 +222,26 @@ a.who{text-decoration:none}
 .signin-cta strong{font-family:var(--display);font-size:1.1rem}
 /* chat rows already show a large avatar */
 .msg .who .av{display:none}
+/* votes */
+:root{--down:#8f9bff}
+@media (prefers-color-scheme: light){:root:not([data-theme="dark"]){--down:#4a55c9}}
+:root[data-theme="light"]{--down:#4a55c9}
+.vote{display:inline-flex;align-items:center;gap:2px;border:1px solid var(--line);border-radius:999px;padding:2px}
+.vbtn{all:unset;cursor:pointer;width:28px;height:26px;display:grid;place-items:center;border-radius:999px;color:var(--muted);font-size:12px;line-height:1}
+.vbtn:hover:not([disabled]){background:var(--surface-2);color:var(--fg)}
+.vbtn.on[aria-label="Upvote"]{color:var(--accent);background:var(--glow)}
+.vbtn.on[aria-label="Downvote"]{color:var(--down);background:var(--surface-2)}
+.vbtn[disabled]{cursor:default;opacity:.4}
+.vbtn:focus-visible{outline:2px solid var(--accent)}
+.score{min-width:2.5ch;text-align:center;font-family:var(--mono);font-size:13px;font-variant-numeric:tabular-nums;color:var(--fg)}
+.score.up{color:var(--accent)}.score.down{color:var(--down)}
+.vote.sm{border:none;padding:0}
+.vote.sm .vbtn{width:22px;height:20px;font-size:10px}
+.vote.sm .score{font-size:12px}
+.rfoot{margin-top:2px}
+.bell{position:relative;padding-inline:12px}
+.bell .badge{position:absolute;top:-6px;right:-6px;margin:0}
+.av.star{font-size:14px}
 footer.site{margin-top:48px;padding-top:18px;border-top:1px solid var(--line);color:var(--muted);font-size:13px}
 </style>
 </head>
@@ -241,6 +261,7 @@ footer.site{margin-top:48px;padding-top:18px;border-top:1px solid var(--line);co
       <div class="mast-btns" id="navIn" hidden>
         <a class="btn primary" href="#lounge">The Lounge</a>
         <a class="btn" href="#messages" id="msgBtn">Messages</a>
+        <a class="btn bell" href="#notifications" id="bellBtn" aria-label="Notifications"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg><span class="badge" id="bellBadge" hidden>0</span></a>
         <a class="btn" href="#" id="meBtn">My profile</a>
       </div>
       <div class="stats" aria-live="polite"><span><b id="stPosts">0</b> transmissions</span><span><b id="stMembers">0</b> members</span></div>
@@ -257,7 +278,7 @@ footer.site{margin-top:48px;padding-top:18px;border-top:1px solid var(--line);co
           <li>Curiosity over certainty.</li>
           <li>Disagree with the idea, never mock the person.</li>
           <li>Share your experience, not someone's private info.</li>
-          <li>No downvotes. If it resonates, say so.</li>
+          <li>Vote on ideas, never on people.</li>
         </ul>
       </div>
     </aside>
@@ -303,7 +324,7 @@ footer.site{margin-top:48px;padding-top:18px;border-top:1px solid var(--line);co
           <h2 id="feedTitle">All realms</h2>
           <div class="seg" role="group" aria-label="Sort">
             <button type="button" data-sort="new" aria-pressed="true">Newest</button>
-            <button type="button" data-sort="res" aria-pressed="false">Most resonance</button>
+            <button type="button" data-sort="top" aria-pressed="false">Top</button>
           </div>
         </div>
         <div class="feed" id="feed"><div class="empty"><strong>Tuning in…</strong>Loading the latest transmissions.</div></div>
@@ -336,7 +357,8 @@ const $ = s => document.querySelector(s);
 const state = {
   user: null, me: null, isAdmin: false,
   posts: [], profiles: new Map(), threads: {}, open: new Set(),
-  realm: "all", sort: "new", answering: null, view: { name: "feed" }, unread: 0
+  realm: "all", sort: "new", answering: null, view: { name: "feed" }, unread: 0,
+  myVotes: new Map(), notifs: [], notifUnread: 0
 };
 let chatSub = null, dmSub = null, inboxSub = null;
 
@@ -417,14 +439,25 @@ async function loadProfiles() {
 }
 async function loadPosts() {
   const { data, error } = await sb.from("posts")
-    .select("id,author_id,realm,title,body,images,prompt_day,created_at,replies(count),resonance(user_id)")
+    .select("id,author_id,realm,title,body,images,prompt_day,created_at,score,replies(count)")
     .order("created_at", { ascending: false }).limit(300);
   if (error) { console.warn(error); return }
-  state.posts = data.map(p => ({ ...p, replyCount: (p.replies && p.replies[0] && p.replies[0].count) || 0, res: (p.resonance || []).map(r => r.user_id) }));
+  state.posts = data.map(p => ({ ...p, replyCount: (p.replies && p.replies[0] && p.replies[0].count) || 0 }));
 }
 async function loadReplies(postId) {
-  const { data, error } = await sb.from("replies").select("id,post_id,author_id,body,created_at").eq("post_id", postId).order("created_at").limit(500);
+  const { data, error } = await sb.from("replies").select("id,post_id,author_id,body,score,created_at").eq("post_id", postId).order("created_at").limit(500);
   if (!error) state.threads[postId] = data;
+}
+async function loadMyVotes() {
+  state.myVotes = new Map();
+  if (!state.user) return;
+  const { data } = await sb.from("votes").select("target_type,target_id,value").eq("user_id", state.user.id).limit(10000);
+  (data || []).forEach(v => state.myVotes.set(v.target_type + ":" + v.target_id, v.value));
+}
+async function loadOnePost(id) {
+  const { data } = await sb.from("posts").select("id,author_id,realm,title,body,images,prompt_day,created_at,score,replies(count)").eq("id", id).maybeSingle();
+  if (data && !state.posts.some(x => x.id === id)) state.posts.push({ ...data, replyCount: (data.replies && data.replies[0] && data.replies[0].count) || 0 });
+  return data;
 }
 const refreshFeed = debounce(async () => {
   await Promise.all([loadPosts(), ...[...state.open].map(loadReplies)]);
@@ -441,8 +474,9 @@ async function setUser(user) {
     const { data } = await sb.from("admins").select("user_id").eq("user_id", user.id).maybeSingle();
     state.isAdmin = !!data;
     if (!state.me) { await loadProfiles() }
+    await loadMyVotes();
     startInbox();
-  } else stopInbox();
+  } else { stopInbox(); state.myVotes = new Map() }
   $("#navOut").hidden = !!user; $("#navIn").hidden = !user;
   $("#pageView").dataset.route = "";
   if (user && !state.me && !["#reset"].includes(location.hash)) location.hash = "#welcome";
@@ -460,6 +494,7 @@ function route() {
   const h = location.hash.replace(/^#/, "");
   const [name, arg] = h.split("/");
   state.view = { name: name || "feed", arg: arg || "" };
+  if (state.view.name !== "notifications") state.freshIds = null;
   if (state.view.name === "me") { location.replace(state.user ? "#u/" + state.user.id : "#login"); return }
   render();
   window.scrollTo({ top: 0 });
@@ -467,6 +502,8 @@ function route() {
   if (state.view.name === "chat" && arg) openChat("p-" + arg);
   if (state.view.name === "dm" && arg) openDm(arg);
   if (state.view.name === "messages") renderInbox();
+  if (state.view.name === "notifications") markNotifsRead();
+  if (state.view.name === "post" && arg) openPost(arg);
 }
 window.addEventListener("hashchange", route);
 
@@ -484,29 +521,37 @@ function render() {
   $("#stPosts").textContent = state.posts.length;
   $("#meBtn").href = state.user ? "#u/" + state.user.id : "#login";
   const mb = $("#msgBtn"); mb.textContent = "Messages"; if (state.unread) mb.append(el("span", { class: "badge", text: String(state.unread) }));
+  const bb = $("#bellBadge"); bb.hidden = !state.notifUnread; bb.textContent = state.notifUnread > 99 ? "99+" : String(state.notifUnread);
+  $("#bellBtn").setAttribute("aria-label", state.notifUnread ? `Notifications, ${state.notifUnread} unread` : "Notifications");
   renderRealms(); renderDaily();
+  // keep half-typed replies across re-renders
+  const keep = {}; document.querySelectorAll(".reply-form .field").forEach(i => { if (i.value) keep[i.id] = i.value });
+  const focusId = document.activeElement && document.activeElement.id;
+  renderMain();
+  for (const [id, v] of Object.entries(keep)) { const i = document.getElementById(id); if (i) i.value = v }
+  if (focusId && focusId.startsWith("reply-")) { const i = document.getElementById(focusId); if (i && document.activeElement !== i) i.focus() }
+}
+function renderMain() {
   const isFeed = state.view.name === "feed";
   $("#feedView").hidden = !isFeed; $("#pageView").hidden = isFeed;
   if (isFeed) return renderFeed();
   const v = $("#pageView");
-  const views = { login: viewLogin, join: viewJoin, forgot: viewForgot, reset: viewReset, welcome: viewWelcome, u: viewProfile, edit: viewEdit, lounge: () => viewChat("lounge"), chat: () => viewChat("p-" + state.view.arg), messages: viewInbox, dm: viewDm };
+  const views = { login: viewLogin, join: viewJoin, forgot: viewForgot, reset: viewReset, welcome: viewWelcome, u: viewProfile, edit: viewEdit, lounge: () => viewChat("lounge"), chat: () => viewChat("p-" + state.view.arg), messages: viewInbox, dm: viewDm, post: viewPost, notifications: viewNotifs };
   const fn = views[state.view.name];
   if (!fn) { location.hash = ""; return }
   // most views keep their own content (typed text, live chat); profiles rebuild to show fresh data
-  if (state.view.name !== "u" && v.dataset.route === location.hash) return refreshLiveView();
+  const rebuild = ["u", "post", "notifications"].includes(state.view.name);
+  if (!rebuild && v.dataset.route === location.hash) return refreshLiveView();
   v.dataset.route = location.hash; v.textContent = "";
   v.append(fn());
 }
 
 function renderFeed() {
   $("#joinCta").hidden = !!state.me; $("#composer").hidden = !state.me;
-  // keep half-typed replies across re-renders
-  const keep = {}; document.querySelectorAll(".reply-form .field").forEach(i => { if (i.value) keep[i.id] = i.value });
-  const focusId = document.activeElement && document.activeElement.id;
   const promptView = state.realm.startsWith("prompt:");
   $("#feedTitle").textContent = promptView ? "Answers to today's prompt" : state.realm === "all" ? "All realms" : realmName(state.realm);
   let list = state.posts.filter(p => state.realm === "all" || (promptView ? p.prompt_day === state.realm.slice(7) : p.realm === state.realm));
-  list.sort(state.sort === "res" ? (a, b) => (b.res.length - a.res.length) || (new Date(b.created_at) - new Date(a.created_at)) : (a, b) => new Date(b.created_at) - new Date(a.created_at));
+  list.sort(state.sort === "top" ? (a, b) => ((b.score || 0) - (a.score || 0)) || (new Date(b.created_at) - new Date(a.created_at)) : (a, b) => new Date(b.created_at) - new Date(a.created_at));
   const feed = $("#feed"); feed.textContent = "";
   if (REALM_NOTES[state.realm]) feed.append(el("div", { class: "notice", text: REALM_NOTES[state.realm] }));
   if (!list.length) {
@@ -514,8 +559,6 @@ function renderFeed() {
       promptView ? "Be the first to answer today's prompt." : state.posts.length ? "Open the door. Post the first idea here." : "Be the first signal. Post an idea and it shows up here for everyone."));
   }
   list.forEach(p => feed.append(postCard(p)));
-  for (const [id, v] of Object.entries(keep)) { const i = document.getElementById(id); if (i) i.value = v }
-  if (focusId && focusId.startsWith("reply-")) { const i = document.getElementById(focusId); if (i) i.focus() }
 }
 
 function gallery(paths) {
@@ -529,8 +572,31 @@ function gallery(paths) {
   return g;
 }
 
-function postCard(p, compact = false) {
-  const open = !compact && state.open.has(p.id), mine = state.user && p.res.includes(state.user.id);
+const fmtScore = n => Math.abs(n) >= 10000 ? (n / 1000).toFixed(0) + "k" : Math.abs(n) >= 1000 ? (n / 1000).toFixed(1) + "k" : String(n);
+function voteBox(type, item) {
+  const key = type + ":" + item.id, v = state.myVotes.get(key) || 0, own = !!(state.user && item.author_id === state.user.id);
+  const noun = type === "post" ? "post" : "comment";
+  const btn = (dir, label, sym) => el("button", { class: "vbtn" + (v === dir ? " on" : ""), type: "button", "aria-label": label, "aria-pressed": String(v === dir), disabled: own, title: own ? `You can't vote on your own ${noun}` : label, onclick: () => castVote(type, item, dir) }, sym);
+  return el("div", { class: "vote" + (type === "reply" ? " sm" : "") }, btn(1, "Upvote", "▲"),
+    el("span", { class: "score" + (v > 0 ? " up" : v < 0 ? " down" : ""), text: fmtScore(item.score || 0), title: (item.score || 0) + " points" }), btn(-1, "Downvote", "▼"));
+}
+async function castVote(type, item, dir) {
+  if (!needMember()) return;
+  const key = type + ":" + item.id, cur = state.myVotes.get(key) || 0, next = cur === dir ? 0 : dir;
+  const undo = () => { item.score = (item.score || 0) - (next - cur); if (cur) state.myVotes.set(key, cur); else state.myVotes.delete(key); render() };
+  item.score = (item.score || 0) + (next - cur); if (next) state.myVotes.set(key, next); else state.myVotes.delete(key); render();
+  const { error } = next
+    ? await sb.from("votes").upsert({ target_type: type, target_id: item.id, user_id: state.user.id, value: next }, { onConflict: "target_type,target_id,user_id" })
+    : await sb.from("votes").delete().eq("target_type", type).eq("target_id", item.id).eq("user_id", state.user.id);
+  if (error) { undo(); toast(niceError(error)) }
+}
+async function sharePost(p) {
+  const url = location.origin + location.pathname + "#post/" + p.id;
+  try { await navigator.clipboard.writeText(url); toast("Link copied") } catch (e) { window.prompt("Copy this link:", url) }
+}
+function postCard(p, mode = "feed") {
+  const compact = mode === "compact", single = mode === "single";
+  const open = single || (mode === "feed" && state.open.has(p.id));
   const imgs = (p.images || []).filter(isPath).slice(0, MAX_IMG);
   const card = el("article", { class: "post" },
     el("div", { class: "meta" }, el("span", { class: "tag", text: realmName(p.realm) }), p.prompt_day ? el("span", { class: "ptag", text: "Daily prompt" }) : null,
@@ -539,9 +605,11 @@ function postCard(p, compact = false) {
     p.body ? el("p", { class: "body" + (open ? "" : " clamp"), text: p.body }) : null,
     imgs.length ? gallery(imgs) : null);
   const acts = el("div", { class: "actions" },
-    el("button", { class: "chip", type: "button", "aria-pressed": String(!!mine), title: "Resonates with me", onclick: () => toggleRes(p, mine) }, el("span", { text: "✦" }), el("span", { text: `Resonates ${p.res.length || ""}`.trim() })),
-    el("button", { class: "chip", type: "button", "aria-expanded": String(open), onclick: async () => { if (open) state.open.delete(p.id); else { state.open.add(p.id); if (!state.threads[p.id]) await loadReplies(p.id) } if (compact) location.hash = ""; render() } },
-      el("span", { text: open ? "Close thread" : `Replies ${p.replyCount || ""}`.trim() })),
+    voteBox("post", p),
+    single ? null : compact ? el("a", { class: "chip", href: "#post/" + p.id, style: "text-decoration:none" }, el("span", { text: `Replies ${p.replyCount || ""}`.trim() }))
+      : el("button", { class: "chip", type: "button", "aria-expanded": String(open), onclick: async () => { if (open) state.open.delete(p.id); else { state.open.add(p.id); if (!state.threads[p.id]) await loadReplies(p.id) } render() } },
+        el("span", { text: open ? "Close thread" : `Replies ${p.replyCount || ""}`.trim() })),
+    el("button", { class: "chip", type: "button", onclick: () => sharePost(p) }, el("span", { text: "Share" })),
     el("a", { class: "chip", href: "#chat/" + p.id, style: "text-decoration:none" }, el("span", { text: "Chat about this" })));
   if (state.user && (p.author_id === state.user.id || state.isAdmin)) acts.append(el("button", { class: "chip del", type: "button", onclick: e => delPost(p, e.currentTarget) }, el("span", { text: "Delete" })));
   card.append(acts);
@@ -551,7 +619,7 @@ function postCard(p, compact = false) {
     reps.forEach(r => th.append(el("div", { class: "reply" },
       el("div", { class: "meta" }, whoLink(r.author_id), el("span", { text: ago(r.created_at) }),
         state.user && (r.author_id === state.user.id || state.isAdmin) ? el("button", { class: "link", type: "button", style: "font-size:12px", text: "Delete", onclick: () => delReply(r) }) : null),
-      el("p", { text: r.body }))));
+      el("p", { text: r.body }), el("div", { class: "rfoot" }, voteBox("reply", r)))));
     if (!reps.length) th.append(el("div", { class: "hint", text: "No replies yet. Add a thought, a link, or your own experience." }));
     if (state.me) {
       const inp = el("input", { class: "field", id: "reply-" + p.id, maxlength: "2000", placeholder: "Add to the thread…", "aria-label": "Reply" });
@@ -563,12 +631,6 @@ function postCard(p, compact = false) {
 }
 
 // ---------- post actions ----------
-async function toggleRes(p, mine) {
-  if (!needMember()) return;
-  const q = mine ? sb.from("resonance").delete().eq("post_id", p.id).eq("user_id", state.user.id) : sb.from("resonance").insert({ post_id: p.id });
-  const { error } = await q; if (error) return toast(niceError(error));
-  refreshFeed();
-}
 async function sendReply(postId, inp) {
   const body = inp.value.trim(); if (!body || !needMember()) return;
   const { error } = await sb.from("replies").insert({ post_id: postId, body });
@@ -739,13 +801,13 @@ function viewProfile() {
   const id = state.view.arg, p = prof(id), mine = state.user && state.user.id === id;
   if (!p) return el("div", {}, back(), el("div", { class: "empty" }, el("strong", { text: "Profile not found." }), "This member may have left the commons."));
   const posts = state.posts.filter(x => x.author_id === id);
-  const resGot = posts.reduce((n, x) => n + x.res.length, 0);
+  const points = posts.reduce((n, x) => n + (x.score || 0), 0);
   const head = el("div", { class: "phead" }, avatar(id, 84),
     el("div", { class: "info" }, el("h2", { text: "@" + p.handle }), p.path ? el("div", { class: "path", text: p.path }) : null,
       p.bio ? el("p", { class: "bio", text: p.bio }) : el("p", { class: "bio hint", text: mine ? "You haven't written a bio yet." : "This seeker hasn't written a bio yet." }),
       (p.realms || []).length ? el("div", { class: "prealms" }, p.realms.filter(r => REALMS.some(x => x[0] === r)).map(r => el("span", { class: "tag", text: realmName(r) }))) : null,
       el("div", { class: "pstats" }, el("span", {}, "Joined ", el("b", { text: new Date(p.created_at).toLocaleDateString(undefined, { month: "short", year: "numeric" }) })),
-        el("span", {}, el("b", { text: String(posts.length) }), " transmissions"), el("span", {}, el("b", { text: String(resGot) }), " resonance"))),
+        el("span", {}, el("b", { text: String(posts.length) }), " transmissions"), el("span", {}, el("b", { text: fmtScore(points) }), " points"))),
     el("div", { class: "mast-btns" },
       mine ? el("a", { class: "btn primary", href: "#edit", text: "Edit profile" }) : null,
       mine ? el("button", { class: "btn", type: "button", text: "Log out", onclick: async () => { await sb.auth.signOut(); toast("Logged out"); location.hash = "" } }) : null,
@@ -756,7 +818,7 @@ function viewProfile() {
   wrap.append(el("div", { class: "toolbar" }, el("h2", { text: mine ? "Your transmissions" : "Transmissions" }), mine && hidden ? el("span", { class: "hint", text: "Only you can see this list. Change it in Edit profile." }) : null));
   const list = el("div", { class: "feed" });
   if (!posts.length) list.append(el("div", { class: "empty" }, el("strong", { text: "No transmissions yet." })));
-  posts.forEach(x => list.append(postCard(x, true)));
+  posts.forEach(x => list.append(postCard(x, "compact")));
   wrap.append(list); return wrap;
 }
 function viewEdit() {
@@ -869,8 +931,13 @@ async function loadInbox() {
 }
 function startInbox() {
   if (inboxSub) return;
-  loadInbox().then(render);
+  Promise.all([loadInbox(), loadNotifs()]).then(render);
   inboxSub = sb.channel("inbox-" + state.user.id)
+    .on("postgres_changes", { event: "INSERT", schema: "public", table: "notifications", filter: "user_id=eq." + state.user.id }, async ({ new: n }) => {
+      await loadNotifs();
+      const full = state.notifs.find(x => x.id === n.id); if (full && state.view.name !== "notifications") toast(notifText(full));
+      if (state.view.name === "notifications") markNotifsRead(); else render();
+    })
     .on("postgres_changes", { event: "INSERT", schema: "public", table: "dm_messages" }, async ({ new: m }) => {
       if (state.view.name === "dm" && state.view.arg === m.thread_id) {
         if (!dmMsgs.some(x => x.id === m.id)) { dmMsgs.push(m); renderMsgs(dmMsgs, "dm") }
@@ -879,7 +946,7 @@ function startInbox() {
       await loadInbox(); render();
     }).subscribe();
 }
-function stopInbox() { if (inboxSub) { sb.removeChannel(inboxSub); inboxSub = null } inbox = []; state.unread = 0 }
+function stopInbox() { if (inboxSub) { sb.removeChannel(inboxSub); inboxSub = null } inbox = []; state.unread = 0; state.notifs = []; state.notifUnread = 0 }
 function viewInbox() {
   const wrap = el("div", { class: "chat" }, back(), el("div", { class: "chat-head" }, el("div", {}, el("div", { class: "eyebrow", text: "Private" }), el("h2", { text: "Messages" }),
     el("p", { text: "One-on-one conversations only you and the other person can read. Start one from anyone's profile." }))), el("div", { class: "inbox", id: "inbox" }));
@@ -934,6 +1001,61 @@ async function openDm(threadId) {
   store(seenKey(threadId), Date.now()); await loadInbox(); render();
 }
 
+// ---------- single post page ----------
+function viewPost() {
+  const id = state.view.arg, p = state.posts.find(x => x.id === id);
+  const wrap = el("div", { class: "profile" }, back());
+  if (!p) { wrap.append(el("div", { class: "empty" }, el("strong", { text: state.postMissing === id ? "This post isn't here anymore." : "Loading…" }), state.postMissing === id ? "It may have been deleted." : "")); return wrap }
+  wrap.append(postCard(p, "single"));
+  return wrap;
+}
+async function openPost(id) {
+  if (!state.posts.some(x => x.id === id)) { const d = await loadOnePost(id); if (!d) state.postMissing = id }
+  await loadReplies(id); render();
+}
+
+// ---------- notifications ----------
+async function loadNotifs() {
+  if (!state.user) { state.notifs = []; state.notifUnread = 0; return }
+  const { data } = await sb.from("notifications").select("id,type,actor_id,post_id,reply_id,milestone,read,created_at,posts(title)").order("created_at", { ascending: false }).limit(100);
+  state.notifs = data || [];
+  state.notifUnread = state.notifs.filter(n => !n.read).length;
+}
+function notifText(n) {
+  const title = "“" + ((n.posts && n.posts.title) || "a post") + "”", who = "@" + nameOf(n.actor_id), m = n.milestone;
+  if (n.type === "reply") return `${who} replied to your post ${title}`;
+  if (n.type === "thread_reply") return `${who} also replied on ${title}`;
+  if (n.reply_id) return m === 1 ? `Your comment on ${title} got its first upvote` : `Your comment on ${title} reached ${m} points`;
+  return m === 1 ? `Your post ${title} got its first upvote` : `Your post ${title} reached ${m} points`;
+}
+function viewNotifs() {
+  if (!state.user) { setTimeout(() => location.hash = "#login"); return el("div") }
+  const wrap = el("div", { class: "chat" }, back(),
+    el("div", { class: "chat-head" }, el("div", {}, el("div", { class: "eyebrow", text: "Activity" }), el("h2", { text: "Notifications" }),
+      el("p", { text: "Replies to your posts and threads, and milestones when your ideas take off." })),
+      state.notifs.length ? el("button", { class: "btn", type: "button", text: "Clear all", onclick: async () => {
+        const { error } = await sb.from("notifications").delete().eq("user_id", state.user.id);
+        if (error) return toast(niceError(error)); state.notifs = []; state.notifUnread = 0; render();
+      } }) : null));
+  const list = el("div", { class: "inbox" });
+  if (!state.notifs.length) list.append(el("div", { class: "empty" }, el("strong", { text: "Nothing yet." }), "When someone replies to you or your post gets upvotes, you'll see it here."));
+  state.notifs.forEach(n => list.append(el("a", { class: "thread-row" + (n.read && !(state.freshIds && state.freshIds.has(n.id)) ? "" : " unread"), href: "#post/" + n.post_id, style: "text-decoration:none;color:inherit" },
+    n.type === "milestone" ? el("span", { class: "av star", style: "--s:40px", "aria-hidden": "true", text: "▲" }) : avatar(n.actor_id, 40),
+    el("div", { class: "c" }, el("div", { class: "t", text: notifText(n) }), el("div", { class: "s", text: ago(n.created_at) })))));
+  wrap.append(list); return wrap;
+}
+async function markNotifsRead() {
+  if (!state.user) return;
+  await loadNotifs();
+  const unread = state.notifs.filter(n => !n.read).map(n => n.id);
+  state.freshIds = new Set([...(state.freshIds || []), ...unread]); // keep this visit's new ones highlighted
+  if (unread.length) {
+    const { error } = await sb.from("notifications").update({ read: true }).eq("user_id", state.user.id).eq("read", false);
+    if (!error) { state.notifs.forEach(n => { if (unread.includes(n.id)) n.read = true }); state.notifUnread = 0 }
+  }
+  render();
+}
+
 // ---------- start up ----------
 async function boot() {
   render();
@@ -955,7 +1077,6 @@ async function boot() {
   sb.channel("public-feed")
     .on("postgres_changes", { event: "*", schema: "public", table: "posts" }, refreshFeed)
     .on("postgres_changes", { event: "*", schema: "public", table: "replies" }, refreshFeed)
-    .on("postgres_changes", { event: "*", schema: "public", table: "resonance" }, refreshFeed)
     .on("postgres_changes", { event: "*", schema: "public", table: "profiles" }, refreshProfiles)
     .subscribe();
   setInterval(() => { if (state.view.name === "feed") render(); else renderDaily() }, 60000);

@@ -62,6 +62,16 @@ Supabase's built-in email sender only allows a handful of emails per hour. That'
 - Set up a free email-sending service such as Resend, then connect it in Supabase under **Authentication → Emails → SMTP Settings**.
 - Or, for a small private test only, turn off **Confirm email** under **Authentication → Sign In / Providers → Email**. Turn it back on before going public.
 
+## Database updates
+
+Some new features come with an update script. Run each one once, in number order, after `setup.sql`:
+
+| File | Adds |
+|---|---|
+| `update-01-votes-notifications.sql` | Upvotes/downvotes and the notification bell |
+
+If you ever rebuild the database from scratch, run `setup.sql` first, then each update file in order.
+
 ## Making changes later
 
 - Edit `index.html` on GitHub (open the file, click the pencil icon, **Commit changes**). Netlify republishes automatically in about a minute.
