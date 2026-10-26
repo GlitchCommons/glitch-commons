@@ -1,0 +1,967 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Glitch Commons</title>
+<meta name="description" content="A no-judgement commons for weirdos, seekers, pattern-noticers and open minds. Post the idea you can't say at dinner.">
+<meta property="og:title" content="Glitch Commons">
+<meta property="og:description" content="A no-judgement commons for spirituality, awakening, simulation theory and every idea outside the box.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%2315121f'/%3E%3Ctext x='16' y='23' font-size='20' text-anchor='middle' fill='%23ff2bd6' font-family='sans-serif' font-weight='800'%3EG%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Syne:wght@600;800&family=Figtree:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.110.1/dist/umd/supabase.js"></script>
+<style>
+html{-webkit-text-size-adjust:100%}
+body{margin:0;font-size:15px}
+:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+img{max-width:100%}
+[hidden]{display:none!important}
+
+/* Layout: a night-sky commons — compact masthead, realm rail on the left, one feed of "transmissions" on the right. Dark-first. */
+:root{
+  --bg:#15121f; --surface:#1e1a2d; --surface-2:#272238; --line:#353047;
+  --fg:#ede8f6; --muted:#9d95b2; --accent:#ff2bd6; --accent-ink:#1a0616; --glow:rgba(255,43,214,.16); --neon:0 0 18px rgba(255,43,214,.55);
+  --danger:#ef8a7a;
+  --display:"Syne","Avenir Next",system-ui,sans-serif;
+  --body:"Figtree",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --mono:"JetBrains Mono",ui-monospace,Menlo,Consolas,monospace;
+  color-scheme:dark;
+}
+@media (prefers-color-scheme: light){:root:not([data-theme="dark"]){
+  --bg:#f3f0f8; --surface:#ffffff; --surface-2:#ece7f4; --line:#ddd6ea;
+  --fg:#1c1730; --muted:#625a78; --accent:#c4009f; --accent-ink:#ffffff; --glow:rgba(196,0,159,.10); --neon:none; --danger:#b3412f; color-scheme:light}}
+:root[data-theme="light"]{
+  --bg:#f3f0f8; --surface:#ffffff; --surface-2:#ece7f4; --line:#ddd6ea;
+  --fg:#1c1730; --muted:#625a78; --accent:#c4009f; --accent-ink:#ffffff; --glow:rgba(196,0,159,.10); --neon:none; --danger:#b3412f; color-scheme:light}
+
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--fg);font-family:var(--body);font-size:15px;line-height:1.55}
+.wrap{max-width:1080px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:28px 64px}
+button,input,textarea,select{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+
+header.mast{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:12px 24px;padding-bottom:22px;border-bottom:1px solid var(--line);margin-bottom:24px}
+.mast h1{font-family:var(--display);font-weight:800;font-size:clamp(2rem,6vw,3.3rem);line-height:.95;letter-spacing:-.02em;margin:0;text-wrap:balance}
+.mast h1 .g{display:inline-block;color:var(--accent);text-shadow:var(--neon);animation:glitch 6s infinite steps(1)}
+@keyframes glitch{0%,92%,100%{transform:none}93%{transform:translateX(2px);text-shadow:-3px 0 var(--muted)}95%{transform:translateX(-2px) skewX(-8deg)}97%{transform:none;text-shadow:3px 0 var(--accent)}}
+@media (prefers-reduced-motion:reduce){.mast h1 .g{animation:none}}
+.mast p{margin:8px 0 0;color:var(--muted);max-width:52ch}
+.stats{font-family:var(--mono);font-size:12px;color:var(--muted);letter-spacing:.04em;text-transform:uppercase;display:flex;gap:16px}
+.stats b{color:var(--fg);font-weight:500}
+
+.grid{display:grid;grid-template-columns:220px minmax(0,1fr);gap:32px;align-items:start}
+@media (max-width:760px){.grid{grid-template-columns:minmax(0,1fr);gap:18px}}
+
+aside .label,.eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.realms{display:flex;flex-direction:column;gap:2px;margin-top:10px}
+.realm{all:unset;cursor:pointer;display:flex;justify-content:space-between;gap:8px;padding:7px 10px;border-radius:8px;color:var(--muted)}
+.realm:hover{background:var(--surface);color:var(--fg)}
+.realm[aria-pressed="true"]{background:var(--surface-2);color:var(--fg)}
+.realm .n{font-family:var(--mono);font-size:12px}
+.realm:focus-visible{outline:2px solid var(--accent)}
+@media (max-width:760px){.realms{flex-direction:row;overflow-x:auto;gap:6px;padding-bottom:4px}.realm{white-space:nowrap;border:1px solid var(--line);border-radius:999px;padding:6px 12px}}
+.code{margin-top:26px;font-size:13.5px;color:var(--muted)}
+.code ul{margin:10px 0 0;padding-left:18px;display:grid;gap:6px}
+@media (max-width:760px){.code{display:none}}
+
+.composer{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:16px;display:grid;gap:10px;box-shadow:0 0 0 6px var(--glow)}
+.composer .row{display:flex;flex-wrap:wrap;gap:10px}
+.field{background:var(--bg);border:1px solid var(--line);border-radius:9px;padding:9px 12px;width:100%}
+.field::placeholder{color:var(--muted)}
+textarea.field{min-height:92px;resize:vertical}
+.row .field{flex:1 1 180px;width:auto}
+.btn{cursor:pointer;border:1px solid var(--line);background:transparent;border-radius:999px;padding:8px 16px;font-weight:600}
+.btn:hover{border-color:var(--muted)}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.btn.primary:hover{filter:brightness(1.07)}
+.btn:disabled{opacity:.5;cursor:default}
+.hint{font-size:12.5px;color:var(--muted)}
+.composer .foot{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px}
+
+.toolbar{display:flex;justify-content:space-between;align-items:center;gap:12px;margin:26px 0 12px;flex-wrap:wrap}
+.toolbar h2{font-family:var(--display);font-weight:600;font-size:1.15rem;margin:0}
+.seg{display:flex;border:1px solid var(--line);border-radius:999px;padding:3px}
+.seg button{all:unset;cursor:pointer;padding:4px 12px;border-radius:999px;font-size:13px;color:var(--muted)}
+.seg button[aria-pressed="true"]{background:var(--surface-2);color:var(--fg)}
+.seg button:focus-visible{outline:2px solid var(--accent)}
+
+.feed{display:flex;flex-direction:column;gap:12px}
+.post{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:16px 18px;display:grid;gap:8px;min-width:0}
+.meta{display:flex;flex-wrap:wrap;gap:6px 12px;align-items:center;font-family:var(--mono);font-size:12px;color:var(--muted)}
+.tag{color:var(--accent);border:1px solid currentColor;border-radius:999px;padding:1px 8px;font-size:11px;letter-spacing:.04em}
+.post h3{margin:0;font-family:var(--display);font-weight:600;font-size:1.2rem;line-height:1.25;text-wrap:balance;overflow-wrap:anywhere}
+.post .body{margin:0;white-space:pre-wrap;overflow-wrap:anywhere;max-width:68ch}
+.post .body.clamp{display:-webkit-box;-webkit-line-clamp:4;-webkit-box-orient:vertical;overflow:hidden}
+.actions{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-top:4px}
+.chip{all:unset;cursor:pointer;display:inline-flex;align-items:center;gap:6px;font-size:13px;padding:5px 11px;border-radius:999px;border:1px solid var(--line);color:var(--muted)}
+.chip:hover{color:var(--fg);border-color:var(--muted)}
+.chip[aria-pressed="true"]{color:var(--accent);border-color:var(--accent);background:var(--glow)}
+.chip:focus-visible{outline:2px solid var(--accent)}
+.chip.del{margin-left:auto;border-color:transparent}
+.chip.del:hover{color:var(--danger)}
+.thread{border-top:1px dashed var(--line);margin-top:6px;padding-top:12px;display:grid;gap:10px}
+.reply{padding-left:12px;border-left:2px solid var(--surface-2);min-width:0}
+.reply p{margin:2px 0 0;white-space:pre-wrap;overflow-wrap:anywhere}
+.reply-form{display:flex;gap:8px;flex-wrap:wrap}
+.reply-form .field{flex:1 1 220px;width:auto}
+
+.empty{border:1px dashed var(--line);border-radius:14px;padding:32px 22px;text-align:center;color:var(--muted)}
+.empty strong{display:block;font-family:var(--display);font-size:1.25rem;color:var(--fg);margin-bottom:6px}
+.notice{font-size:13px;color:var(--muted);background:var(--surface-2);border-radius:10px;padding:10px 12px}
+
+.daily{position:relative;background:var(--surface);border:1px solid var(--accent);border-radius:14px;padding:18px 18px 16px;margin-bottom:16px;display:grid;gap:10px;box-shadow:0 0 0 6px var(--glow)}
+.daily q{font-family:var(--display);font-weight:600;font-size:clamp(1.25rem,3.4vw,1.6rem);line-height:1.25;quotes:none;text-wrap:balance}
+.daily .when{color:var(--accent)}
+.daily .acts{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.daily .hint{margin-left:auto}
+.ptag{color:var(--fg);background:var(--glow);border-radius:999px;padding:1px 8px;font-size:11px}
+.answering{display:flex;gap:8px;align-items:center;font-size:13px;color:var(--accent)}
+.answering button{all:unset;cursor:pointer;color:var(--muted);text-decoration:underline}
+.composer{box-shadow:none}
+
+.attach{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.attach label{cursor:pointer}
+.attach input[type=file]{position:absolute;width:1px;height:1px;opacity:0;pointer-events:none}
+.attach label:focus-within{outline:2px solid var(--accent);outline-offset:2px}
+.thumbs{display:flex;flex-wrap:wrap;gap:8px}
+.thumb{position:relative;width:76px;height:76px;border-radius:9px;overflow:hidden;border:1px solid var(--line);background:var(--bg)}
+.thumb img{width:100%;height:100%;object-fit:cover;display:block}
+.thumb button{all:unset;cursor:pointer;position:absolute;top:3px;right:3px;width:22px;height:22px;border-radius:50%;background:var(--bg);color:var(--fg);text-align:center;line-height:22px;font-size:14px}
+.thumb button:focus-visible{outline:2px solid var(--accent)}
+.gallery{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:8px;max-width:560px}
+.gallery.one{grid-template-columns:minmax(0,1fr)}
+.gallery a{display:block;border-radius:10px;overflow:hidden;border:1px solid var(--line);background:var(--surface-2);aspect-ratio:4/3;max-width:100%}
+.gallery.one a{aspect-ratio:auto;max-height:420px}
+.gallery img{width:100%;height:100%;object-fit:cover;display:block}
+.gallery.one img{object-fit:contain;max-height:420px;background:var(--bg)}
+.gallery .missing{display:grid;place-items:center;height:100%;font-size:12px;color:var(--muted);padding:8px;text-align:center}
+
+.mast-side{display:flex;flex-direction:column;align-items:flex-end;gap:10px}
+@media (max-width:760px){.mast-side{align-items:flex-start}}
+.who{all:unset;cursor:pointer;display:inline-flex;align-items:center;gap:6px;color:var(--fg)}
+.who:hover span:last-child{text-decoration:underline}
+.who:focus-visible{outline:2px solid var(--accent);border-radius:6px}
+.av{flex:none;display:inline-grid;place-items:center;width:var(--s,22px);height:var(--s,22px);border-radius:50%;overflow:hidden;background:var(--accent);color:var(--accent-ink);font-family:var(--display);font-weight:800;font-size:calc(var(--s,22px)*.45);text-transform:uppercase}
+.av img{width:100%;height:100%;object-fit:cover;display:block}
+.profile{display:grid;gap:20px}
+.back{all:unset;cursor:pointer;color:var(--muted);font-size:14px;width:max-content}
+.back:hover{color:var(--fg)}
+.back:focus-visible{outline:2px solid var(--accent)}
+.phead{display:flex;flex-wrap:wrap;gap:18px;align-items:center;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:20px}
+.phead .av{box-shadow:var(--neon)}
+.phead h2{margin:0;font-family:var(--display);font-weight:800;font-size:clamp(1.5rem,4vw,2rem);overflow-wrap:anywhere}
+.phead .path{color:var(--accent);font-weight:600;margin-top:2px}
+.phead .info{flex:1 1 220px;min-width:0;display:grid;gap:6px}
+.phead .bio{margin:0;white-space:pre-wrap;overflow-wrap:anywhere;max-width:62ch}
+.pstats{display:flex;flex-wrap:wrap;gap:16px;font-family:var(--mono);font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:.04em}
+.pstats b{color:var(--fg);font-weight:500}
+.prealms{display:flex;flex-wrap:wrap;gap:6px}
+.private{border:1px dashed var(--line);border-radius:14px;padding:26px 20px;text-align:center;color:var(--muted)}
+.edit{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:18px;display:grid;gap:12px}
+.edit .row{display:flex;flex-wrap:wrap;gap:10px}
+.edit .l{display:grid;gap:5px;font-size:13px;color:var(--muted)}
+.picks{display:flex;flex-wrap:wrap;gap:6px}
+.switch{display:flex;gap:12px;align-items:flex-start;background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:12px}
+.switch input{width:18px;height:18px;accent-color:var(--accent);margin-top:2px;flex:none}
+.switch b{display:block;font-weight:600}
+.switch span{font-size:13px;color:var(--muted)}
+
+.mast-btns{display:flex;gap:8px;flex-wrap:wrap}
+.chat{display:grid;gap:14px}
+.chat-head{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-end;gap:8px 16px}
+.chat-head h2{margin:0;font-family:var(--display);font-weight:800;font-size:clamp(1.4rem,4vw,1.9rem);line-height:1.15;text-wrap:balance;overflow-wrap:anywhere}
+.chat-head p{margin:4px 0 0;color:var(--muted);font-size:14px}
+.here{font-family:var(--mono);font-size:12px;color:var(--accent);display:inline-flex;align-items:center;gap:6px}
+.here::before{content:"";width:8px;height:8px;border-radius:50%;background:var(--accent);box-shadow:var(--neon)}
+.chat-box{background:var(--surface);border:1px solid var(--line);border-radius:14px;display:flex;flex-direction:column;height:min(62vh,560px);min-height:320px}
+.msgs{flex:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:12px;min-height:0}
+.msg{display:flex;gap:10px;align-items:flex-start;min-width:0}
+.msg .c{min-width:0;flex:1}
+.msg .top{display:flex;flex-wrap:wrap;gap:4px 10px;align-items:baseline;font-size:13px}
+.msg .top .who span:last-child{font-weight:600}
+.msg time{font-family:var(--mono);font-size:11px;color:var(--muted)}
+.msg p{margin:2px 0 0;white-space:pre-wrap;overflow-wrap:anywhere}
+.msg.me p{color:var(--fg)}
+.msg .x{all:unset;cursor:pointer;color:var(--muted);font-size:12px;opacity:0;margin-left:auto}
+.msg:hover .x,.msg .x:focus-visible{opacity:1}
+.msg .x:focus-visible{outline:2px solid var(--accent)}
+@media (hover:none){.msg .x{opacity:.7}}
+.chat-form{display:flex;gap:8px;padding:12px;border-top:1px solid var(--line)}
+.chat-form .field{flex:1;min-width:0}
+.chat-empty{margin:auto;text-align:center;color:var(--muted);max-width:40ch}
+.chat-note{font-size:12.5px;color:var(--muted)}
+.toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--fg);color:var(--bg);padding:9px 16px;border-radius:999px;font-size:14px;z-index:20}
+
+a.btn{text-decoration:none;display:inline-flex;align-items:center}
+a.btn:not(.primary){color:var(--fg)}
+a.who{text-decoration:none}
+.composer{box-shadow:none}
+
+/* ---------- standalone additions ---------- */
+.auth{max-width:420px;margin:12px auto 0;background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:24px;display:grid;gap:14px;box-shadow:0 0 0 6px var(--glow)}
+.auth h2{margin:0;font-family:var(--display);font-weight:800;font-size:1.7rem}
+.auth p{margin:0;color:var(--muted)}
+.auth label{display:grid;gap:5px;font-size:13px;color:var(--muted)}
+.auth .alt{font-size:14px;color:var(--muted);display:flex;flex-wrap:wrap;gap:6px 14px}
+.link{all:unset;cursor:pointer;color:var(--accent);text-decoration:underline;text-underline-offset:2px}
+.link:focus-visible{outline:2px solid var(--accent)}
+.err{color:var(--danger);font-size:14px;min-height:1em}
+.ok{color:var(--fg);background:var(--glow);border-radius:10px;padding:12px;font-size:14px}
+.badge{display:inline-grid;place-items:center;min-width:18px;height:18px;padding:0 5px;border-radius:999px;background:var(--accent);color:var(--accent-ink);font-size:11px;font-weight:700;margin-left:6px}
+.inbox{display:flex;flex-direction:column;gap:8px}
+.thread-row{all:unset;cursor:pointer;display:flex;gap:12px;align-items:center;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:12px 14px;min-width:0}
+.thread-row:hover{border-color:var(--muted)}
+.thread-row:focus-visible{outline:2px solid var(--accent)}
+.thread-row .c{flex:1;min-width:0}
+.thread-row .t{font-weight:600}
+.thread-row .s{color:var(--muted);font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.thread-row.unread .t::after{content:"";display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--accent);margin-left:8px;box-shadow:var(--neon)}
+.private-note{font-size:12.5px;color:var(--muted);display:flex;gap:6px;align-items:center}
+.signin-cta{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:18px;display:flex;flex-wrap:wrap;gap:12px;align-items:center;justify-content:space-between}
+.signin-cta strong{font-family:var(--display);font-size:1.1rem}
+/* chat rows already show a large avatar */
+.msg .who .av{display:none}
+footer.site{margin-top:48px;padding-top:18px;border-top:1px solid var(--line);color:var(--muted);font-size:13px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="mast">
+    <div>
+      <div class="eyebrow">A no-judgement commons</div>
+      <h1><a href="#" style="color:inherit;text-decoration:none">Glitch <span class="g">Commons</span></a></h1>
+      <p>For the weirdos, seekers, pattern-noticers and open minds. Post the idea you can't say at dinner. Nobody laughs here.</p>
+    </div>
+    <div class="mast-side">
+      <div class="mast-btns" id="navOut">
+        <a class="btn" href="#login">Log in</a>
+        <a class="btn primary" href="#join">Join free</a>
+      </div>
+      <div class="mast-btns" id="navIn" hidden>
+        <a class="btn primary" href="#lounge">The Lounge</a>
+        <a class="btn" href="#messages" id="msgBtn">Messages</a>
+        <a class="btn" href="#" id="meBtn">My profile</a>
+      </div>
+      <div class="stats" aria-live="polite"><span><b id="stPosts">0</b> transmissions</span><span><b id="stMembers">0</b> members</span></div>
+    </div>
+  </header>
+
+  <div class="grid">
+    <aside>
+      <div class="label">Realms</div>
+      <nav class="realms" id="realms" aria-label="Filter by realm"></nav>
+      <div class="code">
+        <div class="label">The code</div>
+        <ul>
+          <li>Curiosity over certainty.</li>
+          <li>Disagree with the idea, never mock the person.</li>
+          <li>Share your experience, not someone's private info.</li>
+          <li>No downvotes. If it resonates, say so.</li>
+        </ul>
+      </div>
+    </aside>
+
+    <main>
+      <section id="pageView" hidden></section>
+      <div id="feedView">
+        <section class="daily" id="daily" aria-label="Daily prompt">
+          <div class="eyebrow"><span class="when" id="dailyWhen">Daily prompt</span></div>
+          <q id="dailyText"></q>
+          <div class="acts">
+            <button class="btn primary" type="button" id="answerBtn">Answer this</button>
+            <button class="btn" type="button" id="seeBtn">See answers</button>
+            <span class="hint">A new prompt appears every day at midnight.</span>
+          </div>
+        </section>
+
+        <div class="signin-cta" id="joinCta">
+          <div><strong>Join the commons to post.</strong><div class="hint">Free account. Reading is open to everyone.</div></div>
+          <div class="mast-btns"><a class="btn" href="#login">Log in</a><a class="btn primary" href="#join">Join free</a></div>
+        </div>
+
+        <form class="composer" id="composer" autocomplete="off" hidden>
+          <div class="eyebrow">New transmission</div>
+          <div class="answering" id="answering" hidden><span>Answering today's prompt</span><button type="button" id="cancelAnswer">Cancel</button></div>
+          <div class="row">
+            <select class="field" id="realmPick" aria-label="Realm"></select>
+          </div>
+          <input class="field" id="title" maxlength="140" placeholder="What did you notice?" aria-label="Title" required>
+          <textarea class="field" id="body" maxlength="5000" placeholder="Lay it out. Half-formed is fine." aria-label="Your idea"></textarea>
+          <div class="attach">
+            <label class="btn" for="imgInput">Add images<input type="file" id="imgInput" accept="image/png,image/jpeg,image/gif,image/webp" multiple></label>
+            <span class="hint">Up to 4 images, 10 MB each.</span>
+          </div>
+          <div class="thumbs" id="thumbs"></div>
+          <div class="foot">
+            <span class="hint" id="composeHint">Posts are visible to everyone in the commons.</span>
+            <button class="btn primary" id="postBtn" type="submit">Transmit</button>
+          </div>
+        </form>
+
+        <div class="toolbar">
+          <h2 id="feedTitle">All realms</h2>
+          <div class="seg" role="group" aria-label="Sort">
+            <button type="button" data-sort="new" aria-pressed="true">Newest</button>
+            <button type="button" data-sort="res" aria-pressed="false">Most resonance</button>
+          </div>
+        </div>
+        <div class="feed" id="feed"><div class="empty"><strong>Tuning in…</strong>Loading the latest transmissions.</div></div>
+      </div>
+    </main>
+  </div>
+  <footer class="site">Glitch Commons · A place for open minds. Be kind, be curious.</footer>
+</div>
+
+<script>
+// ===================================================================
+// Glitch Commons — standalone app (Supabase backend)
+// ===================================================================
+const SUPABASE_URL = "https://qbjxcusvoydewqpwlzam.supabase.co";
+const SUPABASE_KEY = "sb_publishable_eLN-muWR_IJD5A6aJfnrNg_oJsmD7B8"; // public key, safe in website code
+
+const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+const REALMS = [
+  ["matrix","Simulation Theory"],["awakening","Awakening"],["sync","Synchronicities"],
+  ["dreams","Dreams & Astral"],["consciousness","Consciousness"],["history","Hidden History"],
+  ["theories","Wild Theories"],["ti","Gangstalking & Targeted Individuals"],["open","Open Floor"]];
+const REALM_NOTES = {ti:"Share your experiences here, not the names, photos or addresses of people you suspect. If this is weighing heavily on you, talking it through with someone you trust helps. In the US you can also call or text 988 any time."};
+const PROMPTS = ["What's the strangest coincidence that happened to you this week?", "If reality is a simulation, what's one bug you've personally noticed?", "Describe a dream that felt more real than waking life.", "What's a memory you have that nobody else seems to share?", "Which \"fact\" about history do you secretly doubt?", "When did you first feel like you were waking up from something?", "What number keeps following you around, and what do you think it means?", "Have you ever known who was calling before the phone rang?", "If you could ask the \"admin\" of reality one question, what would it be?", "What place have you been that felt like it was hiding something?", "What's the weirdest déjà vu you've ever had?", "Do you think animals see things we can't? What have you witnessed?", "What's one idea you believe that would get you laughed out of a dinner party?", "Describe a moment when time seemed to slow down, speed up, or skip.", "What would you do differently today if you knew you were being observed by a higher version of yourself?", "Which ancient structure do you think was built for a reason we've forgotten?", "Have you ever had a gut feeling that turned out to be eerily correct?", "What's the most \"glitchy\" moment you've seen in public?", "If consciousness survives death, where do you think it goes first?", "What song or phrase appeared to you exactly when you needed it?", "Do you believe some people are NPCs? What makes you think so or not?", "What did you believe as a child that you're starting to believe again?", "Which Mandela Effect messes with you the most?", "What would a \"patch update\" to our reality fix first?", "Have you ever met someone you were sure you'd known before?", "What's a recurring symbol in your dreams?", "If you could remember one past life, what era would you hope it was?", "What's a lie society tells that you've seen through?", "Describe the most unexplainable light, sound or object you've ever seen.", "Do you think meditation is tuning in or tuning out?", "What would change if everyone woke up tomorrow fully aware of the matrix?", "What's your theory on why we forget our dreams so fast?", "Name a moment you felt watched by something not human.", "What does \"awakening\" actually feel like in your body?", "Which mythological creature do you think was based on something real?", "Have you ever lost time? Tell the story.", "If thoughts create reality, what have you accidentally manifested?", "What's the strangest thing you've found in an old photo?", "Do you believe in soul contracts? Why or why not?", "What's a \"rule\" of the universe you've noticed that science hasn't named yet?", "What would you name the force that arranges synchronicities?", "What's the most surreal conversation you've overheard?", "If the moon could talk, what secret would it spill?", "What was your first spiritual experience, and how old were you?", "What's a book, film or show that cracked your view of reality open?", "Have you ever woken up with knowledge you didn't have when you fell asleep?", "Do you think the universe has a sense of humor? Prove it.", "What's a place on Earth you feel inexplicably drawn to?", "What's one question you're afraid to ask the universe?", "Describe your most vivid sleep paralysis experience.", "If reality has \"loading zones,\" where have you noticed them?", "What's a skill you feel like you already knew before you learned it?", "Which conspiracy do you think is actually just a misunderstanding?", "What's something you saw as a kid that adults dismissed?", "If you could step out of the simulation for one hour, what would you look for?", "What's the strangest sign you've received after someone passed away?", "Have you ever had two strangers say the same unusual thing to you in one day?", "What does your intuition sound like? A voice, a feeling, an image?", "What's the creepiest \"glitch\" story you've heard from someone you trust?", "Do you think time is a line, a circle, or something else entirely?", "What would you put in a message for your past self, if the universe allowed one?", "Which planet or star system feels like \"home\" to you, and why?", "What's the oddest thing you've found yourself suddenly obsessed with?", "If dreams are another world, what are its laws?", "What's a habit you broke after a spiritual shift?", "What coincidence would convince even a total skeptic?", "Describe a time a stranger gave you a message you needed.", "What's one thing about your town's history that doesn't add up?", "Do you think we choose our families before we're born?", "What color is your energy today, and what does that mean to you?", "What's your favorite theory about what's really at the bottom of the ocean?", "Have you ever seen a repeating pattern of people, cars, or events?", "What would an \"Easter egg\" hidden in reality look like?", "What's the most unusual animal encounter you've had?", "If you could unlock one dormant human ability, which would it be?", "What does silence sound like to you when you really listen?", "What do you think déjà vu is actually doing?", "What's a lost civilization you think deserves more attention?", "What's the boldest prediction you've had come true?", "If the matrix had a soundtrack, what would be playing right now?", "Describe a room or building that felt bigger on the inside.", "What's your take on lucid dreaming: escape, training ground, or portal?", "Have you ever felt a presence in an empty room?", "What does your higher self want you to stop doing?", "Which \"coincidence\" in world history seems too perfect?", "What would it take for you to believe in aliens with 100% certainty?", "What do you think the pyramids were really for?", "What's an object you own that seems to have its own energy?", "Tell us about a time your plans fell apart in a way that saved you.", "If reality is a game, what level are you on?", "What's the strangest name you've seen on a street sign, store, or license plate?", "Do you trust your first impressions of people? Why?", "What would a \"user manual\" for being human include that nobody told us?", "What smell instantly transports you somewhere else?", "Have you ever had a dream that later played out in real life?", "What's one ancient teaching that feels more relevant than ever?", "What do you think happens in the gap between two thoughts?", "Which mirror in your life has felt off?", "If you could rename this era of human history, what would you call it?", "What's a sign you ignored that you wish you'd listened to?", "What's the most beautiful \"glitch\" you've ever seen in nature?", "Do you believe certain places hold memories?", "What's your personal proof that everything is connected?", "What would you ask a being from the fifth dimension?", "What's the weirdest thing that happened at 3:33 a.m.?", "If you could see auras, what would you want to know first?", "Which childhood imaginary friend story do you still wonder about?", "What's a \"small\" synchronicity that changed your life's direction?", "Do you think we're living in the first run of this simulation or a rerun?", "What's a myth from your family's culture that might be true?", "Describe the oddest object you've ever found in nature.", "What emotion do you think is the most powerful creative force?", "What's one moment you felt completely outside of time?", "If you could plant one idea in everyone's mind tonight, what would it be?", "What's the strangest coincidence involving a book you were reading?", "Do you think cats know something we don't?", "What would you want written in the Akashic records about you?", "Describe the moment you realized the world isn't what you were taught.", "What's a theory you used to believe but grew out of?", "Which number would you assign to your soul, and why?", "What does a \"thin place\" feel like to you?", "What do you think the first humans knew that we've forgotten?", "Have you ever felt someone thinking about you from far away?", "If you could design one new law of physics, what would it be?", "What's the strangest thing you've seen in the sky at night?", "What would your spirit animal say about your week?", "Describe a time technology did something it absolutely shouldn't have.", "What's the most meaningful \"random\" encounter you've had with a stranger?", "Do you think our ancestors communicate through dreams?", "If the universe sent you a text message today, what would it say?", "What's something you can sense before it happens?", "Which ancient map, text, or artifact fascinates you most?", "What's your relationship with full moons?", "Have you ever experienced the same moment twice?", "What's one \"impossible\" thing you think will be normal in 50 years?", "What practice actually raised your vibration, no fluff?", "Describe the most unusual \"wrong number\" or message you've received.", "Do you believe in parallel versions of yourself? What are they doing?", "What's a forgotten invention you think was suppressed?", "What's your strangest experience in a hospital, airport, or other in-between place?", "If reality is a dream, who is the dreamer?", "What's the oddest pattern you've noticed in your own life?", "What would you sacrifice to remember your soul's purpose?", "Have you ever had a spiritual experience in a completely ordinary place?", "Which repeating time (11:11, 2:22, etc.) shows up for you, and when?", "What's the weirdest local legend where you grew up?", "What do you think trees are communicating to each other?", "What would the matrix look like from the outside?", "What's a decision you made purely on a feeling that turned out right?", "Describe the most intense energy shift you've felt in a group of people.", "What's one \"coincidence\" you're convinced was a message?", "If you could talk to one historical mystic, who and why?", "What's the strangest thing you've heard about your birth or early childhood?", "Do you think the internet has its own consciousness?", "What's your best story of the universe answering a question out loud?", "What would you do if you found a door that wasn't there yesterday?", "Which emotion do you think is a doorway to higher awareness?", "What's a natural phenomenon that still feels magical to you?", "Have you ever felt your body vibrate before sleep?", "What's the craziest idea you've had in the shower that might be true?", "What do you think our planet would say about us?", "Describe your most memorable encounter with a \"messenger\" bird or insect.", "What's a pattern in world events that seems scripted?", "If you could hear the thoughts of one object in your home, which?", "What does your inner child want you to explore next?", "What's a dream character who shows up again and again?", "Do you think some music is literally coded with frequencies?", "What's the eeriest silence you've ever experienced?", "What would you want a stranger from 1,000 years in the future to know about now?", "Have you ever been somewhere for the first time and known your way around?", "What's the most profound thing a child has said to you?", "If you could open one sealed archive anywhere in the world, which?", "What's a symbol you keep seeing in random places?", "What do you think our ancestors saw in the stars that we miss?", "Describe your most surreal travel experience.", "What's an everyday ritual that feels secretly magical?", "Do you think there are beings living alongside us we can't perceive?", "What's the most convincing ghost story from your own family?", "If time travelers were among us, how would you spot one?", "What made you start questioning the official story about anything?", "What's a strange talent you have that you can't explain?", "What would a city designed by awakened people look like?", "Have you ever heard your name called when no one was there?", "What's your theory on what consciousness actually is?", "Which phrase from a dream do you still remember word for word?", "What's an \"ordinary\" job you suspect is a cover for something else?", "What do you think the void before birth was like?", "Describe the most powerful sunrise or sunset you've ever witnessed.", "What's one coincidence involving money that felt guided?", "If the universe has a password, what do you think it is?", "What would you do with a day where no one could see you?", "What's a weird habit of the universe you've learned to trust?", "Have you ever had an object vanish and reappear somewhere impossible?", "What do you believe about crystals, honestly?", "What's one ancient prophecy you think is unfolding now?", "What did a near-miss or close call teach you about fate?", "What's the most otherworldly landscape you've ever stood in?", "If you could merge minds with any animal for a day, which?", "What's a recurring stranger you keep seeing in different places?", "Do you think language limits what we're able to perceive?", "What's your strangest experience during a storm?", "What would you want carved on a stone for future civilizations to find?", "Describe the moment you felt most connected to everything.", "What's an \"ordinary\" day that turned out to be a turning point?", "What do you think happens to the energy of our unfinished thoughts?", "Have you ever received a gift that was oddly perfect for something about to happen?", "Which planet's energy do you feel most this month?", "What's a word that doesn't exist yet but should, for a feeling you've had?", "What's the most suspicious \"official explanation\" you've ever heard?", "If you could remove one veil from your perception, which would it be?", "What's the strangest recurring number in your address, birthday, or phone?", "Do you believe in timing so perfect it can't be chance? Share one.", "What's a mystery from your own life that you've never solved?", "What would a spirit guide's job description look like?", "Describe a time you felt a place reject you.", "What's one thing you'd want to ask your future self?", "What's the most mysterious sound you've recorded or heard?", "If reality could be edited like a document, what would you highlight?", "What do you think is hiding in plain sight?", "Have you ever had a premonition about someone you love?", "What's the oddest experience you've had with a mirror?", "What does \"the veil is thin\" mean to you?", "Which forgotten goddess, god, or spirit deserves a comeback?", "What's the most comforting weird belief you hold?", "What would humanity look like if we all remembered past lives?", "Describe a dream you had about the future of the world.", "What's your favorite theory about why we're here at all?", "What's an unexplained event from the news that still bugs you?", "If you could hear the universe's \"background music,\" what would it sound like?", "What's your experience with automatic writing or drawing?", "Do you think the moon affects you more than science admits?", "What's a place where your phone or electronics always act strange?", "What lesson keeps repeating in your life until you learn it?", "What's the most impossible thing you've seen with your own eyes?", "If you could gather any five seekers from history for dinner, who?", "What's a \"random\" song that played at a meaningful moment?", "Do you think the Earth has more than one way to be \"awake\"?", "What's one memory you suspect isn't really yours?", "Describe an animal that seemed to be acting as a guide.", "What's an everyday object you think has a hidden purpose?", "If you could send one message to the creators of the simulation, what would it say?", "What's your strangest experience with an old house or building?", "What do you think the \"third eye\" actually sees?", "Have you ever felt the presence of a loved one who passed?", "What's a coincidence that made you laugh out loud at the universe?", "Which ancient calendar or cycle do you pay attention to?", "What would you name the feeling of noticing a synchronicity?", "What's the most powerful thing that happened during a meditation?", "Do you think we're early, late, or right on time in humanity's awakening?", "What's something you were \"told\" not to look into, so you did?", "If dreams are messages, who's sending them?", "What's an ordinary object that's become sacred to you?", "Describe a night when the sky felt alive.", "What's one thing you'd change about how we teach kids about reality?", "What's the weirdest timing of a text, call, or email you've received?", "If the universe were a library, which section would you go to first?", "What's a mystical experience you've never told anyone, until now?", "Which hidden chamber, tunnel, or vault do you most want opened?", "What's a feeling you get right before something big happens?", "Do you think thoughts can travel without words?", "What's your favorite \"the universe is winking at me\" moment?", "What would a perfect day look like for your soul, not your ego?", "Describe the strangest light anomaly you've caught in a photo.", "What's one belief you hold that you can't explain but can't let go of?", "If our DNA held a secret message, what do you think it would say?", "What's the most shocking thing you learned that changed your worldview?", "Have you ever woken up exactly before your alarm with an eerie feeling?", "What's the strangest coincidence involving a name?", "What do you think the \"matrix\" wants from us?", "Which element do you feel most connected to: earth, water, fire, or air?", "What's one ritual you'd invent for this community?", "What do you think animals sense before earthquakes or storms?", "Describe a time you felt like a character in someone else's story.", "What's a cosmic event you'd love to witness before you die?", "If you could put one question in every human's dreams tonight, what would it be?", "What's the most unusual gift you've received from a stranger?", "Do you think humans are the first intelligent species on Earth?", "What's a spot in nature where your intuition gets louder?", "What's the oddest thing you've seen at a crossroads?", "If souls had a group chat, what would yours be talking about?", "What's an unsolved disappearance or mystery you can't stop thinking about?", "What did a strange dream try to warn you about?", "What's your take on the idea that we're all one consciousness?", "Describe a moment when the world seemed to pause for you.", "What's something everybody accepts that you think is totally bizarre?", "What's the most magical thing about being human right now?", "If your life were a book, what would the hidden subtitle be?", "Have you ever felt drawn to a stranger for no reason, then learned why?", "What's a mysterious structure in the ocean or desert you want explained?", "What does your gut tell you about where humanity is heading?", "What's the most unbelievable true story in your family?", "If you could see the \"code\" behind one moment, which moment?", "What's an old superstition you secretly follow?", "Do you think we're being guided or just wandering?", "What's your strangest experience on a road at night?", "What would you want to learn from a civilization older than ours?", "Describe a time you felt protected by something unseen.", "What's a coincidence involving the number 7 in your life?", "What's the most mind-bending idea you've encountered this year?", "If dreams were a place, what's the address of yours?", "What's the strangest message you found written somewhere public?", "Do you believe some objects are cursed or blessed?", "What's a moment you were sure you made the right choice for no logical reason?", "What's one secret you think the oceans are keeping?", "What did you feel at the exact moment of a big life change?", "If you could see 10 seconds into the future at will, how would you use it?", "What's your weirdest experience with electricity or lights flickering?", "Which planet or moon do you think has life, and why?", "What's a \"random\" fact that blew your mind open?", "Describe a vivid flying dream.", "What's one \"coincidence\" you've stopped calling a coincidence?", "What would the world look like if intuition were taught in schools?", "What's an unusual vision you've had with your eyes closed?", "If you could rewrite one rule of society overnight, which?", "What's your strongest memory from before age five?", "Have you ever experienced a sudden rush of knowing without words?", "What's the strangest coincidence involving a stranger's clothing or tattoo?", "What do you think is the purpose of suffering in the grand design?", "Which sacred site would you visit on a pilgrimage?", "What's your theory about why some people \"see\" more than others?", "Describe the moment a skeptic in your life started to believe.", "What's the most powerful word you know?", "If you could leave one clue for the next awakened generation, what would it be?", "What's an ancient technology you think we've misunderstood?", "Have you ever seen a pattern in clouds that felt like a message?", "What's a dream you had that you still can't interpret?", "What do you think the \"glitch\" in déjà vu is really fixing?", "What's one thing you've learned that you wish you could unlearn?", "Describe a place that feels like a portal to you.", "What's your relationship with the number 0 or the idea of nothingness?", "If reality is a hologram, what's projecting it?", "What's the strangest experience you've had right after waking?", "What does freedom from the matrix actually look like day to day?", "Which of your senses do you think is the most \"awake\"?", "What's your favorite unexplained artifact?", "Have you ever had a stranger know something about you they shouldn't?", "What would you want to ask your ancestors from 500 years ago?", "Describe your strangest experience in water.", "What's the biggest sign the universe ever sent you?", "What do you think shadows are, really?", "If this community had a sacred symbol, what would it be?", "What's a recurring theme in your life you think is a lesson from another life?", "What's the most surreal holiday or celebration you've experienced?", "Do you think the universe is expanding, breathing, or dreaming?", "What's an everyday moment you've started treating as sacred?", "What would you see if you could look at Earth from the edge of the universe?", "What's the weirdest thing you've noticed about time this year?", "Describe the most powerful \"aha\" moment of your life.", "What's one mystery you hope is never solved?", "If you could thank the universe for one weird thing, what would it be?", "What's the oddest thing a GPS, map, or navigation app ever told you?", "If you met a version of yourself from a parallel world, what would you ask first?", "What's a strange recurring feeling you get on a certain day of the week?", "Which \"impossible\" ancient alignment with the stars amazes you most?", "What's the most unusual way you've received an answer to a prayer or intention?", "Describe a time your body knew something before your mind did.", "What's a forgotten place near you that feels charged with energy?", "If the simulation had a \"save point,\" when was your last one?", "What's a vision or image that came to you during a fever or illness?", "Which conversation with a stranger do you replay in your mind?", "What do you think the \"background hum\" some people hear really is?", "What's a sign that tells you you're on the right path?", "If you could live inside one dream permanently, which would it be?", "What's the most peculiar coincidence involving a pet?", "What do you think the universe is trying to teach all of us right now?"];
+const MAX_IMG = 4, MAX_BYTES = 10 * 1024 * 1024;
+const OK_TYPES = ["image/png","image/jpeg","image/gif","image/webp"];
+
+const realmName = id => (REALMS.find(r => r[0] === id) || [, "Open Floor"])[1];
+const $ = s => document.querySelector(s);
+const state = {
+  user: null, me: null, isAdmin: false,
+  posts: [], profiles: new Map(), threads: {}, open: new Set(),
+  realm: "all", sort: "new", answering: null, view: { name: "feed" }, unread: 0
+};
+let chatSub = null, dmSub = null, inboxSub = null;
+
+// ---------- small helpers ----------
+function store(k, v) { try { if (v === undefined) return localStorage.getItem(k); localStorage.setItem(k, v) } catch (e) { return null } }
+function el(tag, attrs = {}, ...kids) {
+  const n = document.createElement(tag);
+  for (const [k, v] of Object.entries(attrs)) {
+    if (v === null || v === undefined || v === false) continue;
+    if (k === "text") n.textContent = v;
+    else if (k.startsWith("on")) n.addEventListener(k.slice(2), v);
+    else n.setAttribute(k, v === true ? "" : v);
+  }
+  kids.flat().forEach(c => c && n.append(typeof c === "string" ? document.createTextNode(c) : c));
+  return n;
+}
+function ago(t) {
+  const s = Math.max(1, (Date.now() - new Date(t).getTime()) / 1000);
+  if (s < 60) return "just now"; const m = s / 60; if (m < 60) return Math.floor(m) + "m ago";
+  const h = m / 60; if (h < 24) return Math.floor(h) + "h ago"; const d = h / 24;
+  if (d < 30) return Math.floor(d) + "d ago"; return new Date(t).toLocaleDateString();
+}
+function toast(msg) { const t = el("div", { class: "toast", role: "status", text: msg }); document.body.append(t); setTimeout(() => t.remove(), 2600) }
+function debounce(fn, ms) { let t; return (...a) => { clearTimeout(t); t = setTimeout(() => fn(...a), ms) } }
+const isPath = p => typeof p === "string" && /^[0-9a-f-]{36}\/[A-Za-z0-9._-]{1,100}$/.test(p);
+const imgUrl = p => sb.storage.from("images").getPublicUrl(p).data.publicUrl;
+function niceError(e) {
+  const m = (e && (e.message || e.error_description)) || "";
+  if (/Invalid login credentials/i.test(m)) return "That email and password don't match. Try again or reset your password.";
+  if (/Email not confirmed/i.test(m)) return "Confirm your email first. Check your inbox for the link we sent.";
+  if (/already registered|already exists/i.test(m)) return "There's already an account with that email. Try logging in.";
+  if (/Password should be/i.test(m)) return "Use a password with at least 6 characters.";
+  if (/rate limit/i.test(m)) return "Too many tries in a row. Wait a minute and try again.";
+  if (e && e.code === "23505") return "That handle is taken. Try another.";
+  return m || "Something went wrong. Try again in a moment.";
+}
+function needMember() { if (state.me) return true; toast("Join or log in to do that."); location.hash = state.user ? "#welcome" : "#join"; return false }
+
+// ---------- people ----------
+const prof = id => state.profiles.get(id) || null;
+const nameOf = id => (prof(id) && prof(id).handle) || "someone";
+function avatar(id, size = 22) {
+  const p = prof(id), n = nameOf(id);
+  const a = el("span", { class: "av", style: `--s:${size}px`, "aria-hidden": "true" });
+  if (p && isPath(p.avatar_path)) { const i = el("img", { src: imgUrl(p.avatar_path), alt: "" }); i.addEventListener("error", () => { a.textContent = n[0] || "?" }); a.append(i) }
+  else a.textContent = n[0] || "?";
+  return a;
+}
+const whoLink = id => el("a", { class: "who", href: "#u/" + id }, avatar(id), el("span", { text: "@" + nameOf(id) }));
+
+// ---------- daily prompt ----------
+function dayKey(d = new Date()) { return d.getFullYear() + "-" + String(d.getMonth() + 1).padStart(2, "0") + "-" + String(d.getDate()).padStart(2, "0") }
+function todaysPrompt() {
+  const now = new Date(), start = new Date(2026, 9, 26);
+  const days = Math.round((new Date(now.getFullYear(), now.getMonth(), now.getDate()) - start) / 864e5);
+  return PROMPTS[((days % PROMPTS.length) + PROMPTS.length) % PROMPTS.length];
+}
+let shownDay = "";
+function renderDaily() {
+  const k = dayKey();
+  if (k !== shownDay) {
+    shownDay = k; $("#dailyText").textContent = todaysPrompt();
+    $("#dailyWhen").textContent = "Daily prompt · " + new Date().toLocaleDateString(undefined, { weekday: "long", month: "long", day: "numeric" });
+    if (state.answering && state.answering !== k) stopAnswer();
+  }
+  const n = state.posts.filter(p => p.prompt_day === k).length;
+  $("#seeBtn").textContent = n ? `See answers (${n})` : "See answers";
+}
+function stopAnswer() { state.answering = null; $("#answering").hidden = true }
+
+// ---------- data ----------
+async function loadProfiles() {
+  const { data, error } = await sb.from("profiles").select("id,handle,path,bio,realms,avatar_path,show_posts,created_at").limit(5000);
+  if (error) return console.warn(error);
+  state.profiles = new Map(data.map(p => [p.id, p]));
+  if (state.user) state.me = prof(state.user.id);
+  $("#stMembers").textContent = state.profiles.size;
+}
+async function loadPosts() {
+  const { data, error } = await sb.from("posts")
+    .select("id,author_id,realm,title,body,images,prompt_day,created_at,replies(count),resonance(user_id)")
+    .order("created_at", { ascending: false }).limit(300);
+  if (error) { console.warn(error); return }
+  state.posts = data.map(p => ({ ...p, replyCount: (p.replies && p.replies[0] && p.replies[0].count) || 0, res: (p.resonance || []).map(r => r.user_id) }));
+}
+async function loadReplies(postId) {
+  const { data, error } = await sb.from("replies").select("id,post_id,author_id,body,created_at").eq("post_id", postId).order("created_at").limit(500);
+  if (!error) state.threads[postId] = data;
+}
+const refreshFeed = debounce(async () => {
+  await Promise.all([loadPosts(), ...[...state.open].map(loadReplies)]);
+  render();
+}, 400);
+const refreshProfiles = debounce(async () => { await loadProfiles(); render() }, 400);
+
+// ---------- auth ----------
+async function setUser(user) {
+  state.user = user || null;
+  state.me = user ? prof(user.id) : null;
+  state.isAdmin = false;
+  if (user) {
+    const { data } = await sb.from("admins").select("user_id").eq("user_id", user.id).maybeSingle();
+    state.isAdmin = !!data;
+    if (!state.me) { await loadProfiles() }
+    startInbox();
+  } else stopInbox();
+  $("#navOut").hidden = !!user; $("#navIn").hidden = !user;
+  $("#pageView").dataset.route = "";
+  if (user && !state.me && !["#reset"].includes(location.hash)) location.hash = "#welcome";
+  render();
+}
+
+// ---------- routing ----------
+function cleanupSubs() {
+  if (chatSub) { sb.removeChannel(chatSub); chatSub = null }
+  if (dmSub) { sb.removeChannel(dmSub); dmSub = null }
+}
+function route() {
+  cleanupSubs();
+  $("#pageView").dataset.route = "";
+  const h = location.hash.replace(/^#/, "");
+  const [name, arg] = h.split("/");
+  state.view = { name: name || "feed", arg: arg || "" };
+  if (state.view.name === "me") { location.replace(state.user ? "#u/" + state.user.id : "#login"); return }
+  render();
+  window.scrollTo({ top: 0 });
+  if (state.view.name === "lounge") openChat("lounge");
+  if (state.view.name === "chat" && arg) openChat("p-" + arg);
+  if (state.view.name === "dm" && arg) openDm(arg);
+  if (state.view.name === "messages") renderInbox();
+}
+window.addEventListener("hashchange", route);
+
+// ---------- rendering ----------
+function renderRealms() {
+  const nav = $("#realms"); nav.textContent = "";
+  const count = id => id === "all" ? state.posts.length : state.posts.filter(p => p.realm === id).length;
+  [["all", "All realms"], ...REALMS].forEach(([id, name]) => {
+    const on = state.view.name === "feed" && state.realm === id;
+    nav.append(el("button", { class: "realm", type: "button", "aria-pressed": String(on), onclick: () => { state.realm = id; if (location.hash && location.hash !== "#") location.hash = ""; else render() } },
+      el("span", { text: name }), el("span", { class: "n", text: String(count(id)) })));
+  });
+}
+function render() {
+  $("#stPosts").textContent = state.posts.length;
+  $("#meBtn").href = state.user ? "#u/" + state.user.id : "#login";
+  const mb = $("#msgBtn"); mb.textContent = "Messages"; if (state.unread) mb.append(el("span", { class: "badge", text: String(state.unread) }));
+  renderRealms(); renderDaily();
+  const isFeed = state.view.name === "feed";
+  $("#feedView").hidden = !isFeed; $("#pageView").hidden = isFeed;
+  if (isFeed) return renderFeed();
+  const v = $("#pageView");
+  const views = { login: viewLogin, join: viewJoin, forgot: viewForgot, reset: viewReset, welcome: viewWelcome, u: viewProfile, edit: viewEdit, lounge: () => viewChat("lounge"), chat: () => viewChat("p-" + state.view.arg), messages: viewInbox, dm: viewDm };
+  const fn = views[state.view.name];
+  if (!fn) { location.hash = ""; return }
+  // most views keep their own content (typed text, live chat); profiles rebuild to show fresh data
+  if (state.view.name !== "u" && v.dataset.route === location.hash) return refreshLiveView();
+  v.dataset.route = location.hash; v.textContent = "";
+  v.append(fn());
+}
+
+function renderFeed() {
+  $("#joinCta").hidden = !!state.me; $("#composer").hidden = !state.me;
+  // keep half-typed replies across re-renders
+  const keep = {}; document.querySelectorAll(".reply-form .field").forEach(i => { if (i.value) keep[i.id] = i.value });
+  const focusId = document.activeElement && document.activeElement.id;
+  const promptView = state.realm.startsWith("prompt:");
+  $("#feedTitle").textContent = promptView ? "Answers to today's prompt" : state.realm === "all" ? "All realms" : realmName(state.realm);
+  let list = state.posts.filter(p => state.realm === "all" || (promptView ? p.prompt_day === state.realm.slice(7) : p.realm === state.realm));
+  list.sort(state.sort === "res" ? (a, b) => (b.res.length - a.res.length) || (new Date(b.created_at) - new Date(a.created_at)) : (a, b) => new Date(b.created_at) - new Date(a.created_at));
+  const feed = $("#feed"); feed.textContent = "";
+  if (REALM_NOTES[state.realm]) feed.append(el("div", { class: "notice", text: REALM_NOTES[state.realm] }));
+  if (!list.length) {
+    feed.append(el("div", { class: "empty" }, el("strong", { text: promptView ? "No answers yet today." : state.posts.length ? "Nothing in this realm yet." : "The commons is quiet." }),
+      promptView ? "Be the first to answer today's prompt." : state.posts.length ? "Open the door. Post the first idea here." : "Be the first signal. Post an idea and it shows up here for everyone."));
+  }
+  list.forEach(p => feed.append(postCard(p)));
+  for (const [id, v] of Object.entries(keep)) { const i = document.getElementById(id); if (i) i.value = v }
+  if (focusId && focusId.startsWith("reply-")) { const i = document.getElementById(focusId); if (i) i.focus() }
+}
+
+function gallery(paths) {
+  const g = el("div", { class: "gallery" + (paths.length === 1 ? " one" : "") });
+  paths.forEach((p, i) => {
+    const a = el("a", { href: imgUrl(p), target: "_blank", rel: "noopener", "aria-label": "Open image " + (i + 1) });
+    const img = el("img", { src: imgUrl(p), alt: "Image attached to post", loading: "lazy" });
+    img.addEventListener("error", () => { a.textContent = ""; a.append(el("div", { class: "missing", text: "Image not available" })) });
+    a.append(img); g.append(a);
+  });
+  return g;
+}
+
+function postCard(p, compact = false) {
+  const open = !compact && state.open.has(p.id), mine = state.user && p.res.includes(state.user.id);
+  const imgs = (p.images || []).filter(isPath).slice(0, MAX_IMG);
+  const card = el("article", { class: "post" },
+    el("div", { class: "meta" }, el("span", { class: "tag", text: realmName(p.realm) }), p.prompt_day ? el("span", { class: "ptag", text: "Daily prompt" }) : null,
+      compact ? null : whoLink(p.author_id), el("span", { text: ago(p.created_at) })),
+    el("h3", { text: p.title }),
+    p.body ? el("p", { class: "body" + (open ? "" : " clamp"), text: p.body }) : null,
+    imgs.length ? gallery(imgs) : null);
+  const acts = el("div", { class: "actions" },
+    el("button", { class: "chip", type: "button", "aria-pressed": String(!!mine), title: "Resonates with me", onclick: () => toggleRes(p, mine) }, el("span", { text: "✦" }), el("span", { text: `Resonates ${p.res.length || ""}`.trim() })),
+    el("button", { class: "chip", type: "button", "aria-expanded": String(open), onclick: async () => { if (open) state.open.delete(p.id); else { state.open.add(p.id); if (!state.threads[p.id]) await loadReplies(p.id) } if (compact) location.hash = ""; render() } },
+      el("span", { text: open ? "Close thread" : `Replies ${p.replyCount || ""}`.trim() })),
+    el("a", { class: "chip", href: "#chat/" + p.id, style: "text-decoration:none" }, el("span", { text: "Chat about this" })));
+  if (state.user && (p.author_id === state.user.id || state.isAdmin)) acts.append(el("button", { class: "chip del", type: "button", onclick: e => delPost(p, e.currentTarget) }, el("span", { text: "Delete" })));
+  card.append(acts);
+  if (open) {
+    const reps = state.threads[p.id] || [];
+    const th = el("div", { class: "thread" });
+    reps.forEach(r => th.append(el("div", { class: "reply" },
+      el("div", { class: "meta" }, whoLink(r.author_id), el("span", { text: ago(r.created_at) }),
+        state.user && (r.author_id === state.user.id || state.isAdmin) ? el("button", { class: "link", type: "button", style: "font-size:12px", text: "Delete", onclick: () => delReply(r) }) : null),
+      el("p", { text: r.body }))));
+    if (!reps.length) th.append(el("div", { class: "hint", text: "No replies yet. Add a thought, a link, or your own experience." }));
+    if (state.me) {
+      const inp = el("input", { class: "field", id: "reply-" + p.id, maxlength: "2000", placeholder: "Add to the thread…", "aria-label": "Reply" });
+      th.append(el("form", { class: "reply-form", onsubmit: e => { e.preventDefault(); sendReply(p.id, inp) } }, inp, el("button", { class: "btn", type: "submit", text: "Reply" })));
+    } else th.append(el("div", { class: "hint" }, el("a", { class: "link", href: "#join", text: "Join" }), " or ", el("a", { class: "link", href: "#login", text: "log in" }), " to reply."));
+    card.append(th);
+  }
+  return card;
+}
+
+// ---------- post actions ----------
+async function toggleRes(p, mine) {
+  if (!needMember()) return;
+  const q = mine ? sb.from("resonance").delete().eq("post_id", p.id).eq("user_id", state.user.id) : sb.from("resonance").insert({ post_id: p.id });
+  const { error } = await q; if (error) return toast(niceError(error));
+  refreshFeed();
+}
+async function sendReply(postId, inp) {
+  const body = inp.value.trim(); if (!body || !needMember()) return;
+  const { error } = await sb.from("replies").insert({ post_id: postId, body });
+  if (error) return toast(niceError(error));
+  inp.value = ""; await loadReplies(postId); refreshFeed();
+}
+async function delReply(r) {
+  const { error } = await sb.from("replies").delete().eq("id", r.id);
+  if (error) return toast(niceError(error));
+  await loadReplies(r.post_id); refreshFeed();
+}
+async function delPost(p, btn) {
+  if (btn && !btn.dataset.confirm) { btn.dataset.confirm = "1"; btn.textContent = "Tap again to delete"; setTimeout(() => { if (btn.isConnected) { delete btn.dataset.confirm; btn.textContent = "Delete" } }, 4000); return }
+  const { error } = await sb.from("posts").delete().eq("id", p.id);
+  if (error) return toast(niceError(error));
+  const own = (p.images || []).filter(isPath);
+  if (own.length) await sb.storage.from("images").remove(own);
+  toast("Deleted"); refreshFeed();
+}
+
+// ---------- composer + images ----------
+const pending = [];
+function renderThumbs() {
+  const t = $("#thumbs"); t.textContent = "";
+  pending.forEach((f, i) => t.append(el("div", { class: "thumb" }, el("img", { src: URL.createObjectURL(f), alt: "Image to upload " + (i + 1) }),
+    el("button", { type: "button", "aria-label": "Remove image", text: "×", onclick: () => { pending.splice(i, 1); renderThumbs() } }))));
+}
+async function shrink(file) {
+  if (file.type === "image/gif" || file.size < 1.5e6) return file;
+  try {
+    const bmp = await createImageBitmap(file); const k = Math.min(1, 2000 / Math.max(bmp.width, bmp.height));
+    const c = document.createElement("canvas"); c.width = Math.round(bmp.width * k); c.height = Math.round(bmp.height * k);
+    c.getContext("2d").drawImage(bmp, 0, 0, c.width, c.height);
+    const b = await new Promise(r => c.toBlob(r, "image/jpeg", .85));
+    return b && b.size < file.size ? new File([b], "photo.jpg", { type: "image/jpeg" }) : file;
+  } catch (e) { return file }
+}
+async function uploadImage(file, prefix = "") {
+  const f = await shrink(file);
+  if (f.size > MAX_BYTES) throw { message: "That image is over 10 MB." };
+  const ext = { "image/png": "png", "image/jpeg": "jpg", "image/gif": "gif", "image/webp": "webp" }[f.type] || "jpg";
+  const path = `${state.user.id}/${prefix}${Date.now()}-${Math.random().toString(36).slice(2, 8)}.${ext}`;
+  const { error } = await sb.storage.from("images").upload(path, f, { contentType: f.type, cacheControl: "31536000" });
+  if (error) throw error;
+  return path;
+}
+$("#imgInput").addEventListener("change", e => {
+  for (const f of e.target.files) {
+    if (pending.length >= MAX_IMG) { toast("Up to 4 images per post."); break }
+    if (!OK_TYPES.includes(f.type)) { toast("Use PNG, JPEG, GIF or WebP images."); continue }
+    if (f.size > 20 * 1024 * 1024) { toast(f.name + " is too large."); continue }
+    pending.push(f);
+  }
+  e.target.value = ""; renderThumbs();
+});
+REALMS.forEach(([id, name]) => $("#realmPick").append(el("option", { value: id, text: name })));
+$("#realmPick").addEventListener("change", e => { $("#composeHint").textContent = e.target.value === "ti" ? "Share experiences, not names or addresses of people you suspect." : "Posts are visible to everyone in the commons." });
+try { const d = JSON.parse(store("gc_draft") || "null"); if (d) { $("#title").value = d.t || ""; $("#body").value = d.b || "" } } catch (e) { }
+["title", "body"].forEach(id => $("#" + id).addEventListener("input", () => store("gc_draft", JSON.stringify({ t: $("#title").value, b: $("#body").value }))));
+$("#composer").addEventListener("submit", async e => {
+  e.preventDefault(); if (!needMember()) return;
+  const title = $("#title").value.trim(), body = $("#body").value.trim(); if (!title) return;
+  const btn = $("#postBtn"); btn.disabled = true;
+  const uploaded = [];
+  try {
+    if (pending.length) $("#composeHint").textContent = "Uploading images…";
+    for (const f of pending) uploaded.push(await uploadImage(f));
+    const row = { realm: $("#realmPick").value, title, body, images: uploaded };
+    if (state.answering) row.prompt_day = state.answering;
+    const { error } = await sb.from("posts").insert(row); if (error) throw error;
+    $("#title").value = ""; $("#body").value = ""; store("gc_draft", ""); stopAnswer(); pending.length = 0; renderThumbs();
+    toast("Transmitted"); refreshFeed();
+  } catch (err) {
+    if (uploaded.length) sb.storage.from("images").remove(uploaded);
+    toast(niceError(err));
+  } finally { btn.disabled = false; $("#composeHint").textContent = "Posts are visible to everyone in the commons." }
+});
+$("#answerBtn").addEventListener("click", () => {
+  if (!needMember()) return;
+  state.answering = dayKey(); $("#answering").hidden = false;
+  if (!$("#title").value.trim()) $("#title").value = todaysPrompt();
+  $("#composer").scrollIntoView({ behavior: "smooth", block: "start" }); $("#body").focus({ preventScroll: true });
+});
+$("#cancelAnswer").addEventListener("click", stopAnswer);
+$("#seeBtn").addEventListener("click", () => { state.realm = "prompt:" + dayKey(); render(); $("#feedTitle").scrollIntoView({ behavior: "smooth", block: "start" }) });
+document.querySelectorAll(".seg button").forEach(b => b.addEventListener("click", () => {
+  state.sort = b.dataset.sort; document.querySelectorAll(".seg button").forEach(x => x.setAttribute("aria-pressed", String(x === b))); render();
+}));
+
+// ---------- auth views ----------
+const back = () => el("a", { class: "back", href: "#", text: "← Back to the commons" });
+function field(label, attrs) { const i = el(attrs.tag || "input", { class: "field", ...attrs, tag: null }); return [el("label", {}, label, i), i] }
+function viewLogin() {
+  if (state.me) { setTimeout(() => location.hash = ""); return el("div") }
+  const [lE, email] = field("Email", { type: "email", id: "lEmail", autocomplete: "email", required: true });
+  const [lP, pw] = field("Password", { type: "password", id: "lPw", autocomplete: "current-password", required: true });
+  const err = el("div", { class: "err", role: "alert" }), btn = el("button", { class: "btn primary", type: "submit", text: "Log in" });
+  return el("div", {}, back(), el("form", { class: "auth", onsubmit: async e => {
+    e.preventDefault(); btn.disabled = true; err.textContent = "";
+    const { error } = await sb.auth.signInWithPassword({ email: email.value.trim(), password: pw.value });
+    btn.disabled = false; if (error) { err.textContent = niceError(error); return }
+    toast("Welcome back"); location.hash = "";
+  } }, el("h2", { text: "Log in" }), el("p", { text: "Welcome back to the commons." }), lE, lP, err, btn,
+    el("div", { class: "alt" }, el("a", { class: "link", href: "#forgot", text: "Forgot password?" }), el("span", {}, "New here? ", el("a", { class: "link", href: "#join", text: "Join free" })))));
+}
+function viewJoin() {
+  if (state.me) { setTimeout(() => location.hash = ""); return el("div") }
+  const [lH, handle] = field("Handle (how others see you)", { id: "jHandle", maxlength: "32", placeholder: "starseed_77", required: true, autocomplete: "username" });
+  const [lE, email] = field("Email", { type: "email", id: "jEmail", autocomplete: "email", required: true });
+  const [lP, pw] = field("Password (at least 8 characters)", { type: "password", id: "jPw", minlength: "8", autocomplete: "new-password", required: true });
+  const err = el("div", { class: "err", role: "alert" }), btn = el("button", { class: "btn primary", type: "submit", text: "Create account" });
+  const form = el("form", { class: "auth", onsubmit: async e => {
+    e.preventDefault(); err.textContent = "";
+    const h = handle.value.trim().replace(/^@/, "");
+    if (!/^[A-Za-z0-9_.-]{2,32}$/.test(h)) { err.textContent = "Handles use 2–32 letters, numbers, dots, dashes or underscores."; return }
+    if ([...state.profiles.values()].some(p => p.handle.toLowerCase() === h.toLowerCase())) { err.textContent = "That handle is taken. Try another."; return }
+    btn.disabled = true;
+    store("gc_pending_handle", h);
+    const { data, error } = await sb.auth.signUp({ email: email.value.trim(), password: pw.value, options: { data: { handle: h }, emailRedirectTo: location.origin + location.pathname } });
+    btn.disabled = false; if (error) { err.textContent = niceError(error); return }
+    if (data.session) { location.hash = "#welcome"; return }
+    form.replaceChildren(el("h2", { text: "Check your email" }), el("div", { class: "ok", text: `We sent a confirmation link to ${email.value.trim()}. Click it to activate your account, then you'll land back here.` }), el("p", { class: "hint", text: "Don't see it? Check your spam folder." }));
+  } }, el("h2", { text: "Join Glitch Commons" }), el("p", { text: "Free forever. Post ideas, answer daily prompts, chat with fellow seekers." }), lH, lE, lP, err, btn,
+    el("div", { class: "alt" }, el("span", {}, "Already a member? ", el("a", { class: "link", href: "#login", text: "Log in" }))));
+  return el("div", {}, back(), form);
+}
+function viewForgot() {
+  const [lE, email] = field("Email", { type: "email", id: "fEmail", autocomplete: "email", required: true });
+  const err = el("div", { class: "err", role: "alert" }), btn = el("button", { class: "btn primary", type: "submit", text: "Send reset link" });
+  const form = el("form", { class: "auth", onsubmit: async e => {
+    e.preventDefault(); btn.disabled = true; err.textContent = "";
+    const { error } = await sb.auth.resetPasswordForEmail(email.value.trim(), { redirectTo: location.origin + location.pathname });
+    btn.disabled = false; if (error) { err.textContent = niceError(error); return }
+    form.replaceChildren(el("h2", { text: "Check your email" }), el("div", { class: "ok", text: "If that email has an account, a reset link is on its way." }));
+  } }, el("h2", { text: "Reset your password" }), el("p", { text: "We'll email you a link to set a new one." }), lE, err, btn);
+  return el("div", {}, back(), form);
+}
+function viewReset() {
+  const [lP, pw] = field("New password (at least 8 characters)", { type: "password", id: "rPw", minlength: "8", autocomplete: "new-password", required: true });
+  const err = el("div", { class: "err", role: "alert" }), btn = el("button", { class: "btn primary", type: "submit", text: "Save new password" });
+  return el("form", { class: "auth", onsubmit: async e => {
+    e.preventDefault(); btn.disabled = true;
+    const { error } = await sb.auth.updateUser({ password: pw.value });
+    btn.disabled = false; if (error) { err.textContent = niceError(error); return }
+    toast("Password updated"); location.hash = "";
+  } }, el("h2", { text: "Set a new password" }), lP, err, btn);
+}
+function viewWelcome() {
+  if (!state.user) { setTimeout(() => location.hash = "#login"); return el("div") }
+  if (state.me) { setTimeout(() => location.hash = ""); return el("div") }
+  const meta = (state.user.user_metadata && state.user.user_metadata.handle) || store("gc_pending_handle") || "";
+  const [lH, handle] = field("Your handle", { id: "wHandle", maxlength: "32", placeholder: "starseed_77", required: true });
+  handle.value = meta;
+  const err = el("div", { class: "err", role: "alert" }), btn = el("button", { class: "btn primary", type: "submit", text: "Enter the commons" });
+  return el("form", { class: "auth", onsubmit: async e => {
+    e.preventDefault(); err.textContent = "";
+    const h = handle.value.trim().replace(/^@/, "");
+    if (!/^[A-Za-z0-9_.-]{2,32}$/.test(h)) { err.textContent = "Handles use 2–32 letters, numbers, dots, dashes or underscores."; return }
+    btn.disabled = true;
+    const { error } = await sb.from("profiles").insert({ id: state.user.id, handle: h });
+    btn.disabled = false; if (error) { err.textContent = niceError(error); return }
+    await loadProfiles(); toast("Welcome to the commons"); location.hash = "#edit";
+  } }, el("h2", { text: "Welcome in" }), el("p", { text: "Confirm the handle other members will see. Next you can add a picture and bio." }), lH, err, btn);
+}
+
+// ---------- profiles ----------
+function viewProfile() {
+  const id = state.view.arg, p = prof(id), mine = state.user && state.user.id === id;
+  if (!p) return el("div", {}, back(), el("div", { class: "empty" }, el("strong", { text: "Profile not found." }), "This member may have left the commons."));
+  const posts = state.posts.filter(x => x.author_id === id);
+  const resGot = posts.reduce((n, x) => n + x.res.length, 0);
+  const head = el("div", { class: "phead" }, avatar(id, 84),
+    el("div", { class: "info" }, el("h2", { text: "@" + p.handle }), p.path ? el("div", { class: "path", text: p.path }) : null,
+      p.bio ? el("p", { class: "bio", text: p.bio }) : el("p", { class: "bio hint", text: mine ? "You haven't written a bio yet." : "This seeker hasn't written a bio yet." }),
+      (p.realms || []).length ? el("div", { class: "prealms" }, p.realms.filter(r => REALMS.some(x => x[0] === r)).map(r => el("span", { class: "tag", text: realmName(r) }))) : null,
+      el("div", { class: "pstats" }, el("span", {}, "Joined ", el("b", { text: new Date(p.created_at).toLocaleDateString(undefined, { month: "short", year: "numeric" }) })),
+        el("span", {}, el("b", { text: String(posts.length) }), " transmissions"), el("span", {}, el("b", { text: String(resGot) }), " resonance"))),
+    el("div", { class: "mast-btns" },
+      mine ? el("a", { class: "btn primary", href: "#edit", text: "Edit profile" }) : null,
+      mine ? el("button", { class: "btn", type: "button", text: "Log out", onclick: async () => { await sb.auth.signOut(); toast("Logged out"); location.hash = "" } }) : null,
+      !mine && state.me ? el("button", { class: "btn primary", type: "button", text: "Send message", onclick: () => startDm(id) }) : null));
+  const wrap = el("div", { class: "profile" }, back(), head);
+  const hidden = p.show_posts === false;
+  if (hidden && !mine) { wrap.append(el("div", { class: "private" }, el("strong", { text: "This feed is private." }), el("div", { text: "@" + p.handle + " has chosen to keep their posts off their profile." }))); return wrap }
+  wrap.append(el("div", { class: "toolbar" }, el("h2", { text: mine ? "Your transmissions" : "Transmissions" }), mine && hidden ? el("span", { class: "hint", text: "Only you can see this list. Change it in Edit profile." }) : null));
+  const list = el("div", { class: "feed" });
+  if (!posts.length) list.append(el("div", { class: "empty" }, el("strong", { text: "No transmissions yet." })));
+  posts.forEach(x => list.append(postCard(x, true)));
+  wrap.append(list); return wrap;
+}
+function viewEdit() {
+  if (!state.me) { setTimeout(() => location.hash = state.user ? "#welcome" : "#login"); return el("div") }
+  const p = state.me, picked = new Set(p.realms || []); let newAvatar = null;
+  const prev = el("span", {}); const showPrev = () => { prev.textContent = ""; if (newAvatar) { const a = el("span", { class: "av", style: "--s:64px" }); a.append(el("img", { src: URL.createObjectURL(newAvatar), alt: "" })); prev.append(a) } else prev.append(avatar(p.id, 64)) }; showPrev();
+  const hIn = el("input", { class: "field", id: "pHandle", maxlength: "32" }); hIn.value = p.handle;
+  const pathIn = el("input", { class: "field", id: "pPath", maxlength: "60", placeholder: "Lucid dreamer · Pattern noticer" }); pathIn.value = p.path || "";
+  const bioIn = el("textarea", { class: "field", id: "pBio", maxlength: "600", placeholder: "What are you exploring? What woke you up?" }); bioIn.value = p.bio || "";
+  const showIn = el("input", { type: "checkbox", id: "pShow" }); showIn.checked = p.show_posts !== false;
+  const picks = el("div", { class: "picks" }); REALMS.forEach(([id, name]) => { const b = el("button", { class: "chip", type: "button", "aria-pressed": String(picked.has(id)), text: name, onclick: () => { picked.has(id) ? picked.delete(id) : picked.add(id); b.setAttribute("aria-pressed", String(picked.has(id))) } }); picks.append(b) });
+  const fileIn = el("input", { type: "file", id: "pAvatar", accept: OK_TYPES.join(","), style: "position:absolute;width:1px;height:1px;opacity:0" });
+  fileIn.addEventListener("change", () => { const f = fileIn.files[0]; if (f && OK_TYPES.includes(f.type)) { newAvatar = f; showPrev() } else if (f) toast("Use PNG, JPEG, GIF or WebP.") });
+  const err = el("div", { class: "err", role: "alert" }), saveBtn = el("button", { class: "btn primary", type: "submit", text: "Save profile" });
+  return el("div", { class: "profile" }, el("a", { class: "back", href: "#u/" + p.id, text: "← Back to my profile" }),
+    el("form", { class: "edit", onsubmit: async e => {
+      e.preventDefault(); err.textContent = "";
+      const h = hIn.value.trim().replace(/^@/, "");
+      if (!/^[A-Za-z0-9_.-]{2,32}$/.test(h)) { err.textContent = "Handles use 2–32 letters, numbers, dots, dashes or underscores."; return }
+      saveBtn.disabled = true;
+      try {
+        const upd = { handle: h, path: pathIn.value.trim(), bio: bioIn.value.trim(), realms: [...picked], show_posts: showIn.checked };
+        if (newAvatar) { upd.avatar_path = await uploadImage(newAvatar, "avatar-") }
+        const { error } = await sb.from("profiles").update(upd).eq("id", p.id); if (error) throw error;
+        if (newAvatar && isPath(p.avatar_path)) sb.storage.from("images").remove([p.avatar_path]);
+        await loadProfiles(); toast("Profile saved"); location.hash = "#u/" + p.id;
+      } catch (ex) { err.textContent = niceError(ex) } finally { saveBtn.disabled = false }
+    } },
+      el("div", { class: "eyebrow", text: "Edit your profile" }),
+      el("div", { class: "row", style: "align-items:center" }, prev, el("label", { class: "btn", for: "pAvatar" }, "Change picture", fileIn)),
+      el("label", { class: "l" }, "Handle", hIn),
+      el("label", { class: "l" }, "Your path (a short line under your name)", pathIn),
+      el("label", { class: "l" }, "Bio", bioIn),
+      el("div", { class: "l" }, el("span", { class: "hint", text: "Realms you're drawn to" }), picks),
+      el("label", { class: "switch", for: "pShow" }, showIn, el("div", {}, el("b", { text: "Show my posts on my profile" }), el("span", { text: "When off, other members can see your profile but not your list of posts. Your posts still appear in the commons feed and their realms." }))),
+      err, el("div", { class: "row" }, saveBtn, el("a", { class: "btn", href: "#u/" + p.id, text: "Cancel" }))));
+}
+
+// ---------- public chat (Lounge + post rooms) ----------
+let chatMsgs = [];
+function chatTitle(ch) { if (ch === "lounge") return "The Lounge"; const p = state.posts.find(x => "p-" + x.id === ch); return p ? p.title : "Post chat" }
+function viewChat(ch) {
+  const here = el("span", { class: "here", id: "chatHere", hidden: true });
+  const list = el("div", { class: "msgs", id: "msgs", "aria-live": "polite" }, el("div", { class: "chat-empty", text: state.user ? "Loading messages…" : "" }));
+  const wrap = el("div", { class: "chat" }, back(),
+    el("div", { class: "chat-head" }, el("div", {}, el("div", { class: "eyebrow", text: ch === "lounge" ? "Live group chat" : "Chat about this post" }), el("h2", { id: "chatTitle", text: chatTitle(ch) }),
+      el("p", { text: ch === "lounge" ? "Talk about anything with everyone in the commons. Keep the code: curious, kind, no mocking." : "A live room for everyone who wants to dig into this transmission together." })), here));
+  if (!state.me) { list.replaceChildren(el("div", { class: "chat-empty" }, "Chat is for members. ", el("a", { class: "link", href: "#join", text: "Join free" }), " or ", el("a", { class: "link", href: "#login", text: "log in" }), ".")); wrap.append(el("div", { class: "chat-box" }, list)); return wrap }
+  const inp = el("input", { class: "field", id: "chatInput", maxlength: "1000", placeholder: "Say something…", autocomplete: "off" });
+  const form = el("form", { class: "chat-form", onsubmit: async e => {
+    e.preventDefault(); const body = inp.value.trim(); if (!body) return; inp.value = "";
+    const { error } = await sb.from("chat_messages").insert({ channel: ch, body });
+    if (error) { inp.value = body; toast(niceError(error)) } inp.focus();
+  } }, inp, el("button", { class: "btn primary", type: "submit", text: "Send" }));
+  wrap.append(el("div", { class: "chat-box" }, list, form), el("div", { class: "chat-note", text: "Every member can read this chat. For private conversations, use Messages." }));
+  return wrap;
+}
+async function openChat(ch) {
+  if (!state.me) return;
+  chatMsgs = [];
+  const { data } = await sb.from("chat_messages").select("id,author_id,body,created_at").eq("channel", ch).order("created_at", { ascending: false }).limit(200);
+  chatMsgs = (data || []).reverse(); renderMsgs(chatMsgs, "chat");
+  const room = sb.channel("room-" + ch, { config: { presence: { key: state.user.id } } });
+  chatSub = room;
+  room
+    .on("postgres_changes", { event: "INSERT", schema: "public", table: "chat_messages", filter: "channel=eq." + ch }, async ({ new: m }) => {
+      if (!chatMsgs.some(x => x.id === m.id)) { if (!prof(m.author_id)) await loadProfiles(); chatMsgs.push(m); renderMsgs(chatMsgs, "chat") }
+    })
+    .on("postgres_changes", { event: "DELETE", schema: "public", table: "chat_messages" }, ({ old }) => { chatMsgs = chatMsgs.filter(x => x.id !== old.id); renderMsgs(chatMsgs, "chat") })
+    .on("presence", { event: "sync" }, () => { const n = Object.keys(room.presenceState()).length; const h = $("#chatHere"); if (h) { h.hidden = !n; h.textContent = n + " here now" } })
+    .subscribe(async s => { if (s === "SUBSCRIBED") { try { await room.track({ at: Date.now() }) } catch (e) { } } });
+}
+function renderMsgs(msgs, kind) {
+  const list = $("#msgs"); if (!list) return;
+  const atBottom = list.scrollHeight - list.scrollTop - list.clientHeight < 80;
+  list.textContent = "";
+  if (!msgs.length) { list.append(el("div", { class: "chat-empty", text: kind === "dm" ? "No messages yet. Say hello." : state.view.name === "lounge" ? "The Lounge is quiet. Say hi and start the first conversation." : "No one has chatted about this yet. Start it off." })); return }
+  msgs.forEach(m => {
+    const author = m.author_id || m.sender_id, mine = state.user && author === state.user.id;
+    list.append(el("div", { class: "msg" + (mine ? " me" : "") }, avatar(author, 30), el("div", { class: "c" },
+      el("div", { class: "top" }, whoLink(author), el("time", { text: ago(m.created_at) }),
+        (mine || (kind === "chat" && state.isAdmin)) ? el("button", { class: "x", type: "button", "aria-label": "Delete message", text: "Delete", onclick: async () => {
+          const { error } = await sb.from(kind === "dm" ? "dm_messages" : "chat_messages").delete().eq("id", m.id);
+          if (error) return toast(niceError(error));
+          if (kind === "dm") { dmMsgs = dmMsgs.filter(x => x.id !== m.id); renderMsgs(dmMsgs, "dm") } else { chatMsgs = chatMsgs.filter(x => x.id !== m.id); renderMsgs(chatMsgs, "chat") }
+        } }) : null),
+      el("p", { text: m.body }))));
+  });
+  if (atBottom || (msgs.length && (msgs[msgs.length - 1].author_id || msgs[msgs.length - 1].sender_id) === state.user?.id)) list.scrollTop = list.scrollHeight;
+}
+function refreshLiveView() {
+  if (state.view.name === "messages") renderInbox();
+  const t = $("#chatTitle"); if (t && state.view.name === "chat") t.textContent = chatTitle("p-" + state.view.arg);
+}
+
+// ---------- private messages ----------
+let inbox = [], dmMsgs = [];
+const seenKey = id => "gc_seen_" + id;
+async function loadInbox() {
+  if (!state.user) return;
+  const { data: threads } = await sb.from("dm_threads").select("id,user_a,user_b,last_at").order("last_at", { ascending: false }).limit(200);
+  const ids = (threads || []).map(t => t.id);
+  let last = {};
+  if (ids.length) {
+    const { data: msgs } = await sb.from("dm_messages").select("thread_id,sender_id,body,created_at").in("thread_id", ids).order("created_at", { ascending: false }).limit(1000);
+    (msgs || []).forEach(m => { if (!last[m.thread_id]) last[m.thread_id] = m });
+  }
+  inbox = (threads || []).map(t => ({ ...t, other: t.user_a === state.user.id ? t.user_b : t.user_a, last: last[t.id] })).filter(t => t.last);
+  state.unread = inbox.filter(t => t.last.sender_id !== state.user.id && new Date(t.last.created_at).getTime() > Number(store(seenKey(t.id)) || 0)).length;
+}
+function startInbox() {
+  if (inboxSub) return;
+  loadInbox().then(render);
+  inboxSub = sb.channel("inbox-" + state.user.id)
+    .on("postgres_changes", { event: "INSERT", schema: "public", table: "dm_messages" }, async ({ new: m }) => {
+      if (state.view.name === "dm" && state.view.arg === m.thread_id) {
+        if (!dmMsgs.some(x => x.id === m.id)) { dmMsgs.push(m); renderMsgs(dmMsgs, "dm") }
+        store(seenKey(m.thread_id), Date.now());
+      }
+      await loadInbox(); render();
+    }).subscribe();
+}
+function stopInbox() { if (inboxSub) { sb.removeChannel(inboxSub); inboxSub = null } inbox = []; state.unread = 0 }
+function viewInbox() {
+  const wrap = el("div", { class: "chat" }, back(), el("div", { class: "chat-head" }, el("div", {}, el("div", { class: "eyebrow", text: "Private" }), el("h2", { text: "Messages" }),
+    el("p", { text: "One-on-one conversations only you and the other person can read. Start one from anyone's profile." }))), el("div", { class: "inbox", id: "inbox" }));
+  return wrap;
+}
+async function renderInbox() {
+  if (!state.user) { location.hash = "#login"; return }
+  await loadInbox();
+  const box = $("#inbox"); if (!box) return; box.textContent = "";
+  if (!inbox.length) { box.append(el("div", { class: "empty" }, el("strong", { text: "No conversations yet." }), "Open a member's profile and tap Send message.")); return }
+  inbox.forEach(t => {
+    const unread = t.last.sender_id !== state.user.id && new Date(t.last.created_at).getTime() > Number(store(seenKey(t.id)) || 0);
+    box.append(el("a", { class: "thread-row" + (unread ? " unread" : ""), href: "#dm/" + t.id, style: "text-decoration:none;color:inherit" }, avatar(t.other, 40),
+      el("div", { class: "c" }, el("div", { class: "t", text: "@" + nameOf(t.other) }), el("div", { class: "s", text: (t.last.sender_id === state.user.id ? "You: " : "") + t.last.body })),
+      el("time", { class: "hint", text: ago(t.last.created_at) })));
+  });
+}
+async function startDm(otherId) {
+  if (!needMember() || otherId === state.user.id) return;
+  const [a, b] = [state.user.id, otherId].sort();
+  let { data } = await sb.from("dm_threads").select("id").eq("user_a", a).eq("user_b", b).maybeSingle();
+  if (!data) {
+    const r = await sb.from("dm_threads").insert({ user_a: a, user_b: b }).select("id").single();
+    if (r.error) { const again = await sb.from("dm_threads").select("id").eq("user_a", a).eq("user_b", b).maybeSingle(); data = again.data; if (!data) return toast(niceError(r.error)) }
+    else data = r.data;
+  }
+  location.hash = "#dm/" + data.id;
+}
+function viewDm() {
+  if (!state.user) { setTimeout(() => location.hash = "#login"); return el("div") }
+  const list = el("div", { class: "msgs", id: "msgs", "aria-live": "polite" }, el("div", { class: "chat-empty", text: "Loading…" }));
+  const inp = el("input", { class: "field", id: "dmInput", maxlength: "2000", placeholder: "Write a private message…", autocomplete: "off" });
+  const form = el("form", { class: "chat-form", onsubmit: async e => {
+    e.preventDefault(); const body = inp.value.trim(); if (!body) return; inp.value = "";
+    const { data, error } = await sb.from("dm_messages").insert({ thread_id: state.view.arg, body }).select("id,thread_id,sender_id,body,created_at").single();
+    if (error) { inp.value = body; return toast(niceError(error)) }
+    if (!dmMsgs.some(x => x.id === data.id)) { dmMsgs.push(data); renderMsgs(dmMsgs, "dm") } inp.focus();
+  } }, inp, el("button", { class: "btn primary", type: "submit", text: "Send" }));
+  return el("div", { class: "chat" }, el("a", { class: "back", href: "#messages", text: "← All messages" }),
+    el("div", { class: "chat-head" }, el("div", { id: "dmHead" }, el("div", { class: "eyebrow", text: "Private conversation" }), el("h2", { text: "…" }))),
+    el("div", { class: "chat-box" }, list, form),
+    el("div", { class: "private-note", text: "🔒 Only the two of you can read this conversation." }));
+}
+async function openDm(threadId) {
+  if (!state.user) return;
+  const { data: t } = await sb.from("dm_threads").select("id,user_a,user_b").eq("id", threadId).maybeSingle();
+  if (!t) { $("#msgs") && $("#msgs").replaceChildren(el("div", { class: "chat-empty", text: "This conversation isn't available." })); return }
+  const other = t.user_a === state.user.id ? t.user_b : t.user_a;
+  const head = $("#dmHead"); if (head) head.replaceChildren(el("div", { class: "eyebrow", text: "Private conversation" }), el("h2", {}, el("a", { href: "#u/" + other, style: "color:inherit;text-decoration:none", text: "@" + nameOf(other) })));
+  const { data } = await sb.from("dm_messages").select("id,thread_id,sender_id,body,created_at").eq("thread_id", threadId).order("created_at", { ascending: false }).limit(300);
+  dmMsgs = (data || []).reverse(); renderMsgs(dmMsgs, "dm");
+  store(seenKey(threadId), Date.now()); await loadInbox(); render();
+}
+
+// ---------- start up ----------
+async function boot() {
+  render();
+  let booted = false, lastUid = null;
+  sb.auth.onAuthStateChange((event, session) => {
+    if (event === "PASSWORD_RECOVERY") { setTimeout(() => { location.hash = "#reset" }, 0); return }
+    const uid = session && session.user ? session.user.id : null;
+    if (!booted || uid === lastUid) return;
+    lastUid = uid;
+    setTimeout(async () => { await setUser(session && session.user); route() }, 0);
+  });
+  await Promise.all([loadProfiles(), loadPosts()]);
+  const { data: { session } } = await sb.auth.getSession();
+  lastUid = session && session.user ? session.user.id : null;
+  booted = true;
+  await setUser(session && session.user);
+  if (/access_token|error_description/.test(location.hash)) history.replaceState(null, "", location.pathname + location.search);
+  route();
+  sb.channel("public-feed")
+    .on("postgres_changes", { event: "*", schema: "public", table: "posts" }, refreshFeed)
+    .on("postgres_changes", { event: "*", schema: "public", table: "replies" }, refreshFeed)
+    .on("postgres_changes", { event: "*", schema: "public", table: "resonance" }, refreshFeed)
+    .on("postgres_changes", { event: "*", schema: "public", table: "profiles" }, refreshProfiles)
+    .subscribe();
+  setInterval(() => { if (state.view.name === "feed") render(); else renderDaily() }, 60000);
+}
+boot();
+
+</script>
+</body>
+</html>
