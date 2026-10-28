@@ -285,6 +285,47 @@ html,body{overflow-x:clip}
 .av.wing svg{width:70%;height:auto;--wf:transparent}
 footer.site{display:flex;align-items:center;gap:10px}
 footer.site .mark{height:16px;margin:0;opacity:.7}
+/* ---------- the vault ---------- */
+.vault{display:grid;gap:16px}
+.vault-tools{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+.vault-tools .field{flex:1 1 220px;width:auto;min-width:0}
+.case-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,230px),1fr));gap:12px}
+.case-grid .empty{grid-column:1/-1}
+.case-card{display:flex;flex-direction:column;background:var(--surface);border:1px solid var(--line);border-radius:14px;overflow:hidden;color:inherit;text-decoration:none;min-width:0;transition:border-color .15s}
+.case-card:hover{border-color:var(--accent)}
+.case-card:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.case-thumb{aspect-ratio:16/9;max-width:100%;background:var(--surface-2)}
+.case-thumb img{width:100%;height:100%;object-fit:cover;display:block}
+.case-body{padding:14px 16px;display:flex;flex-direction:column;gap:8px;min-width:0;flex:1}
+.case-top{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.case-no{font-family:var(--mono);font-size:12px;letter-spacing:.06em;color:var(--accent);font-variant-numeric:tabular-nums}
+.case-no.big{font-size:14px}
+.case-card h3{margin:0;font-family:var(--display);font-weight:600;font-size:1.05rem;line-height:1.3;text-wrap:balance;overflow-wrap:anywhere}
+.case-card .body{margin:0;font-size:14px;color:var(--muted);display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;overflow-wrap:anywhere}
+.case-foot{display:flex;flex-wrap:wrap;justify-content:space-between;gap:4px 10px;font-size:12px;color:var(--muted);font-family:var(--mono);margin-top:auto;padding-top:4px}
+.metoo-count{color:var(--accent);font-family:var(--mono);font-size:12px}
+.post h3.case-title{font-size:clamp(1.3rem,3.4vw,1.7rem)}
+.case-full h4{margin:8px 0 0;font-size:11px;font-family:var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--muted);font-weight:500}
+.facts{display:grid;grid-template-columns:max-content minmax(0,1fr);gap:6px 16px;margin:4px 0;font-size:14px}
+.facts dt{color:var(--muted)}
+.facts dd{margin:0;min-width:0;overflow-wrap:anywhere}
+.btn.on{border-color:var(--accent);color:var(--accent);background:var(--glow)}
+.btn[disabled]{opacity:.5;cursor:default}
+.cited{display:flex;flex-wrap:wrap;gap:6px;align-items:center;min-width:0}
+.cited .lbl{font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.casechip{display:inline-flex;align-items:center;gap:6px;max-width:100%;font-size:13px;padding:4px 10px;border-radius:8px;background:var(--surface-2);border:1px solid var(--line);color:var(--fg);text-decoration:none;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+a.casechip{display:inline-block}
+a.casechip:hover{border-color:var(--accent)}
+a.casechip:focus-visible{outline:2px solid var(--accent)}
+.casechip button{all:unset;cursor:pointer;color:var(--muted);padding:0 2px;font-size:15px}
+.casechip button:focus-visible{outline:2px solid var(--accent)}
+.attach-cases{display:grid;gap:8px}
+.case-chips{display:flex;flex-wrap:wrap;gap:6px}
+.case-chips:empty{display:none}
+.form-title{margin:0;font-family:var(--display);font-weight:800;font-size:1.5rem}
+.form-note{margin:0;font-size:13px;color:var(--muted)}
+.topbar .btn[aria-current="page"]{border-color:var(--accent);color:var(--accent)}
+@media (max-width:440px){.topbar .mast-btns{gap:6px}.topbar .btn{padding:6px 11px;font-size:14px}}
 </style>
 </head>
 <body>
@@ -293,10 +334,12 @@ footer.site .mark{height:16px;margin:0;opacity:.7}
   <header class="topbar">
     <a class="brand" href="#" aria-label="Glitch Commons home"><svg class="mark" viewBox="0 0 252 79" aria-hidden="true" focusable="false"><use href="#wings-sm"/></svg>Glitch&nbsp;<span>Commons</span></a>
     <nav class="mast-btns" id="navOut" aria-label="Account">
+      <a class="btn vault-link" href="#vault">The Vault</a>
       <a class="btn" href="#login">Log in</a>
       <a class="btn primary" href="#join">Join free</a>
     </nav>
     <nav class="mast-btns" id="navIn" aria-label="Account" hidden>
+      <a class="btn vault-link" href="#vault">The Vault</a>
       <a class="btn" href="#messages" id="msgBtn">Messages</a>
       <a class="btn bell" href="#notifications" id="bellBtn" aria-label="Notifications"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg><span class="badge" id="bellBadge" hidden>0</span></a>
       <a class="btn" href="#" id="meBtn">My profile</a>
@@ -320,10 +363,10 @@ footer.site .mark{height:16px;margin:0;opacity:.7}
       <div class="code">
         <div class="label">The code</div>
         <ul>
-          <li>Question everything, including this.</li>
           <li>Challenge the idea, never the person.</li>
           <li>Bring your evidence and your experience.</li>
           <li>No harassment, threats or doxxing. Ever.</li>
+          <li>Downvote low-effort posts, not ideas you disagree with.</li>
         </ul>
       </div>
     </aside>
@@ -344,6 +387,10 @@ footer.site .mark{height:16px;margin:0;opacity:.7}
             <span class="hint">Up to 4 images, 10 MB each.</span>
           </div>
           <div class="thumbs" id="thumbs"></div>
+          <div class="attach-cases">
+            <select class="field" id="casePick" aria-label="Attach evidence from the Vault"><option value="">Attach evidence from the Vault…</option></select>
+            <div class="case-chips" id="caseChips"></div>
+          </div>
           <div class="foot">
             <span class="hint" id="composeHint">Everyone can read and vote on your idea.</span>
             <div class="mast-btns"><button class="btn" id="cancelPost" type="button">Cancel</button><button class="btn primary" id="postBtn" type="submit">Post idea</button></div>
@@ -399,7 +446,8 @@ const state = {
   user: null, me: null, isAdmin: false,
   posts: [], profiles: new Map(), threads: {}, open: new Set(),
   realm: "all", sort: "week", composing: false, answering: null, view: { name: "feed" }, unread: 0,
-  myVotes: new Map(), notifs: [], notifUnread: 0
+  myVotes: new Map(), notifs: [], notifUnread: 0,
+  cases: [], casesLoaded: false, myMetoo: new Set(), attach: [], vault: { type: "all", sort: "new", q: "" }
 };
 let chatSub = null, dmSub = null, inboxSub = null;
 
@@ -478,9 +526,10 @@ async function loadProfiles() {
   if (state.user) state.me = prof(state.user.id);
   $("#stMembers").textContent = state.profiles.size;
 }
+const POST_COLS = "id,author_id,realm,title,body,images,prompt_day,created_at,score,replies(count),post_cases(case_id,vault_cases(case_no,title))";
 async function loadPosts() {
   const { data, error } = await sb.from("posts")
-    .select("id,author_id,realm,title,body,images,prompt_day,created_at,score,replies(count)")
+    .select(POST_COLS)
     .order("created_at", { ascending: false }).limit(300);
   if (error) { console.warn(error); return }
   state.posts = data.map(p => ({ ...p, replyCount: (p.replies && p.replies[0] && p.replies[0].count) || 0 }));
@@ -496,7 +545,7 @@ async function loadMyVotes() {
   (data || []).forEach(v => state.myVotes.set(v.target_type + ":" + v.target_id, v.value));
 }
 async function loadOnePost(id) {
-  const { data } = await sb.from("posts").select("id,author_id,realm,title,body,images,prompt_day,created_at,score,replies(count)").eq("id", id).maybeSingle();
+  const { data } = await sb.from("posts").select(POST_COLS).eq("id", id).maybeSingle();
   if (data && !state.posts.some(x => x.id === id)) state.posts.push({ ...data, replyCount: (data.replies && data.replies[0] && data.replies[0].count) || 0 });
   return data;
 }
@@ -515,9 +564,9 @@ async function setUser(user) {
     const { data } = await sb.from("admins").select("user_id").eq("user_id", user.id).maybeSingle();
     state.isAdmin = !!data;
     if (!state.me) { await loadProfiles() }
-    await loadMyVotes();
+    await Promise.all([loadMyVotes(), loadMyMetoo()]);
     startInbox();
-  } else { stopInbox(); state.myVotes = new Map() }
+  } else { stopInbox(); state.myVotes = new Map(); state.myMetoo = new Set() }
   $("#navOut").hidden = !!user; $("#navIn").hidden = !user;
   $("#pageView").dataset.route = "";
   if (user && !state.me && !["#reset"].includes(location.hash)) location.hash = "#welcome";
@@ -543,6 +592,8 @@ function route() {
   if (state.view.name === "messages") renderInbox();
   if (state.view.name === "notifications") markNotifsRead();
   if (state.view.name === "post" && arg) openPost(arg);
+  if (state.view.name === "case" && arg) openCase(arg);
+  if (state.view.name === "feed" && state.pendingCompose) { state.pendingCompose = false; openComposer() }
 }
 window.addEventListener("hashchange", route);
 
@@ -562,6 +613,8 @@ function render() {
   const mb = $("#msgBtn"); mb.textContent = "Messages"; if (state.unread) mb.append(el("span", { class: "badge", text: String(state.unread) }));
   const bb = $("#bellBadge"); bb.hidden = !state.notifUnread; bb.textContent = state.notifUnread > 99 ? "99+" : String(state.notifUnread);
   $("#bellBtn").setAttribute("aria-label", state.notifUnread ? `Notifications, ${state.notifUnread} unread` : "Notifications");
+  const inVault = state.view.name === "vault" || state.view.name === "case";
+  document.querySelectorAll(".vault-link").forEach(a => { if (inVault) a.setAttribute("aria-current", "page"); else a.removeAttribute("aria-current") });
   renderRealms(); renderDaily();
   // keep half-typed replies across re-renders
   const keep = {}; document.querySelectorAll(".reply-form .field").forEach(i => { if (i.value) keep[i.id] = i.value });
@@ -575,11 +628,11 @@ function renderMain() {
   $("#feedView").hidden = !isFeed; $("#pageView").hidden = isFeed; $("#hero").hidden = !isFeed;
   if (isFeed) return renderFeed();
   const v = $("#pageView");
-  const views = { login: viewLogin, join: viewJoin, forgot: viewForgot, reset: viewReset, welcome: viewWelcome, u: viewProfile, edit: viewEdit, messages: viewInbox, dm: viewDm, post: viewPost, notifications: viewNotifs };
+  const views = { login: viewLogin, join: viewJoin, forgot: viewForgot, reset: viewReset, welcome: viewWelcome, u: viewProfile, edit: viewEdit, messages: viewInbox, dm: viewDm, post: viewPost, notifications: viewNotifs, vault: viewVault, case: viewCase };
   const fn = views[state.view.name];
   if (!fn) { location.hash = ""; return }
   // most views keep their own content (typed text, live chat); profiles rebuild to show fresh data
-  const rebuild = ["u", "post", "notifications"].includes(state.view.name);
+  const rebuild = ["u", "post", "notifications", "case"].includes(state.view.name);
   if (!rebuild && v.dataset.route === location.hash) return refreshLiveView();
   v.dataset.route = location.hash; v.textContent = "";
   v.append(fn());
@@ -637,9 +690,12 @@ async function castVote(type, item, dir) {
     : await sb.from("votes").delete().eq("target_type", type).eq("target_id", item.id).eq("user_id", state.user.id);
   if (error) { undo(); toast(niceError(error)) }
 }
-async function sharePost(p) {
-  const url = location.origin + location.pathname + "#post/" + p.id;
-  try { await navigator.clipboard.writeText(url); toast("Link copied") } catch (e) { window.prompt("Copy this link:", url) }
+function sharePost(p) { return shareLink("#post/" + p.id) }
+function citedCases(p) {
+  const list = (p.post_cases || []).filter(x => x && x.vault_cases);
+  if (!list.length) return null;
+  return el("div", { class: "cited" }, el("span", { class: "lbl", text: "Evidence" }),
+    list.map(x => el("a", { class: "casechip", href: "#case/" + x.case_id, title: x.vault_cases.title }, caseNo(x.vault_cases.case_no) + " · " + x.vault_cases.title)));
 }
 function postCard(p, mode = "feed") {
   const compact = mode === "compact", single = mode === "single";
@@ -650,7 +706,8 @@ function postCard(p, mode = "feed") {
       compact ? null : whoLink(p.author_id), el("span", { text: ago(p.created_at) })),
     el("h3", { text: p.title }),
     p.body ? el("p", { class: "body" + (open ? "" : " clamp"), text: p.body }) : null,
-    imgs.length ? gallery(imgs) : null);
+    imgs.length ? gallery(imgs) : null,
+    citedCases(p));
   const acts = el("div", { class: "actions" },
     voteBox("post", p),
     single ? null : compact ? el("a", { class: "chip", href: "#post/" + p.id, style: "text-decoration:none" }, el("span", { text: `Replies ${p.replyCount || ""}`.trim() }))
@@ -704,18 +761,24 @@ function renderThumbs() {
   pending.forEach((f, i) => t.append(el("div", { class: "thumb" }, el("img", { src: URL.createObjectURL(f), alt: "Image to upload " + (i + 1) }),
     el("button", { type: "button", "aria-label": "Remove image", text: "×", onclick: () => { pending.splice(i, 1); renderThumbs() } }))));
 }
-async function shrink(file) {
-  if (file.type === "image/gif" || file.size < 1.5e6) return file;
-  try {
-    const bmp = await createImageBitmap(file); const k = Math.min(1, 2000 / Math.max(bmp.width, bmp.height));
-    const c = document.createElement("canvas"); c.width = Math.round(bmp.width * k); c.height = Math.round(bmp.height * k);
-    c.getContext("2d").drawImage(bmp, 0, 0, c.width, c.height);
-    const b = await new Promise(r => c.toBlob(r, "image/jpeg", .85));
-    return b && b.size < file.size ? new File([b], "photo.jpg", { type: "image/jpeg" }) : file;
-  } catch (e) { return file }
+// Every photo is redrawn and re-saved before upload. This strips the hidden data
+// phones embed in photos (like the GPS location where it was taken) and resizes big ones.
+async function cleanImage(file) {
+  if (file.type === "image/gif") return file; // GIFs are kept as-is so animations still play
+  let bmp;
+  try { bmp = await createImageBitmap(file) } catch (e) { throw { message: "We couldn't read that image. Try a different photo." } }
+  const k = Math.min(1, 2000 / Math.max(bmp.width, bmp.height));
+  const c = document.createElement("canvas");
+  c.width = Math.max(1, Math.round(bmp.width * k)); c.height = Math.max(1, Math.round(bmp.height * k));
+  c.getContext("2d").drawImage(bmp, 0, 0, c.width, c.height);
+  const save = type => new Promise(r => c.toBlob(r, type, .88));
+  let b = file.type === "image/png" ? await save("image/png") : null;
+  if (!b || b.size > MAX_BYTES) b = await save("image/jpeg");
+  if (!b) throw { message: "We couldn't process that image. Try a different photo." };
+  return new File([b], b.type === "image/png" ? "image.png" : "photo.jpg", { type: b.type });
 }
 async function uploadImage(file, prefix = "") {
-  const f = await shrink(file);
+  const f = await cleanImage(file);
   if (f.size > MAX_BYTES) throw { message: "That image is over 10 MB." };
   const ext = { "image/png": "png", "image/jpeg": "jpg", "image/gif": "gif", "image/webp": "webp" }[f.type] || "jpg";
   const path = `${state.user.id}/${prefix}${Date.now()}-${Math.random().toString(36).slice(2, 8)}.${ext}`;
@@ -746,8 +809,13 @@ $("#composer").addEventListener("submit", async e => {
     for (const f of pending) uploaded.push(await uploadImage(f));
     const row = { realm: $("#realmPick").value, title, body, images: uploaded };
     if (state.answering) row.prompt_day = state.answering;
-    const { error } = await sb.from("posts").insert(row); if (error) throw error;
+    const { data: made, error } = await sb.from("posts").insert(row).select("id").single(); if (error) throw error;
+    if (state.attach.length) {
+      const { error: e2 } = await sb.from("post_cases").insert(state.attach.map(case_id => ({ post_id: made.id, case_id })));
+      if (e2) toast("Your idea posted, but the evidence couldn't be attached: " + niceError(e2));
+    }
     $("#title").value = ""; $("#body").value = ""; store("gc_draft", ""); stopAnswer(); pending.length = 0; renderThumbs();
+    state.attach = []; fillCasePick();
     state.composing = false; toast("Posted"); refreshFeed(); render();
   } catch (err) {
     if (uploaded.length) sb.storage.from("images").remove(uploaded);
@@ -756,12 +824,27 @@ $("#composer").addEventListener("submit", async e => {
 });
 function openComposer() {
   if (!needMember()) return false;
-  state.composing = true; render();
+  state.composing = true; fillCasePick(); render();
   $("#composer").scrollIntoView({ behavior: "smooth", block: "start" }); $("#title").focus({ preventScroll: true });
   return true;
 }
 $("#postIdeaBtn").addEventListener("click", openComposer);
-$("#cancelPost").addEventListener("click", () => { state.composing = false; stopAnswer(); render() });
+$("#cancelPost").addEventListener("click", () => { state.composing = false; state.attach = []; fillCasePick(); stopAnswer(); render() });
+function fillCasePick() {
+  const sel = $("#casePick"); sel.textContent = "";
+  sel.append(el("option", { value: "", text: state.attach.length >= 3 ? "Up to 3 cases per idea" : state.cases.length ? "Attach evidence from the Vault…" : "No Vault cases yet" }));
+  const uid = state.user && state.user.id;
+  [...state.cases].sort((a, b) => ((b.author_id === uid) - (a.author_id === uid)) || b.case_no - a.case_no)
+    .forEach(c => { if (!state.attach.includes(c.id)) sel.append(el("option", { value: c.id, text: caseNo(c.case_no) + " · " + c.title.slice(0, 70) + (c.author_id === uid ? " (yours)" : "") })) });
+  sel.disabled = !state.cases.length || state.attach.length >= 3;
+  const box = $("#caseChips"); box.textContent = "";
+  state.attach.forEach(id => {
+    const c = state.cases.find(x => x.id === id); if (!c) return;
+    box.append(el("span", { class: "casechip" }, caseNo(c.case_no) + " · " + c.title.slice(0, 50),
+      el("button", { type: "button", "aria-label": "Remove " + caseNo(c.case_no), text: "×", onclick: () => { state.attach = state.attach.filter(x => x !== id); fillCasePick() } })));
+  });
+}
+$("#casePick").addEventListener("change", e => { const v = e.target.value; if (v && state.attach.length < 3 && !state.attach.includes(v)) { state.attach.push(v); fillCasePick() } else e.target.value = "" });
 $("#answerBtn").addEventListener("click", () => {
   if (!openComposer()) return;
   state.answering = dayKey(); $("#answering").hidden = false;
@@ -770,8 +853,8 @@ $("#answerBtn").addEventListener("click", () => {
 });
 $("#cancelAnswer").addEventListener("click", stopAnswer);
 $("#seeBtn").addEventListener("click", () => { state.realm = "prompt:" + dayKey(); render(); $("#feedTitle").scrollIntoView({ behavior: "smooth", block: "start" }) });
-document.querySelectorAll(".seg button").forEach(b => b.addEventListener("click", () => {
-  state.sort = b.dataset.sort; document.querySelectorAll(".seg button").forEach(x => x.setAttribute("aria-pressed", String(x === b))); render();
+document.querySelectorAll("#feedView .seg button").forEach(b => b.addEventListener("click", () => {
+  state.sort = b.dataset.sort; document.querySelectorAll("#feedView .seg button").forEach(x => x.setAttribute("aria-pressed", String(x === b))); render();
 }));
 
 // ---------- auth views ----------
@@ -861,7 +944,8 @@ function viewProfile() {
       p.bio ? el("p", { class: "bio", text: p.bio }) : el("p", { class: "bio hint", text: mine ? "You haven't written a bio yet." : "This seeker hasn't written a bio yet." }),
       (p.realms || []).length ? el("div", { class: "prealms" }, p.realms.filter(r => REALMS.some(x => x[0] === r)).map(r => el("span", { class: "tag", text: realmName(r) }))) : null,
       el("div", { class: "pstats" }, el("span", {}, "Joined ", el("b", { text: new Date(p.created_at).toLocaleDateString(undefined, { month: "short", year: "numeric" }) })),
-        el("span", {}, el("b", { text: String(posts.length) }), posts.length === 1 ? " idea" : " ideas"), el("span", {}, el("b", { text: fmtScore(points) }), " points"))),
+        el("span", {}, el("b", { text: String(posts.length) }), posts.length === 1 ? " idea" : " ideas"),
+        el("span", {}, el("b", { text: String(state.cases.filter(c => c.author_id === id).length) }), state.cases.filter(c => c.author_id === id).length === 1 ? " case" : " cases"), el("span", {}, el("b", { text: fmtScore(points) }), " points"))),
     el("div", { class: "mast-btns" },
       mine ? el("a", { class: "btn primary", href: "#edit", text: "Edit profile" }) : null,
       mine ? el("button", { class: "btn", type: "button", text: "Log out", onclick: async () => { await sb.auth.signOut(); toast("Logged out"); location.hash = "" } }) : null,
@@ -873,7 +957,16 @@ function viewProfile() {
   const list = el("div", { class: "feed" });
   if (!posts.length) list.append(el("div", { class: "empty" }, el("strong", { text: "No ideas posted yet." })));
   posts.forEach(x => list.append(postCard(x, "compact")));
-  wrap.append(list); return wrap;
+  wrap.append(list);
+  const cases = state.cases.filter(c => c.author_id === id);
+  if (cases.length || mine) {
+    wrap.append(el("div", { class: "toolbar" }, el("h2", { text: mine ? "Your Vault cases" : "Vault cases" }), mine ? el("a", { class: "btn", href: "#vault/new", text: "Log evidence" }) : null));
+    const g = el("div", { class: "case-grid" });
+    if (!cases.length) g.append(el("div", { class: "empty" }, el("strong", { text: "No cases logged yet." }), "Saw something you can't explain? Log it in the Vault."));
+    cases.sort((a, b) => b.case_no - a.case_no).forEach(c => g.append(caseCard(c)));
+    wrap.append(g);
+  }
+  return wrap;
 }
 function viewEdit() {
   if (!state.me) { setTimeout(() => location.hash = state.user ? "#welcome" : "#login"); return el("div") }
@@ -933,6 +1026,7 @@ function renderMsgs(msgs, kind) {
 }
 function refreshLiveView() {
   if (state.view.name === "messages") renderInbox();
+  if (state.view.name === "vault" && state.view.arg !== "new") renderCaseGrid();
 }
 
 // ---------- private messages ----------
@@ -1038,7 +1132,7 @@ async function openPost(id) {
 // ---------- notifications ----------
 async function loadNotifs() {
   if (!state.user) { state.notifs = []; state.notifUnread = 0; return }
-  const { data } = await sb.from("notifications").select("id,type,actor_id,post_id,reply_id,milestone,read,created_at,posts(title)").order("created_at", { ascending: false }).limit(100);
+  const { data } = await sb.from("notifications").select("id,type,actor_id,post_id,reply_id,case_id,milestone,read,created_at,posts(title),vault_cases(case_no,title)").order("created_at", { ascending: false }).limit(100);
   state.notifs = data || [];
   state.notifUnread = state.notifs.filter(n => !n.read).length;
 }
@@ -1049,6 +1143,10 @@ function wingBadge(size) {
 }
 function notifText(n) {
   const title = "“" + ((n.posts && n.posts.title) || "a post") + "”", who = "@" + nameOf(n.actor_id), m = n.milestone;
+  if (n.type === "metoo") {
+    const cn = n.vault_cases ? caseNo(n.vault_cases.case_no) + " “" + n.vault_cases.title + "”" : "your Vault case";
+    return m === 1 ? `Someone said “this happened to me too” on ${cn}` : `${m} people have said “me too” on ${cn}`;
+  }
   if (n.type === "reply") return `${who} replied to your post ${title}`;
   if (n.type === "thread_reply") return `${who} also replied on ${title}`;
   if (n.reply_id) return m === 1 ? `Your comment on ${title} got its first upvote` : `Your comment on ${title} reached ${m} points`;
@@ -1058,15 +1156,15 @@ function viewNotifs() {
   if (!state.user) { setTimeout(() => location.hash = "#login"); return el("div") }
   const wrap = el("div", { class: "chat" }, back(),
     el("div", { class: "chat-head" }, el("div", {}, el("div", { class: "eyebrow", text: "Activity" }), el("h2", { text: "Notifications" }),
-      el("p", { text: "Replies to your posts and threads, and milestones when your ideas take off." })),
+      el("p", { text: "Replies to your posts and threads, and milestones when your ideas and evidence take off." })),
       state.notifs.length ? el("button", { class: "btn", type: "button", text: "Clear all", onclick: async () => {
         const { error } = await sb.from("notifications").delete().eq("user_id", state.user.id);
         if (error) return toast(niceError(error)); state.notifs = []; state.notifUnread = 0; render();
       } }) : null));
   const list = el("div", { class: "inbox" });
-  if (!state.notifs.length) list.append(el("div", { class: "empty" }, el("strong", { text: "Nothing yet." }), "When someone replies to you or your post gets upvotes, you'll see it here."));
-  state.notifs.forEach(n => list.append(el("a", { class: "thread-row" + (n.read && !(state.freshIds && state.freshIds.has(n.id)) ? "" : " unread"), href: "#post/" + n.post_id, style: "text-decoration:none;color:inherit" },
-    n.type === "milestone" ? wingBadge(40) : avatar(n.actor_id, 40),
+  if (!state.notifs.length) list.append(el("div", { class: "empty" }, el("strong", { text: "Nothing yet." }), "When someone replies to you, your post gets upvotes or people say “me too” on your Vault case, you'll see it here."));
+  state.notifs.forEach(n => list.append(el("a", { class: "thread-row" + (n.read && !(state.freshIds && state.freshIds.has(n.id)) ? "" : " unread"), href: n.type === "metoo" ? "#case/" + n.case_id : "#post/" + n.post_id, style: "text-decoration:none;color:inherit" },
+    n.type === "milestone" || n.type === "metoo" ? wingBadge(40) : avatar(n.actor_id, 40),
     el("div", { class: "c" }, el("div", { class: "t", text: notifText(n) }), el("div", { class: "s", text: ago(n.created_at) })))));
   wrap.append(list); return wrap;
 }
@@ -1082,6 +1180,195 @@ async function markNotifsRead() {
   render();
 }
 
+// ---------- The Vault ----------
+const CASE_TYPES = [["sync", "Synchronicity"], ["glitch", "Reality glitch"], ["sighting", "Sighting"], ["premonition", "Premonition"],
+  ["dream", "Dream that came true"], ["encounter", "Encounter"], ["photo", "Unexplained photo or sound"], ["other", "Something else"]];
+const CASE_COLS = "id,case_no,author_id,type,title,account,happened_on,witnessed,ruled_out,images,video_url,metoo_count,created_at";
+const caseTypeName = t => (CASE_TYPES.find(x => x[0] === t) || [, "Something else"])[1];
+const caseNo = n => "Case #" + String(n || 0).padStart(4, "0");
+const metooLabel = n => !n ? "No “me too” yet" : n === 1 ? "1 person said “me too”" : `${n.toLocaleString()} people said “me too”`;
+const hostOf = u => { try { return new URL(u).hostname.replace(/^www\./, "") } catch (e) { return "" } };
+function fmtDay(d) { const [y, m, dd] = String(d).split("-").map(Number); return new Date(y, m - 1, dd).toLocaleDateString(undefined, { month: "long", day: "numeric", year: "numeric" }) }
+
+async function loadCases() {
+  const { data, error } = await sb.from("vault_cases").select(CASE_COLS).order("created_at", { ascending: false }).limit(500);
+  if (error) { console.warn(error); return }
+  state.cases = data; state.casesLoaded = true;
+}
+async function loadMyMetoo() {
+  state.myMetoo = new Set();
+  if (!state.user) return;
+  const { data } = await sb.from("case_metoo").select("case_id").eq("user_id", state.user.id).limit(10000);
+  (data || []).forEach(r => state.myMetoo.add(r.case_id));
+}
+const refreshCases = debounce(async () => { await loadCases(); if (state.composing) fillCasePick(); render() }, 400);
+async function openCase(id) {
+  if (state.cases.some(x => x.id === id)) return;
+  const { data } = await sb.from("vault_cases").select(CASE_COLS).eq("id", id).maybeSingle();
+  if (data) state.cases.push(data); else state.caseMissing = id;
+  render();
+}
+
+function caseCard(c) {
+  const img = (c.images || []).filter(isPath)[0];
+  return el("a", { class: "case-card", href: "#case/" + c.id },
+    img ? el("div", { class: "case-thumb" }, el("img", { src: imgUrl(img), alt: "", loading: "lazy" })) : null,
+    el("div", { class: "case-body" },
+      el("div", { class: "case-top" }, el("span", { class: "case-no", text: caseNo(c.case_no) }), el("span", { class: "tag", text: caseTypeName(c.type) })),
+      el("h3", { text: c.title }),
+      el("p", { class: "body", text: c.account }),
+      el("div", { class: "case-foot" }, el("span", { class: "metoo-count", text: metooLabel(c.metoo_count) }), el("span", { text: "@" + nameOf(c.author_id) + " · " + ago(c.created_at) }))));
+}
+
+function viewVault() {
+  if (state.view.arg === "new") return viewLogCase();
+  const grid = el("div", { class: "case-grid", id: "caseGrid" });
+  const search = el("input", { class: "field", id: "vaultSearch", type: "search", placeholder: "Search the Vault", "aria-label": "Search the Vault", autocomplete: "off" });
+  search.value = state.vault.q;
+  search.addEventListener("input", debounce(() => { state.vault.q = search.value.trim(); renderCaseGrid() }, 200));
+  const types = el("div", { class: "picks", role: "group", "aria-label": "Filter by type" });
+  [["all", "All evidence"], ...CASE_TYPES].forEach(([id, name]) => types.append(el("button", { class: "chip", type: "button", "data-type": id, "aria-pressed": String(state.vault.type === id), text: name,
+    onclick: () => { state.vault.type = id; types.querySelectorAll("button").forEach(b => b.setAttribute("aria-pressed", String(b.dataset.type === id))); renderCaseGrid() } })));
+  const seg = el("div", { class: "seg", role: "group", "aria-label": "Sort" });
+  [["new", "Newest"], ["metoo", "Most “me too”"]].forEach(([id, name]) => seg.append(el("button", { type: "button", "data-sort": id, "aria-pressed": String(state.vault.sort === id), text: name,
+    onclick: () => { state.vault.sort = id; seg.querySelectorAll("button").forEach(b => b.setAttribute("aria-pressed", String(b.dataset.sort === id))); renderCaseGrid() } })));
+  const wrap = el("div", { class: "vault" }, back(),
+    el("div", { class: "chat-head" }, el("div", {}, el("div", { class: "eyebrow", text: "Evidence archive" }), el("h2", { text: "The Vault" }),
+      el("p", { text: "First-hand evidence of the weird and unexplainable, logged case by case. If it happened to you too, say so." })),
+      el("a", { class: "btn primary", href: state.me ? "#vault/new" : "#join", text: "Log evidence" })),
+    el("div", { class: "vault-tools" }, search, seg), types, grid);
+  renderCaseGrid(grid);
+  return wrap;
+}
+function renderCaseGrid(grid = $("#caseGrid")) {
+  if (!grid) return;
+  const q = state.vault.q.toLowerCase();
+  const list = state.cases.filter(c => (state.vault.type === "all" || c.type === state.vault.type) &&
+    (!q || (c.title + " " + c.account + " " + caseNo(c.case_no)).toLowerCase().includes(q)));
+  list.sort(state.vault.sort === "metoo" ? (a, b) => (b.metoo_count - a.metoo_count) || (b.case_no - a.case_no) : (a, b) => b.case_no - a.case_no);
+  grid.textContent = "";
+  if (!list.length) {
+    grid.append(el("div", { class: "empty" }, el("strong", { text: !state.casesLoaded ? "Opening the Vault…" : state.cases.length ? "No cases match." : "The Vault is empty." }),
+      !state.casesLoaded ? "" : state.cases.length ? "Try another type or search." : "Be the first to log evidence of something you can't explain."));
+    return;
+  }
+  list.forEach(c => grid.append(caseCard(c)));
+}
+
+function viewCase() {
+  const id = state.view.arg, c = state.cases.find(x => x.id === id);
+  const wrap = el("div", { class: "profile" }, el("a", { class: "back", href: "#vault", text: "← Back to the Vault" }));
+  if (!c) {
+    const gone = state.caseMissing === id;
+    wrap.append(el("div", { class: "empty" }, el("strong", { text: gone ? "This case isn't in the Vault anymore." : "Opening the case…" }), gone ? "It may have been removed." : ""));
+    return wrap;
+  }
+  const mine = !!(state.user && c.author_id === state.user.id), me = state.myMetoo.has(c.id);
+  const imgs = (c.images || []).filter(isPath).slice(0, MAX_IMG);
+  const metooBtn = el("button", { class: "btn " + (me ? "on" : "primary"), type: "button", "aria-pressed": String(me), disabled: mine,
+    title: mine ? "You can't say “me too” on your own case" : "", onclick: () => toggleMetoo(c), text: me ? "✓ This happened to me too" : "This happened to me too" });
+  const acts = el("div", { class: "actions" }, metooBtn, el("span", { class: "metoo-count", text: metooLabel(c.metoo_count) }),
+    el("button", { class: "chip", type: "button", text: "Share", onclick: () => shareLink("#case/" + c.id) }));
+  if (state.user && (mine || state.isAdmin)) acts.append(el("button", { class: "chip del", type: "button", text: "Delete case", onclick: e => delCase(c, e.currentTarget) }));
+  wrap.append(el("article", { class: "post case-full" },
+    el("div", { class: "case-top" }, el("span", { class: "case-no big", text: caseNo(c.case_no) }), el("span", { class: "tag", text: caseTypeName(c.type) })),
+    el("h3", { class: "case-title", text: c.title }),
+    el("dl", { class: "facts" },
+      el("dt", { text: "When it happened" }), el("dd", { text: c.happened_on ? fmtDay(c.happened_on) : "Not given" }),
+      el("dt", { text: "Witnesses" }), el("dd", { text: c.witnessed === "others" ? "Others were there too" : "Just me" }),
+      el("dt", { text: "Logged by" }), el("dd", {}, whoLink(c.author_id), " · " + ago(c.created_at))),
+    el("h4", { text: "What happened" }), el("p", { class: "body", text: c.account }),
+    c.ruled_out ? el("h4", { text: "What's been ruled out" }) : null, c.ruled_out ? el("p", { class: "body", text: c.ruled_out }) : null,
+    imgs.length ? gallery(imgs) : null,
+    c.video_url ? el("a", { class: "chip", href: c.video_url, target: "_blank", rel: "noopener nofollow ugc", style: "text-decoration:none;width:max-content;max-width:100%" }, "Watch the video on " + (hostOf(c.video_url) || "another site") + " ↗") : null,
+    acts));
+  const cites = state.posts.filter(p => (p.post_cases || []).some(x => x.case_id === c.id));
+  wrap.append(el("div", { class: "toolbar" }, el("h2", { text: cites.length ? "Ideas citing this case" : "No ideas cite this case yet" }),
+    el("button", { class: "btn", type: "button", text: "Discuss this case", onclick: () => discussCase(c.id) })));
+  if (cites.length) { const list = el("div", { class: "feed" }); cites.forEach(p => list.append(postCard(p, "compact"))); wrap.append(list) }
+  return wrap;
+}
+async function toggleMetoo(c) {
+  if (!needMember() || c.author_id === state.user.id) return;
+  const had = state.myMetoo.has(c.id);
+  const flip = () => { if (had) { state.myMetoo.add(c.id); c.metoo_count++ } else { state.myMetoo.delete(c.id); c.metoo_count = Math.max(0, c.metoo_count - 1) } };
+  if (had) { state.myMetoo.delete(c.id); c.metoo_count = Math.max(0, c.metoo_count - 1) } else { state.myMetoo.add(c.id); c.metoo_count++ }
+  render();
+  const { error } = had ? await sb.from("case_metoo").delete().eq("case_id", c.id).eq("user_id", state.user.id) : await sb.from("case_metoo").insert({ case_id: c.id });
+  if (error) { flip(); render(); toast(niceError(error)) }
+}
+async function shareLink(hash) {
+  const url = location.origin + location.pathname + hash;
+  try { await navigator.clipboard.writeText(url); toast("Link copied") } catch (e) { window.prompt("Copy this link:", url) }
+}
+function discussCase(id) { if (!needMember()) return; state.attach = [id]; state.pendingCompose = true; location.hash = "" }
+async function delCase(c, btn) {
+  if (!btn.dataset.confirm) { btn.dataset.confirm = "1"; btn.textContent = "Tap again to delete"; setTimeout(() => { if (btn.isConnected) { delete btn.dataset.confirm; btn.textContent = "Delete case" } }, 4000); return }
+  const { error } = await sb.from("vault_cases").delete().eq("id", c.id);
+  if (error) return toast(niceError(error));
+  const imgs = (c.images || []).filter(isPath); if (imgs.length) sb.storage.from("images").remove(imgs);
+  state.cases = state.cases.filter(x => x.id !== c.id); toast("Case removed from the Vault"); location.hash = "#vault";
+}
+
+function viewLogCase() {
+  if (!state.me) { setTimeout(() => location.hash = state.user ? "#welcome" : "#join"); return el("div") }
+  const lf = (text, input) => el("label", { class: "l" }, text, input);
+  const type = el("select", { class: "field", id: "cType", required: true }, el("option", { value: "", text: "Choose a type" }), CASE_TYPES.map(([v, n]) => el("option", { value: v, text: n })));
+  const title = el("input", { class: "field", id: "cTitle", maxlength: "140", required: true, placeholder: "Saw 11:11 on three different clocks in one hour" });
+  const account = el("textarea", { class: "field", id: "cAccount", maxlength: "5000", required: true, placeholder: "Walk us through it: where you were, what you saw, what happened next." });
+  const when = el("input", { class: "field", id: "cWhen", type: "date", max: dayKey(), min: "1900-01-01" });
+  const wit = el("select", { class: "field", id: "cWit" }, el("option", { value: "alone", text: "Just me" }), el("option", { value: "others", text: "Others were there too" }));
+  const ruled = el("textarea", { class: "field", id: "cRuled", maxlength: "1000", placeholder: "Ordinary explanations you checked, and why they don't fit." });
+  const video = el("input", { class: "field", id: "cVideo", type: "url", maxlength: "490", placeholder: "https://youtube.com/…" });
+  const files = []; const thumbs = el("div", { class: "thumbs" });
+  const drawThumbs = () => { thumbs.textContent = ""; files.forEach((f, i) => thumbs.append(el("div", { class: "thumb" }, el("img", { src: URL.createObjectURL(f), alt: "Photo " + (i + 1) }),
+    el("button", { type: "button", "aria-label": "Remove photo", text: "×", onclick: () => { files.splice(i, 1); drawThumbs() } })))) };
+  const fileIn = el("input", { type: "file", id: "cImg", accept: OK_TYPES.join(","), multiple: true, style: "position:absolute;width:1px;height:1px;opacity:0" });
+  fileIn.addEventListener("change", () => {
+    for (const f of fileIn.files) {
+      if (files.length >= MAX_IMG) { toast("Up to 4 photos per case."); break }
+      if (!OK_TYPES.includes(f.type)) { toast("Use PNG, JPEG, GIF or WebP images."); continue }
+      if (f.size > 20 * 1024 * 1024) { toast(f.name + " is too large."); continue }
+      files.push(f);
+    }
+    fileIn.value = ""; drawThumbs();
+  });
+  const err = el("div", { class: "err", role: "alert" }), btn = el("button", { class: "btn primary", type: "submit", text: "Log it in the Vault" });
+  return el("div", { class: "profile" }, el("a", { class: "back", href: "#vault", text: "← Back to the Vault" }),
+    el("form", { class: "edit", onsubmit: async e => {
+      e.preventDefault(); err.textContent = "";
+      const v = video.value.trim();
+      if (!type.value) { err.textContent = "Choose what kind of evidence this is."; return }
+      if (!title.value.trim() || !account.value.trim()) { err.textContent = "Add a one-line summary and the full account."; return }
+      if (v && !/^https:\/\/\S{4,490}$/.test(v)) { err.textContent = "Video links need to start with https://"; return }
+      if (when.value && when.value > dayKey()) { err.textContent = "The date can't be in the future."; return }
+      btn.disabled = true; const uploaded = [];
+      try {
+        if (files.length) btn.textContent = "Cleaning and uploading photos…";
+        for (const f of files) uploaded.push(await uploadImage(f, "case-"));
+        btn.textContent = "Logging…";
+        const row = { type: type.value, title: title.value.trim(), account: account.value.trim(), witnessed: wit.value, ruled_out: ruled.value.trim(), images: uploaded };
+        if (when.value) row.happened_on = when.value;
+        if (v) row.video_url = v;
+        const { data, error } = await sb.from("vault_cases").insert(row).select(CASE_COLS).single();
+        if (error) throw error;
+        state.cases.unshift(data); toast("Logged as " + caseNo(data.case_no)); location.hash = "#case/" + data.id;
+      } catch (ex) {
+        if (uploaded.length) sb.storage.from("images").remove(uploaded);
+        err.textContent = niceError(ex);
+      } finally { btn.disabled = false; btn.textContent = "Log it in the Vault" }
+    } },
+      el("div", { class: "eyebrow", text: "Log evidence" }),
+      el("h2", { class: "form-title", text: "What did you witness?" }),
+      lf("Type of evidence", type), lf("What happened, in one line", title), lf("The full account", account),
+      el("div", { class: "row" }, el("label", { class: "l", style: "flex:1 1 180px" }, "When it happened (optional)", when), el("label", { class: "l", style: "flex:1 1 180px" }, "Witnesses", wit)),
+      lf("What you've ruled out (optional)", ruled),
+      el("div", { class: "l" }, el("span", { class: "hint", text: "Photos (optional, up to 4)" }), el("div", { class: "row", style: "align-items:center" }, el("label", { class: "btn", for: "cImg" }, "Add photos", fileIn)), thumbs),
+      lf("Video link (optional)", video),
+      el("p", { class: "form-note", text: "Photos are cleaned of hidden location data before they upload. Please leave out other people's faces, license plates and addresses." }),
+      err, el("div", { class: "row" }, btn, el("a", { class: "btn", href: "#vault", text: "Cancel" }))));
+}
+
 // ---------- start up ----------
 async function boot() {
   render();
@@ -1093,7 +1380,7 @@ async function boot() {
     lastUid = uid;
     setTimeout(async () => { await setUser(session && session.user); route() }, 0);
   });
-  await Promise.all([loadProfiles(), loadPosts()]);
+  await Promise.all([loadProfiles(), loadPosts(), loadCases()]);
   const { data: { session } } = await sb.auth.getSession();
   lastUid = session && session.user ? session.user.id : null;
   booted = true;
@@ -1104,6 +1391,8 @@ async function boot() {
     .on("postgres_changes", { event: "*", schema: "public", table: "posts" }, refreshFeed)
     .on("postgres_changes", { event: "*", schema: "public", table: "replies" }, refreshFeed)
     .on("postgres_changes", { event: "*", schema: "public", table: "profiles" }, refreshProfiles)
+    .on("postgres_changes", { event: "*", schema: "public", table: "vault_cases" }, refreshCases)
+    .on("postgres_changes", { event: "*", schema: "public", table: "post_cases" }, refreshFeed)
     .subscribe();
   setInterval(() => { if (state.view.name === "feed") render(); else renderDaily() }, 60000);
 }

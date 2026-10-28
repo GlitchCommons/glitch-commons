@@ -69,6 +69,7 @@ Some new features come with an update script. Run each one once, in number order
 | File | Adds |
 |---|---|
 | `update-01-votes-notifications.sql` | Upvotes/downvotes and the notification bell |
+| `update-02-vault.sql` | The Vault: evidence cases, "me too," and citing cases in ideas |
 
 If you ever rebuild the database from scratch, run `setup.sql` first, then each update file in order.
 
