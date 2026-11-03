@@ -17,7 +17,11 @@
 <meta name="description" content="The ideas the mainstream won't touch. Post them, vote on the most compelling, and explore them with people who actually think.">
 <meta property="og:title" content="Glitch Commons: Reality has cracks. We live in them.">
 <meta property="og:description" content="Post them, vote on the most compelling, and explore them with people who actually think.">
-<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%22-12%20-40%20276%20276%22%3E%3Crect%20x%3D%22-12%22%20y%3D%22-40%22%20width%3D%22276%22%20height%3D%22276%22%20rx%3D%2240%22%20fill%3D%22%2315121f%22/%3E%3Cg%20transform%3D%22translate%2815.0%2C-1.0%29%22%3E%3Cg%20fill%3D%22%2315121f%22%20stroke%3D%22%23ff2bd6%22%20stroke-width%3D%224%22%20stroke-linejoin%3D%22round%22%3E%3Cpath%20d%3D%22M40.0%204.0Q10.1%209.7%20-12.0%2034.0Q20.1%2027.1%2040.0%204.0Z%22/%3E%3Cpath%20d%3D%22M55.2%206.3Q28.7%2015.6%2012.5%2041.1Q40.7%2030.3%2055.2%206.3Z%22/%3E%3Cpath%20d%3D%22M68.4%2011.6Q45.8%2023.6%2035.1%2049.0Q59.1%2035.5%2068.4%2011.6Z%22/%3E%3Cpath%20d%3D%22M79.7%2020.1Q61.0%2033.6%2055.6%2057.7Q75.2%2042.6%2079.7%2020.1Z%22/%3E%3Cpath%20d%3D%22M88.9%2031.6Q74.3%2045.6%2073.5%2067.2Q88.7%2051.8%2088.9%2031.6Z%22/%3E%3Cpath%20d%3D%22M96.2%2046.2Q85.2%2059.4%2088.2%2077.5Q99.5%2063.0%2096.2%2046.2Z%22/%3E%3Cpath%20d%3D%22M100%2058Q86%206%2040%204%22%20fill%3D%22none%22%20stroke-linecap%3D%22round%22/%3E%3C/g%3E%3C/g%3E%3Cg%20transform%3D%22translate%28251.9%2C0%29%20scale%28-1%2C1%29%22%3E%3Cg%20transform%3D%22translate%2815.0%2C-1.0%29%22%3E%3Cg%20fill%3D%22%2315121f%22%20stroke%3D%22%23ff2bd6%22%20stroke-width%3D%224%22%20stroke-linejoin%3D%22round%22%3E%3Cpath%20d%3D%22M40.0%204.0Q10.1%209.7%20-12.0%2034.0Q20.1%2027.1%2040.0%204.0Z%22/%3E%3Cpath%20d%3D%22M55.2%206.3Q28.7%2015.6%2012.5%2041.1Q40.7%2030.3%2055.2%206.3Z%22/%3E%3Cpath%20d%3D%22M68.4%2011.6Q45.8%2023.6%2035.1%2049.0Q59.1%2035.5%2068.4%2011.6Z%22/%3E%3Cpath%20d%3D%22M79.7%2020.1Q61.0%2033.6%2055.6%2057.7Q75.2%2042.6%2079.7%2020.1Z%22/%3E%3Cpath%20d%3D%22M88.9%2031.6Q74.3%2045.6%2073.5%2067.2Q88.7%2051.8%2088.9%2031.6Z%22/%3E%3Cpath%20d%3D%22M96.2%2046.2Q85.2%2059.4%2088.2%2077.5Q99.5%2063.0%2096.2%2046.2Z%22/%3E%3Cpath%20d%3D%22M100%2058Q86%206%2040%204%22%20fill%3D%22none%22%20stroke-linecap%3D%22round%22/%3E%3C/g%3E%3C/g%3E%3C/g%3E%3Cpath%20d%3D%22M126.0%2017.0l-5%2014%208%209-6%2014%204%2010%22%20fill%3D%22none%22%20stroke%3D%22%23ff2bd6%22%20stroke-width%3D%225%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22/%3E%3C/svg%3E">
+<link rel="icon" href="/favicon.ico" sizes="32x32">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="manifest" href="/site.webmanifest">
+<meta name="theme-color" content="#15121f">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Syne:wght@600;800&family=Figtree:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.110.1/dist/umd/supabase.js"></script>
@@ -314,6 +318,9 @@ html,body{overflow-x:clip}
 .theme-btn.is-light .i-sun{display:none}
 .theme-btn.is-light .i-moon{display:block}
 @media (prefers-reduced-motion:no-preference){.theme-btn svg{transition:transform .3s ease}.theme-btn:hover svg{transform:rotate(18deg)}}
+/* names that must stay on one line (sized to fit by fitOneLine) */
+h1.fit-1line,h2.fit-1line,.fit-1line{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;overflow-wrap:normal;word-break:normal;max-width:100%;min-width:0}
+.fit-1line a{white-space:nowrap}
 footer.site{display:flex;align-items:center;gap:10px}
 footer.site .mark{height:16px;margin:0;opacity:.7}
 /* ---------- the vault ---------- */
@@ -719,7 +726,20 @@ function render() {
   for (const [id, v] of Object.entries(keep)) { const i = document.getElementById(id); if (i) i.value = v }
   if (focusId && focusId.startsWith("reply-")) { const i = document.getElementById(focusId); if (i && document.activeElement !== i) i.focus() }
   setMeta();
+  requestAnimationFrame(() => fitOneLine());
 }
+
+// Member names stay on one line: shrink the text until it fits the space it has.
+function fitOneLine(root = document) {
+  root.querySelectorAll(".fit-1line").forEach(h => {
+    if (!h.isConnected || !h.clientWidth) return;
+    h.style.fontSize = "";
+    let size = parseFloat(getComputedStyle(h).fontSize);
+    while (h.scrollWidth > h.clientWidth + 1 && size > 12) { size -= 1; h.style.fontSize = size + "px" }
+  });
+}
+window.addEventListener("resize", debounce(() => fitOneLine(), 150));
+if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => fitOneLine());
 
 // ---------- page titles and descriptions (for browser tabs, Google and link previews) ----------
 const SITE = "Glitch Commons";
@@ -1069,7 +1089,7 @@ function viewProfile() {
   const posts = state.posts.filter(x => x.author_id === id);
   const points = posts.reduce((n, x) => n + (x.score || 0), 0);
   const head = el("div", { class: "phead" }, avatar(id, 84),
-    el("div", { class: "info" }, el("h2", { text: "@" + p.handle }), p.path ? el("div", { class: "path", text: p.path }) : null,
+    el("div", { class: "info" }, el("h2", { class: "fit-1line", title: "@" + p.handle, text: "@" + p.handle }), p.path ? el("div", { class: "path", text: p.path }) : null,
       p.bio ? el("p", { class: "bio", text: p.bio }) : el("p", { class: "bio hint", text: mine ? "You haven't written a bio yet." : "This seeker hasn't written a bio yet." }),
       (p.realms || []).length ? el("div", { class: "prealms" }, p.realms.filter(r => REALMS.some(x => x[0] === r)).map(r => el("span", { class: "tag", text: realmName(r) }))) : null,
       el("div", { class: "pstats" }, el("span", {}, "Joined ", el("b", { text: new Date(p.created_at).toLocaleDateString(undefined, { month: "short", year: "numeric" }) })),
@@ -1239,7 +1259,7 @@ async function openDm(threadId) {
   const { data: t } = await sb.from("dm_threads").select("id,user_a,user_b").eq("id", threadId).maybeSingle();
   if (!t) { $("#msgs") && $("#msgs").replaceChildren(el("div", { class: "chat-empty", text: "This conversation isn't available." })); return }
   const other = t.user_a === state.user.id ? t.user_b : t.user_a;
-  const head = $("#dmHead"); if (head) head.replaceChildren(el("div", { class: "eyebrow", text: "Private conversation" }), el("h2", {}, el("a", { href: profilePath(other), style: "color:inherit;text-decoration:none", text: "@" + nameOf(other) })));
+  const head = $("#dmHead"); if (head) head.replaceChildren(el("div", { class: "eyebrow", text: "Private conversation" }), el("h2", { class: "fit-1line" }, el("a", { href: profilePath(other), style: "color:inherit;text-decoration:none", text: "@" + nameOf(other) })));
   const { data } = await sb.from("dm_messages").select("id,thread_id,sender_id,body,created_at").eq("thread_id", threadId).order("created_at", { ascending: false }).limit(300);
   dmMsgs = (data || []).reverse(); renderMsgs(dmMsgs, "dm");
   store(seenKey(threadId), Date.now()); await loadInbox(); render();
@@ -1528,7 +1548,7 @@ paintThemeBtn();
 // ---------- start up ----------
 async function boot() {
   // Pages the edge function filled in already show their content; keep it on screen until data loads.
-  if (!$("#pageView").hasAttribute("data-prerendered")) render();
+  if (!$("#pageView").hasAttribute("data-prerendered")) render(); else fitOneLine();
   let booted = false, lastUid = null;
   sb.auth.onAuthStateChange((event, session) => {
     if (event === "PASSWORD_RECOVERY") { setTimeout(() => go("/reset"), 0); return }
