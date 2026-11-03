@@ -118,7 +118,7 @@ async function profilePage(arg) {
   }
   const url = ORIGIN + profilePath(p.handle);
   const content = `<div class="profile prerender">${back("/", "← Back to the ideas")}
-<div class="phead"><div class="info"><h1 class="pr-name">@${esc(p.handle)}</h1>${p.path ? `<div class="path">${esc(p.path)}</div>` : ""}${p.bio ? `<div class="bio">${paras(p.bio)}</div>` : ""}
+<div class="phead"><div class="info"><h1 class="pr-name fit-1line">@${esc(p.handle)}</h1>${p.path ? `<div class="path">${esc(p.path)}</div>` : ""}${p.bio ? `<div class="bio">${paras(p.bio)}</div>` : ""}
 <div class="pstats">Joined ${fmtDate(p.created_at)}</div></div></div>${list}</div>`;
   return {
     title: `@${p.handle} · ${SITE}`, desc: clip(p.bio || `${p.handle} explores the ideas the mainstream won't touch on Glitch Commons.`),
