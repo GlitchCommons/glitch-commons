@@ -323,12 +323,13 @@ h1.fit-1line,h2.fit-1line,.fit-1line{white-space:nowrap;overflow:hidden;text-ove
 .fit-1line a{white-space:nowrap}
 /* photo viewer (always dark, so photos stand out) */
 html.lb-open{overflow:hidden}
-.lb{position:fixed;inset:0;z-index:60;display:grid;grid-template-rows:auto minmax(0,1fr) auto;gap:10px;background:#0b0910;color:#ede8f6;
+.lb{position:fixed;top:0;right:0;bottom:0;left:0;z-index:60;display:flex;flex-direction:column;gap:10px;background:#0b0910;color:#ede8f6;box-sizing:border-box;height:100%;height:100dvh;
   padding:calc(12px + env(safe-area-inset-top,0px)) max(12px,env(safe-area-inset-right,0px)) calc(12px + env(safe-area-inset-bottom,0px)) max(12px,env(safe-area-inset-left,0px))}
-.lb-top{display:flex;align-items:center;justify-content:space-between;gap:12px;min-height:44px}
+.lb-top{flex:none;display:flex;align-items:center;justify-content:space-between;gap:12px;min-height:44px}
 .lb-count{font-family:var(--mono);font-size:13px;letter-spacing:.06em;color:#b8b0cc;padding-left:4px}
-.lb-stage{position:relative;display:grid;place-items:center;min-height:0;min-width:0;touch-action:pan-y}
-.lb-img{max-width:100%;max-height:100%;object-fit:contain;border-radius:8px;user-select:none;-webkit-user-select:none}
+.lb-stage{position:relative;flex:1 1 auto;min-height:0;min-width:0;touch-action:pan-y;display:flex;align-items:center;justify-content:center}
+/* the photo box exactly fills the middle area; the photo scales to fit inside it (works the same in Safari) */
+.lb-img{position:absolute;top:0;left:0;width:100%;height:100%;object-fit:contain;user-select:none;-webkit-user-select:none;-webkit-touch-callout:none}
 .lb-missing{color:#b8b0cc;font-size:14px}
 .lb-close,.lb-nav{all:unset;box-sizing:border-box;cursor:pointer;display:grid;place-items:center;border-radius:50%;color:#fff;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.18)}
 .lb-close{width:44px;height:44px}
@@ -337,7 +338,7 @@ html.lb-open{overflow:hidden}
 .lb-next{right:max(16px,env(safe-area-inset-right,0px))}
 .lb-close:hover,.lb-nav:hover{background:rgba(255,43,214,.22);border-color:#ff2bd6}
 .lb-close:focus-visible,.lb-nav:focus-visible,.lb-thumb:focus-visible{outline:2px solid #ff2bd6;outline-offset:2px}
-.lb-strip{display:flex;gap:6px;overflow-x:auto;max-width:100%;justify-self:center;padding:2px;scrollbar-width:thin}
+.lb-strip{flex:none;display:flex;gap:6px;overflow-x:auto;max-width:100%;align-self:center;padding:2px;scrollbar-width:thin}
 .lb-thumb{all:unset;box-sizing:border-box;cursor:pointer;flex:none;width:56px;height:56px;border-radius:6px;overflow:hidden;opacity:.45;border:2px solid transparent}
 .lb-thumb:hover{opacity:.8}
 .lb-thumb[aria-current="true"]{opacity:1;border-color:#ff2bd6}
@@ -1605,7 +1606,16 @@ function openViewer(paths, start, opener) {
     if (many) [at - 1, at + 1].forEach(k => { const pre = new Image(); pre.src = urls[(k + urls.length) % urls.length] });
   }
   // tap the dark background to close
-  box.addEventListener("click", e => { if ([box, stage, box.querySelector(".lb-top"), box.querySelector(".lb-strip")].includes(e.target)) closeViewer() });
+  // tap the dark space (around the photo, not on it) to close
+  const onPhoto = e => {
+    if (e.target !== img || !img.naturalWidth) return false;
+    const r = img.getBoundingClientRect(), k = Math.min(r.width / img.naturalWidth, r.height / img.naturalHeight);
+    const w = img.naturalWidth * k, h = img.naturalHeight * k, x = r.left + (r.width - w) / 2, y = r.top + (r.height - h) / 2;
+    return e.clientX >= x && e.clientX <= x + w && e.clientY >= y && e.clientY <= y + h;
+  };
+  box.addEventListener("click", e => {
+    if ([box, stage, img, box.querySelector(".lb-top"), box.querySelector(".lb-strip")].includes(e.target) && !onPhoto(e)) closeViewer();
+  });
   // swipe left / right on phones
   let x0 = null, y0 = null;
   stage.addEventListener("touchstart", e => { x0 = e.touches[0].clientX; y0 = e.touches[0].clientY }, { passive: true });
