@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
+<script>/* apply a saved light/dark choice before the page paints */try{var t=localStorage.getItem("gc_theme");if(t==="light"||t==="dark")document.documentElement.setAttribute("data-theme",t)}catch(e){}</script>
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>Glitch Commons: Reality has cracks. We live in them.</title>
 <link rel="canonical" href="https://glitchcommons.com/">
@@ -304,6 +305,15 @@ html,body{overflow-x:clip}
 .pr-list li{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:12px 14px;min-width:0}
 .pr-list li a{font-weight:600;color:var(--fg);overflow-wrap:anywhere}
 .pr-list li p{margin:4px 0 0;color:var(--muted);font-size:14px;overflow-wrap:anywhere}
+/* light / dark switch */
+.topbar-right{display:flex;flex-wrap:wrap;align-items:center;gap:8px}
+.theme-btn{padding-inline:11px;display:inline-grid;place-items:center}
+@media (max-width:640px){.topbar{position:relative;padding-right:52px}.theme-btn{position:absolute;top:0;right:0}}
+.theme-btn svg{grid-area:1/1}
+.theme-btn .i-moon{display:none}
+.theme-btn.is-light .i-sun{display:none}
+.theme-btn.is-light .i-moon{display:block}
+@media (prefers-reduced-motion:no-preference){.theme-btn svg{transition:transform .3s ease}.theme-btn:hover svg{transform:rotate(18deg)}}
 footer.site{display:flex;align-items:center;gap:10px}
 footer.site .mark{height:16px;margin:0;opacity:.7}
 /* ---------- the vault ---------- */
@@ -362,6 +372,7 @@ a.casechip:focus-visible{outline:2px solid var(--accent)}
 <div class="wrap">
   <header class="topbar">
     <a class="brand" href="/" aria-label="Glitch Commons home"><svg class="mark" viewBox="0 0 252 79" aria-hidden="true" focusable="false"><use href="#wings-sm"/></svg>Glitch&nbsp;<span>Commons</span></a>
+    <div class="topbar-right">
     <nav class="mast-btns" id="navOut" aria-label="Account">
       <a class="btn vault-link" href="/vault">The Vault</a>
       <a class="btn" href="/login">Log in</a>
@@ -373,6 +384,8 @@ a.casechip:focus-visible{outline:2px solid var(--accent)}
       <a class="btn bell" href="/notifications" id="bellBtn" aria-label="Notifications"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg><span class="badge" id="bellBadge" hidden>0</span></a>
       <a class="btn" href="/login" id="meBtn">My profile</a>
     </nav>
+    <button class="btn theme-btn" type="button" id="themeBtn" aria-label="Switch to light mode" title="Switch to light mode"><svg class="i-sun" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg><svg class="i-moon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg></button>
+    </div>
   </header>
 
   <section class="hero" id="hero">
@@ -1494,6 +1507,23 @@ function viewLogCase() {
 function viewNotFound() {
   return el("div", {}, back(), el("div", { class: "empty" }, el("strong", { text: "This page doesn't exist." }), "It may have been moved, or the link has a typo."));
 }
+
+// ---------- light / dark mode ----------
+// Follows the device setting until someone taps the switch, then remembers their choice on this device.
+const darkQuery = window.matchMedia ? window.matchMedia("(prefers-color-scheme: light)") : null;
+const currentTheme = () => document.documentElement.getAttribute("data-theme") || (darkQuery && darkQuery.matches ? "light" : "dark");
+function paintThemeBtn() {
+  const light = currentTheme() === "light", btn = $("#themeBtn"), label = light ? "Switch to dark mode" : "Switch to light mode";
+  btn.classList.toggle("is-light", light); btn.setAttribute("aria-label", label); btn.title = label;
+}
+$("#themeBtn").addEventListener("click", () => {
+  const next = currentTheme() === "light" ? "dark" : "light";
+  document.documentElement.setAttribute("data-theme", next);
+  store("gc_theme", next);
+  paintThemeBtn();
+});
+if (darkQuery && darkQuery.addEventListener) darkQuery.addEventListener("change", paintThemeBtn);
+paintThemeBtn();
 
 // ---------- start up ----------
 async function boot() {
