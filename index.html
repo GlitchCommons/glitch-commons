@@ -321,6 +321,28 @@ html,body{overflow-x:clip}
 /* names that must stay on one line (sized to fit by fitOneLine) */
 h1.fit-1line,h2.fit-1line,.fit-1line{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;overflow-wrap:normal;word-break:normal;max-width:100%;min-width:0}
 .fit-1line a{white-space:nowrap}
+/* photo viewer (always dark, so photos stand out) */
+html.lb-open{overflow:hidden}
+.lb{position:fixed;inset:0;z-index:60;display:grid;grid-template-rows:auto minmax(0,1fr) auto;gap:10px;background:#0b0910;color:#ede8f6;
+  padding:calc(12px + env(safe-area-inset-top,0px)) max(12px,env(safe-area-inset-right,0px)) calc(12px + env(safe-area-inset-bottom,0px)) max(12px,env(safe-area-inset-left,0px))}
+.lb-top{display:flex;align-items:center;justify-content:space-between;gap:12px;min-height:44px}
+.lb-count{font-family:var(--mono);font-size:13px;letter-spacing:.06em;color:#b8b0cc;padding-left:4px}
+.lb-stage{position:relative;display:grid;place-items:center;min-height:0;min-width:0;touch-action:pan-y}
+.lb-img{max-width:100%;max-height:100%;object-fit:contain;border-radius:8px;user-select:none;-webkit-user-select:none}
+.lb-missing{color:#b8b0cc;font-size:14px}
+.lb-close,.lb-nav{all:unset;box-sizing:border-box;cursor:pointer;display:grid;place-items:center;border-radius:50%;color:#fff;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.18)}
+.lb-close{width:44px;height:44px}
+.lb-nav{position:absolute;top:50%;transform:translateY(-50%);width:48px;height:48px}
+.lb-prev{left:max(16px,env(safe-area-inset-left,0px))}
+.lb-next{right:max(16px,env(safe-area-inset-right,0px))}
+.lb-close:hover,.lb-nav:hover{background:rgba(255,43,214,.22);border-color:#ff2bd6}
+.lb-close:focus-visible,.lb-nav:focus-visible,.lb-thumb:focus-visible{outline:2px solid #ff2bd6;outline-offset:2px}
+.lb-strip{display:flex;gap:6px;overflow-x:auto;max-width:100%;justify-self:center;padding:2px;scrollbar-width:thin}
+.lb-thumb{all:unset;box-sizing:border-box;cursor:pointer;flex:none;width:56px;height:56px;border-radius:6px;overflow:hidden;opacity:.45;border:2px solid transparent}
+.lb-thumb:hover{opacity:.8}
+.lb-thumb[aria-current="true"]{opacity:1;border-color:#ff2bd6}
+.lb-thumb img{width:100%;height:100%;object-fit:cover;display:block}
+@media (max-width:640px){.lb-nav{width:40px;height:40px;background:rgba(0,0,0,.45)}.lb-thumb{width:46px;height:46px}}
 footer.site{display:flex;align-items:center;gap:10px}
 footer.site .mark{height:16px;margin:0;opacity:.7}
 /* ---------- the vault ---------- */
@@ -674,6 +696,7 @@ function parsePath() {
   return { name: "notfound", arg: "" };
 }
 function route() {
+  if (viewer) closeViewer(true);
   cleanupSubs();
   $("#pageView").dataset.route = "";
   state.view = parsePath();
@@ -689,7 +712,11 @@ function route() {
   if (state.view.name === "case" && arg) openCase(arg);
   if (state.view.name === "feed" && state.pendingCompose) { state.pendingCompose = false; openComposer() }
 }
-window.addEventListener("popstate", route);
+window.addEventListener("popstate", () => {
+  if (viewer) { closeViewer(true); return }   // the phone's back button closes the photo viewer first
+  if (skipPop) { skipPop = false; return }
+  route();
+});
 // Internal links change the page without a full reload
 document.addEventListener("click", e => {
   if (e.defaultPrevented || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
@@ -812,7 +839,11 @@ function renderFeed() {
 function gallery(paths) {
   const g = el("div", { class: "gallery" + (paths.length === 1 ? " one" : paths.length > 4 ? " many" : "") });
   paths.forEach((p, i) => {
-    const a = el("a", { href: imgUrl(p), target: "_blank", rel: "noopener", "aria-label": "Open image " + (i + 1) });
+    const a = el("a", { href: imgUrl(p), target: "_blank", rel: "noopener", "aria-label": `Open photo ${i + 1} of ${paths.length}` });
+    a.addEventListener("click", e => {
+      if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey || e.button !== 0) return; // let people open a new tab on purpose
+      e.preventDefault(); openViewer(paths, i, a);
+    });
     const img = el("img", { src: imgUrl(p), alt: "Image attached to post", loading: "lazy" });
     img.addEventListener("error", () => { a.textContent = ""; a.append(el("div", { class: "missing", text: "Image not available" })) });
     a.append(img); g.append(a);
@@ -1544,6 +1575,75 @@ $("#themeBtn").addEventListener("click", () => {
 });
 if (darkQuery && darkQuery.addEventListener) darkQuery.addEventListener("change", paintThemeBtn);
 paintThemeBtn();
+
+// ---------- photo viewer ----------
+let viewer = null, skipPop = false;
+const ICON = { prev: '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 18l-6-6 6-6"/></svg>', next: '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 18l6-6-6-6"/></svg>', close: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>' };
+function openViewer(paths, start, opener) {
+  if (viewer) closeViewer(true);
+  const urls = paths.map(imgUrl), many = urls.length > 1;
+  let at = 0;
+  const img = el("img", { class: "lb-img", alt: "", draggable: "false" });
+  const missing = el("div", { class: "lb-missing", text: "This photo isn't available.", hidden: true });
+  img.addEventListener("error", () => { img.hidden = true; missing.hidden = false });
+  img.addEventListener("load", () => { img.hidden = false; missing.hidden = true });
+  const btn = (cls, label, icon, fn) => { const b = el("button", { class: cls, type: "button", "aria-label": label, title: label }); b.innerHTML = icon; b.addEventListener("click", fn); return b };
+  const count = el("div", { class: "lb-count", "aria-live": "polite" });
+  const thumbs = many ? urls.map((u, n) => el("button", { class: "lb-thumb", type: "button", "aria-label": `Show photo ${n + 1}`, onclick: () => show(n) }, el("img", { src: u, alt: "", loading: "lazy" }))) : [];
+  const stage = el("div", { class: "lb-stage" }, img, missing);
+  const box = el("div", { class: "lb", role: "dialog", "aria-modal": "true", "aria-label": "Photo viewer" },
+    el("div", { class: "lb-top" }, count, btn("lb-close", "Close photo viewer", ICON.close, () => closeViewer())),
+    stage,
+    many ? btn("lb-nav lb-prev", "Previous photo", ICON.prev, () => show(at - 1)) : null,
+    many ? btn("lb-nav lb-next", "Next photo", ICON.next, () => show(at + 1)) : null,
+    many ? el("div", { class: "lb-strip" }, thumbs) : null);
+  function show(n) {
+    at = (n + urls.length) % urls.length;
+    img.src = urls[at]; img.alt = `Photo ${at + 1} of ${urls.length}`;
+    count.textContent = many ? `${at + 1} / ${urls.length}` : "";
+    thumbs.forEach((t, k) => { t.setAttribute("aria-current", String(k === at)); if (k === at) t.scrollIntoView({ block: "nearest", inline: "center" }) });
+    if (many) [at - 1, at + 1].forEach(k => { const pre = new Image(); pre.src = urls[(k + urls.length) % urls.length] });
+  }
+  // tap the dark background to close
+  box.addEventListener("click", e => { if ([box, stage, box.querySelector(".lb-top"), box.querySelector(".lb-strip")].includes(e.target)) closeViewer() });
+  // swipe left / right on phones
+  let x0 = null, y0 = null;
+  stage.addEventListener("touchstart", e => { x0 = e.touches[0].clientX; y0 = e.touches[0].clientY }, { passive: true });
+  stage.addEventListener("touchend", e => {
+    if (x0 === null) return;
+    const dx = e.changedTouches[0].clientX - x0, dy = e.changedTouches[0].clientY - y0; x0 = null;
+    if (many && Math.abs(dx) > 40 && Math.abs(dx) > Math.abs(dy)) show(at + (dx < 0 ? 1 : -1));
+  });
+  // keyboard: arrows move, Esc closes, Tab stays inside the viewer
+  const onKey = e => {
+    if (e.key === "Escape") { e.preventDefault(); closeViewer() }
+    else if (e.key === "ArrowRight" && many) { e.preventDefault(); show(at + 1) }
+    else if (e.key === "ArrowLeft" && many) { e.preventDefault(); show(at - 1) }
+    else if (e.key === "Tab") {
+      const f = [...box.querySelectorAll("button")].filter(b => b.offsetParent !== null);
+      if (!f.length) return;
+      const first = f[0], last = f[f.length - 1];
+      if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus() }
+      else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus() }
+    }
+  };
+  document.addEventListener("keydown", onKey);
+  document.body.append(box);
+  document.documentElement.classList.add("lb-open");
+  history.pushState({ viewer: true }, "", location.href);
+  viewer = { box, opener, onKey };
+  show(start);
+  box.querySelector(".lb-close").focus();
+}
+function closeViewer(fromHistory = false) {
+  if (!viewer) return;
+  const v = viewer; viewer = null;
+  document.removeEventListener("keydown", v.onKey);
+  v.box.remove();
+  document.documentElement.classList.remove("lb-open");
+  if (!fromHistory && history.state && history.state.viewer) { skipPop = true; history.back() }
+  if (v.opener && v.opener.isConnected) v.opener.focus({ preventScroll: true });
+}
 
 // ---------- start up ----------
 async function boot() {
