@@ -344,6 +344,22 @@ html.lb-open{overflow:hidden}
 .lb-thumb[aria-current="true"]{opacity:1;border-color:#ff2bd6}
 .lb-thumb img{width:100%;height:100%;object-fit:cover;display:block}
 @media (max-width:640px){.lb-nav{width:40px;height:40px;background:rgba(0,0,0,.45)}.lb-thumb{width:46px;height:46px}}
+/* profile emblems */
+.emb{--es:18px;--emb-bg:var(--surface-2);display:inline-grid;place-items:center;flex:none;width:var(--es);height:var(--es);border-radius:50%;background:var(--emb-bg);color:var(--accent);box-shadow:0 0 0 1px var(--line);vertical-align:middle}
+.emb svg{width:66%;height:66%;display:block}
+.emb-xs{--es:15px}
+.emb-lg{--es:34px;box-shadow:0 0 0 1px var(--line),0 0 14px var(--glow)}
+.emb-choice{--es:40px}
+.emb-none{font-size:18px;color:var(--muted)}
+.case-foot .by{display:inline-flex;align-items:center;gap:4px;flex-wrap:wrap}
+.name-row{display:flex;align-items:center;gap:10px;min-width:0}
+.name-row h2{flex:0 1 auto}
+.emb-picks{display:grid;grid-template-columns:repeat(auto-fill,minmax(88px,1fr));gap:8px}
+.emb-pick{all:unset;box-sizing:border-box;cursor:pointer;display:grid;justify-items:center;align-content:start;gap:6px;padding:10px 4px;border-radius:12px;border:1px solid var(--line);background:var(--bg);font-size:12px;line-height:1.2;text-align:center;color:var(--muted)}
+.emb-pick:hover{border-color:var(--muted);color:var(--fg)}
+.emb-pick[aria-checked="true"]{border-color:var(--accent);color:var(--fg);background:var(--glow)}
+.emb-pick[aria-checked="true"] .emb{box-shadow:0 0 0 1px var(--accent),0 0 12px var(--glow)}
+.emb-pick:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
 footer.site{display:flex;align-items:center;gap:10px}
 footer.site .mark{height:16px;margin:0;opacity:.7}
 /* ---------- the vault ---------- */
@@ -398,6 +414,7 @@ a.casechip:focus-visible{outline:2px solid var(--accent)}
 </style>
 </head>
 <body>
+<svg id="emblemSprite" width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs><symbol id="emb-angel-wings" viewBox="47.3 47.3 201.1 201.1"><g transform="translate(35.5,85.5)"><g transform="translate(-4.5,2.5)"><g fill="currentColor" stroke="currentColor" stroke-width="9" stroke-linejoin="round" stroke-linecap="round"><path d="M58.0 2.0Q23.4 12.9 9.0 46.2Q43.5 35.2 58.0 2.0Z"/><path d="M79.0 12.1Q51.1 27.3 45.7 58.6Q73.6 43.4 79.0 12.1Z"/><path d="M92.8 37.7Q71.6 54.9 73.6 82.1Q94.8 64.9 92.8 37.7Z"/><path d="M99.4 78.7Q84.3 96.0 91.8 117.6Q106.9 100.4 99.4 78.7Z"/><path d="M100 100Q100 6 58 2" fill="none"/></g></g><g transform="translate(224.6,0) scale(-1,1)"><g transform="translate(-4.5,2.5)"><g fill="currentColor" stroke="currentColor" stroke-width="9" stroke-linejoin="round" stroke-linecap="round"><path d="M58.0 2.0Q23.4 12.9 9.0 46.2Q43.5 35.2 58.0 2.0Z"/><path d="M79.0 12.1Q51.1 27.3 45.7 58.6Q73.6 43.4 79.0 12.1Z"/><path d="M92.8 37.7Q71.6 54.9 73.6 82.1Q94.8 64.9 92.8 37.7Z"/><path d="M99.4 78.7Q84.3 96.0 91.8 117.6Q106.9 100.4 99.4 78.7Z"/><path d="M100 100Q100 6 58 2" fill="none"/></g></g></g></g></symbol><symbol id="emb-halo" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="13" rx="9.2" ry="3.6" stroke-width="2"/><ellipse cx="12" cy="13" rx="5.6" ry="1.6" opacity=".45" stroke-width="1.2"/><path d="M12 3.8000000000000003l0.73 1.87 1.87 0.73-1.87 0.73-0.73 1.87-0.73-1.87-1.87-0.73 1.87-0.73z" fill="currentColor" stroke="none"/><path d="M5.2 6.1l0.42 1.08 1.08 0.42-1.08 0.42-0.42 1.08-0.42-1.08-1.08-0.42 1.08-0.42z" fill="currentColor" stroke="none"/><path d="M18.8 6.1l0.42 1.08 1.08 0.42-1.08 0.42-0.42 1.08-0.42-1.08-1.08-0.42 1.08-0.42z" fill="currentColor" stroke="none"/><path d="M17.4 18.2l0.34 0.86 0.86 0.34-0.86 0.34-0.34 0.86-0.34-0.86-0.86-0.34 0.86-0.34z" fill="currentColor" stroke="none"/></g></symbol><symbol id="emb-energy-blade" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M9.2 14.8L20 4" stroke-width="3.2"/><path d="M9.2 14.8L20 4" stroke-width="1" stroke="#fff" opacity=".7"/><path d="M6.4 12.6l5 5"/><path d="M4 20l4.3-4.3" stroke-width="3"/></g></symbol><symbol id="emb-ufo" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M7.4 11.4a4.6 4.3 0 0 1 9.2 0"/><ellipse cx="12" cy="13" rx="9.6" ry="3"/><circle cx="7.6" cy="13" r=".75" fill="currentColor" stroke="none"/><circle cx="12" cy="13.6" r=".75" fill="currentColor" stroke="none"/><circle cx="16.4" cy="13" r=".75" fill="currentColor" stroke="none"/><path d="M8.4 17.6l-2.2 3.4M12 17.4v3.8M15.6 17.6l2.2 3.4" opacity=".65"/></g></symbol><symbol id="emb-visitor" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2.8c-4.4 0-7.6 3.2-7.6 7.3 0 4.7 4.2 9.5 7.6 11.1 3.4-1.6 7.6-6.4 7.6-11.1 0-4.1-3.2-7.3-7.6-7.3z"/><path d="M6.9 10.4c2.1-.3 3.8.8 4.2 2.9-2.1.3-3.8-.8-4.2-2.9zM17.1 10.4c-2.1-.3-3.8.8-4.2 2.9 2.1.3 3.8-.8 4.2-2.9z" fill="currentColor" stroke="none"/></g></symbol><symbol id="emb-third-eye" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M2.4 14s3.6-6 9.6-6 9.6 6 9.6 6-3.6 6-9.6 6-9.6-6-9.6-6z"/><circle cx="12" cy="14" r="3"/><circle cx="12" cy="14" r="1.1" fill="currentColor" stroke="none"/><path d="M12 2.5v2.8M6.9 3.9l1.3 2.3M17.1 3.9l-1.3 2.3"/></g></symbol><symbol id="emb-all-seeing-eye" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2.8L21.6 20.2H2.4z"/><path d="M7.3 14.9s1.9-2.9 4.7-2.9 4.7 2.9 4.7 2.9-1.9 2.9-4.7 2.9-4.7-2.9-4.7-2.9z"/><circle cx="12" cy="14.9" r="1.3" fill="currentColor" stroke="none"/></g></symbol><symbol id="emb-moon-stars" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M14.6 3.3a8.7 8.7 0 1 0 6.1 13.3A7 7 0 0 1 14.6 3.3z"/><path d="M18.2 3.2l.6 1.7 1.7.6-1.7.6-.6 1.7-.6-1.7-1.7-.6 1.7-.6z" fill="currentColor" stroke="none"/><path d="M21 8.8l.4 1.1 1.1.4-1.1.4-.4 1.1-.4-1.1-1.1-.4 1.1-.4z" fill="currentColor" stroke="none"/></g></symbol><symbol id="emb-ringed-planet" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M2.17 16.37A10.6 3.4 -22 0 1 21.83 8.43" opacity=".55"/><circle cx="12" cy="12" r="5.4" fill="var(--emb-bg, #15121f)"/><path d="M2.17 16.37A10.6 3.4 -22 0 0 21.83 8.43"/></g></symbol><symbol id="emb-flower-of-life" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><g stroke-width="1.25"><circle cx="12" cy="12" r="9.2"/><circle cx="12" cy="12" r="4.2"/><circle cx="16.20" cy="12.00" r="4.2"/><circle cx="14.10" cy="15.64" r="4.2"/><circle cx="9.90" cy="15.64" r="4.2"/><circle cx="7.80" cy="12.00" r="4.2"/><circle cx="9.90" cy="8.36" r="4.2"/><circle cx="14.10" cy="8.36" r="4.2"/></g></g></symbol><symbol id="emb-merkaba" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2.6l8.2 4.7v9.4L12 21.4l-8.2-4.7V7.3z" stroke-width="1.4"/><path d="M12 2.6l8.2 14.1H3.8zM12 21.4L3.8 7.3h16.4z" stroke-width="1.4"/><circle cx="12" cy="12" r="1.2" fill="currentColor" stroke="none"/></g></symbol><symbol id="emb-lotus" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4.2c2.6 2.9 2.6 9.1 0 11.9-2.6-2.8-2.6-9 0-11.9z"/><path d="M12 16.1c-.8-4-4.4-6.8-8.3-6.8.2 4 3.6 6.8 8.3 6.8zM12 16.1c.8-4 4.4-6.8 8.3-6.8-.2 4-3.6 6.8-8.3 6.8z"/><path d="M4.6 19.2c2.1 1.1 4.6 1.6 7.4 1.6s5.3-.5 7.4-1.6" opacity=".7"/></g></symbol><symbol id="emb-ankh" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 11.2c-2.4-1.7-3.7-3.8-3.7-5.7a3.7 3.7 0 0 1 7.4 0c0 1.9-1.3 4-3.7 5.7z"/><path d="M5.6 11.6h12.8M12 11.2v10.3"/></g></symbol><symbol id="emb-crystal" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9.2L12 21l8-11.8-4-6H8z"/><path d="M4 9.2h16M9.6 9.2L12 21l2.4-11.8M8 3.2l1.6 6M16 3.2l-1.6 6" stroke-width="1.3"/></g></symbol><symbol id="emb-portal" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12.13 12.33 L12.13 12.38 L12.12 12.44 L12.10 12.50 L12.08 12.56 L12.06 12.62 L12.02 12.68 L11.99 12.73 L11.94 12.79 L11.89 12.84 L11.83 12.88 L11.77 12.92 L11.70 12.96 L11.63 13.00 L11.55 13.02 L11.47 13.05 L11.39 13.06 L11.30 13.07 L11.21 13.08 L11.11 13.07 L11.02 13.06 L10.92 13.04 L10.82 13.02 L10.73 12.98 L10.63 12.94 L10.53 12.89 L10.44 12.83 L10.34 12.77 L10.25 12.69 L10.16 12.61 L10.08 12.52 L10.00 12.43 L9.92 12.32 L9.85 12.21 L9.79 12.09 L9.73 11.97 L9.69 11.84 L9.64 11.70 L9.61 11.56 L9.58 11.42 L9.57 11.27 L9.56 11.11 L9.56 10.96 L9.58 10.80 L9.60 10.64 L9.63 10.48 L9.68 10.32 L9.73 10.15 L9.80 9.99 L9.88 9.84 L9.97 9.68 L10.06 9.53 L10.17 9.38 L10.29 9.23 L10.43 9.09 L10.57 8.96 L10.72 8.83 L10.88 8.72 L11.05 8.61 L11.23 8.50 L11.42 8.41 L11.61 8.33 L11.81 8.26 L12.02 8.20 L12.24 8.15 L12.46 8.12 L12.68 8.10 L12.91 8.09 L13.15 8.09 L13.38 8.11 L13.62 8.14 L13.85 8.19 L14.09 8.25 L14.33 8.33 L14.56 8.42 L14.79 8.53 L15.01 8.65 L15.24 8.78 L15.45 8.93 L15.66 9.09 L15.86 9.27 L16.05 9.46 L16.24 9.67 L16.41 9.88 L16.57 10.11 L16.72 10.35 L16.86 10.60 L16.98 10.86 L17.09 11.13 L17.19 11.41 L17.27 11.70 L17.33 12.00 L17.38 12.30 L17.41 12.60 L17.42 12.91 L17.41 13.23 L17.39 13.54 L17.35 13.86 L17.28 14.17 L17.20 14.49 L17.11 14.80 L16.99 15.11 L16.85 15.42 L16.70 15.72 L16.52 16.01 L16.33 16.29 L16.12 16.57 L15.89 16.83 L15.65 17.09 L15.39 17.33 L15.11 17.56 L14.82 17.77 L14.52 17.97 L14.20 18.15 L13.87 18.32 L13.52 18.47 L13.17 18.60 L12.80 18.71 L12.43 18.79 L12.05 18.86 L11.67 18.91 L11.28 18.94 L10.88 18.94 L10.48 18.92 L10.09 18.88 L9.69 18.81 L9.29 18.72 L8.90 18.61 L8.51 18.47 L8.12 18.31 L7.74 18.13 L7.37 17.93 L7.02 17.70 L6.67 17.46 L6.33 17.19 L6.01 16.90 L5.70 16.59 L5.41 16.26 L5.13 15.91 L4.87 15.54 L4.64 15.16 L4.42 14.77 L4.23 14.35 L4.05 13.93 L3.90 13.49 L3.78 13.05 L3.68 12.59 L3.61 12.12 L3.56 11.65 L3.53 11.18 L3.54 10.70 L3.57 10.22 L3.63 9.73 L3.72 9.25 L3.83 8.77 L3.98 8.30 L4.15 7.83 L4.35 7.37 L4.57 6.92 L4.82 6.48 L5.10 6.05 L5.40 5.64 L5.73 5.24 L6.08 4.86 L6.46 4.50 L6.86 4.15 L7.28 3.83 L7.71 3.53 L8.17 3.26 L8.65 3.00 L9.14 2.78 L9.64 2.58 L10.16 2.41 L10.69 2.27 L11.23 2.16 L11.78 2.07 L12.34 2.02 L12.90 2.00 L13.47 2.01 L14.03 2.06 L14.60 2.13" stroke-width="1.6"/></g></symbol><symbol id="emb-glitch" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5.5h11M8 9.5h12.5M3 13.5h9M9.5 17.5h11"/><path d="M17.5 5.5h2.5M15 13.5h4" opacity=".6"/><rect x="4.5" y="18.8" width="2.4" height="2.4" rx=".4" fill="currentColor" stroke="none"/><rect x="19.2" y="2" width="2.2" height="2.2" rx=".4" fill="currentColor" stroke="none" opacity=".7"/></g></symbol><symbol id="emb-infinity" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 12c-2-2.6-3.8-4-5.6-4a4 4 0 0 0 0 8c1.8 0 3.6-1.4 5.6-4s3.8-4 5.6-4a4 4 0 0 1 0 8c-1.8 0-3.6-1.4-5.6-4z" stroke-width="1.9"/></g></symbol><symbol id="emb-cosmic-dna" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M8 2.8c0 4.6 8 4.6 8 9.2s-8 4.6-8 9.2M16 2.8c0 4.6-8 4.6-8 9.2s8 4.6 8 9.2"/><path d="M9.3 5.8h5.4M10.4 9.3h3.2M10.4 14.7h3.2M9.3 18.2h5.4" stroke-width="1.3" opacity=".75"/></g></symbol><symbol id="emb-comet" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="16.6" cy="7.4" r="3.4"/><path d="M14.2 10.4L3.6 21M16.2 11.3L9.2 18.3M12.6 8.9L5.7 15.8" opacity=".7"/><circle cx="16.6" cy="7.4" r="1.2" fill="currentColor" stroke="none"/></g></symbol><symbol id="emb-orbit" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="12" rx="10" ry="3.8"/><ellipse cx="12" cy="12" rx="10" ry="3.8" transform="rotate(60 12 12)"/><ellipse cx="12" cy="12" rx="10" ry="3.8" transform="rotate(120 12 12)"/><circle cx="12" cy="12" r="1.7" fill="currentColor" stroke="none"/></g></symbol></defs></svg>
 <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs><symbol id="wings-sm" viewBox="0 0 252 79"><g transform="translate(15.0,-1.0)"><g fill="var(--wf,#fff)" stroke="currentColor" stroke-width="4" stroke-linejoin="round"><path d="M40.0 4.0Q10.1 9.7 -12.0 34.0Q20.1 27.1 40.0 4.0Z"/><path d="M55.2 6.3Q28.7 15.6 12.5 41.1Q40.7 30.3 55.2 6.3Z"/><path d="M68.4 11.6Q45.8 23.6 35.1 49.0Q59.1 35.5 68.4 11.6Z"/><path d="M79.7 20.1Q61.0 33.6 55.6 57.7Q75.2 42.6 79.7 20.1Z"/><path d="M88.9 31.6Q74.3 45.6 73.5 67.2Q88.7 51.8 88.9 31.6Z"/><path d="M96.2 46.2Q85.2 59.4 88.2 77.5Q99.5 63.0 96.2 46.2Z"/><path d="M100 58Q86 6 40 4" fill="none" stroke-linecap="round"/></g></g><g transform="translate(251.9,0) scale(-1,1)"><g transform="translate(15.0,-1.0)"><g fill="var(--wf,#fff)" stroke="currentColor" stroke-width="4" stroke-linejoin="round"><path d="M40.0 4.0Q10.1 9.7 -12.0 34.0Q20.1 27.1 40.0 4.0Z"/><path d="M55.2 6.3Q28.7 15.6 12.5 41.1Q40.7 30.3 55.2 6.3Z"/><path d="M68.4 11.6Q45.8 23.6 35.1 49.0Q59.1 35.5 68.4 11.6Z"/><path d="M79.7 20.1Q61.0 33.6 55.6 57.7Q75.2 42.6 79.7 20.1Z"/><path d="M88.9 31.6Q74.3 45.6 73.5 67.2Q88.7 51.8 88.9 31.6Z"/><path d="M96.2 46.2Q85.2 59.4 88.2 77.5Q99.5 63.0 96.2 46.2Z"/><path d="M100 58Q86 6 40 4" fill="none" stroke-linecap="round"/></g></g></g><path d="M126.0 17.0l-5 14 8 9-6 14 4 10" fill="none" stroke="currentColor" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/></symbol></defs></svg>
 <div class="wrap">
   <header class="topbar">
@@ -512,6 +529,15 @@ const PROMPTS = ["If reality is a simulation, what's the strongest evidence you'
 const MAX_IMG = 4, MAX_CASE_IMG = 20, MAX_BYTES = 10 * 1024 * 1024;
 const OK_TYPES = ["image/png","image/jpeg","image/gif","image/webp"];
 
+// Profile emblems: [id, name]. To add more later, draw a new symbol in index.html's emblem sprite and add it here.
+const EMBLEMS = [["angel-wings", "Angel Wings"], ["halo", "Halo"], ["energy-blade", "Energy Blade"], ["ufo", "UFO"], ["visitor", "Visitor"], ["third-eye", "Third Eye"], ["all-seeing-eye", "All-Seeing Eye"], ["moon-stars", "Moon & Stars"], ["ringed-planet", "Ringed Planet"], ["flower-of-life", "Flower of Life"], ["merkaba", "Merkaba"], ["lotus", "Lotus"], ["ankh", "Ankh"], ["crystal", "Crystal"], ["portal", "Portal"], ["glitch", "Glitch"], ["infinity", "Infinity"], ["cosmic-dna", "Cosmic DNA"], ["comet", "Comet"], ["orbit", "Orbit"]];
+const emblemName = id => (EMBLEMS.find(e => e[0] === id) || [])[1];
+function emblemEl(id, size = "sm") {
+  const name = emblemName(id); if (!name) return null;
+  const s = el("span", { class: "emb emb-" + size, title: name, role: "img", "aria-label": name + " emblem" });
+  s.innerHTML = `<svg aria-hidden="true" focusable="false"><use href="#emb-${id}"/></svg>`;
+  return s;
+}
 const realmName = id => (REALMS.find(r => r[0] === id) || [, "Open Floor"])[1];
 const $ = s => document.querySelector(s);
 const state = {
@@ -568,7 +594,7 @@ function avatar(id, size = 22) {
   else a.textContent = n[0] || "?";
   return a;
 }
-const whoLink = id => el("a", { class: "who", href: profilePath(id) }, avatar(id), el("span", { text: "@" + nameOf(id) }));
+const whoLink = id => el("a", { class: "who", href: profilePath(id) }, avatar(id), el("span", { text: "@" + nameOf(id) }), prof(id) && prof(id).emblem ? emblemEl(prof(id).emblem, "sm") : null);
 
 // ---------- page addresses ----------
 const slugify = t => String(t || "").toLowerCase().normalize("NFKD").replace(/[\u0300-\u036f]/g, "").replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "").slice(0, 60).replace(/-+$/, "");
@@ -622,7 +648,9 @@ function stopAnswer() { state.answering = null; $("#answering").hidden = true }
 
 // ---------- data ----------
 async function loadProfiles() {
-  const { data, error } = await sb.from("profiles").select("id,handle,path,bio,realms,avatar_path,show_posts,created_at").limit(5000);
+  const cols = "id,handle,path,bio,realms,avatar_path,show_posts,created_at";
+  let { data, error } = await sb.from("profiles").select(cols + ",emblem").limit(5000);
+  if (error && /emblem/.test(error.message || "")) ({ data, error } = await sb.from("profiles").select(cols).limit(5000)); // database update 04 not run yet
   if (error) return console.warn(error);
   state.profiles = new Map(data.map(p => [p.id, p]));
   if (state.user) state.me = prof(state.user.id);
@@ -1121,7 +1149,7 @@ function viewProfile() {
   const posts = state.posts.filter(x => x.author_id === id);
   const points = posts.reduce((n, x) => n + (x.score || 0), 0);
   const head = el("div", { class: "phead" }, avatar(id, 84),
-    el("div", { class: "info" }, el("h2", { class: "fit-1line", title: "@" + p.handle, text: "@" + p.handle }), p.path ? el("div", { class: "path", text: p.path }) : null,
+    el("div", { class: "info" }, el("div", { class: "name-row" }, el("h2", { class: "fit-1line", title: "@" + p.handle, text: "@" + p.handle }), p.emblem ? emblemEl(p.emblem, "lg") : null), p.path ? el("div", { class: "path", text: p.path }) : null,
       p.bio ? el("p", { class: "bio", text: p.bio }) : el("p", { class: "bio hint", text: mine ? "You haven't written a bio yet." : "This seeker hasn't written a bio yet." }),
       (p.realms || []).length ? el("div", { class: "prealms" }, p.realms.filter(r => REALMS.some(x => x[0] === r)).map(r => el("span", { class: "tag", text: realmName(r) }))) : null,
       el("div", { class: "pstats" }, el("span", {}, "Joined ", el("b", { text: new Date(p.created_at).toLocaleDateString(undefined, { month: "short", year: "numeric" }) })),
@@ -1151,7 +1179,19 @@ function viewProfile() {
 }
 function viewEdit() {
   if (!state.me) { setTimeout(() => go(state.user ? "/welcome" : "/login", true)); return el("div") }
-  const p = state.me, picked = new Set(p.realms || []); let newAvatar = null;
+  const p = state.me, picked = new Set(p.realms || []); let newAvatar = null, myEmblem = emblemName(p.emblem) ? p.emblem : "";
+  const embPicks = el("div", { class: "emb-picks", role: "radiogroup", "aria-label": "Your emblem" });
+  const drawPicks = () => { embPicks.querySelectorAll(".emb-pick").forEach(b => { const on = b.dataset.emblem === myEmblem; b.setAttribute("aria-checked", String(on)); b.tabIndex = on ? 0 : -1 }) };
+  [["", "None"], ...EMBLEMS].forEach(([id, name]) => {
+    const b = el("button", { class: "emb-pick", type: "button", role: "radio", "data-emblem": id, onclick: () => { myEmblem = id; drawPicks() } },
+      id ? emblemEl(id, "choice") : el("span", { class: "emb emb-choice emb-none", "aria-hidden": "true", text: "∅" }), el("span", { text: name }));
+    b.addEventListener("keydown", e => {
+      const all = [...embPicks.querySelectorAll(".emb-pick")], i = all.indexOf(b), step = { ArrowRight: 1, ArrowDown: 1, ArrowLeft: -1, ArrowUp: -1 }[e.key];
+      if (step) { e.preventDefault(); const n = all[(i + step + all.length) % all.length]; myEmblem = n.dataset.emblem; drawPicks(); n.focus() }
+    });
+    embPicks.append(b);
+  });
+  drawPicks();
   const prev = el("span", {}); const showPrev = () => { prev.textContent = ""; if (newAvatar) { const a = el("span", { class: "av", style: "--s:64px" }); a.append(el("img", { src: URL.createObjectURL(newAvatar), alt: "" })); prev.append(a) } else prev.append(avatar(p.id, 64)) }; showPrev();
   const hIn = el("input", { class: "field", id: "pHandle", maxlength: "32" }); hIn.value = p.handle;
   const pathIn = el("input", { class: "field", id: "pPath", maxlength: "60", placeholder: "Lucid dreamer · Pattern noticer" }); pathIn.value = p.path || "";
@@ -1168,7 +1208,7 @@ function viewEdit() {
       if (!/^[A-Za-z0-9_.-]{2,32}$/.test(h)) { err.textContent = "Handles use 2–32 letters, numbers, dots, dashes or underscores."; return }
       saveBtn.disabled = true;
       try {
-        const upd = { handle: h, path: pathIn.value.trim(), bio: bioIn.value.trim(), realms: [...picked], show_posts: showIn.checked };
+        const upd = { handle: h, path: pathIn.value.trim(), bio: bioIn.value.trim(), realms: [...picked], show_posts: showIn.checked, emblem: myEmblem || null };
         if (newAvatar) { upd.avatar_path = await uploadImage(newAvatar, "avatar-") }
         const { error } = await sb.from("profiles").update(upd).eq("id", p.id); if (error) throw error;
         if (newAvatar && isPath(p.avatar_path)) sb.storage.from("images").remove([p.avatar_path]);
@@ -1181,6 +1221,7 @@ function viewEdit() {
       el("label", { class: "l" }, "Your path (a short line under your name)", pathIn),
       el("label", { class: "l" }, "Bio", bioIn),
       el("div", { class: "l" }, el("span", { class: "hint", text: "Topics you're drawn to" }), picks),
+      el("div", { class: "l" }, el("span", { class: "hint", text: "Your emblem (shows next to your name on everything you post)" }), embPicks),
       el("label", { class: "switch", for: "pShow" }, showIn, el("div", {}, el("b", { text: "Show my posts on my profile" }), el("span", { text: "When off, other members can see your profile but not your list of ideas. Your ideas still appear in the main feed." }))),
       err, el("div", { class: "row" }, saveBtn, el("a", { class: "btn", href: profilePath(p.id), text: "Cancel" }))));
 }
@@ -1402,7 +1443,7 @@ function caseCard(c) {
       el("div", { class: "case-top" }, el("span", { class: "case-no", text: caseNo(c.case_no) }), el("span", { class: "tag", text: caseTypeName(c.type) })),
       el("h3", { text: c.title }),
       el("p", { class: "body", text: c.account }),
-      el("div", { class: "case-foot" }, el("span", { class: "metoo-count", text: metooLabel(c.metoo_count) }), el("span", { text: "@" + nameOf(c.author_id) + " · " + ago(c.created_at) }))));
+      el("div", { class: "case-foot" }, el("span", { class: "metoo-count", text: metooLabel(c.metoo_count) }), el("span", { class: "by" }, "@" + nameOf(c.author_id), prof(c.author_id) && prof(c.author_id).emblem ? emblemEl(prof(c.author_id).emblem, "xs") : null, " · " + ago(c.created_at)))));
 }
 
 function viewVault() {
