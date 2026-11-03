@@ -84,6 +84,19 @@ README and SQL files in this repo from being shown to visitors. It must sit next
 When you add a new `update-XX-….sql` file, add a matching line near the top of `_redirects`
 so it stays hidden too.
 
+## Search engines and link previews
+
+| File | What it does |
+|---|---|
+| `netlify/edge-functions/page-meta.js` | Writes each post, Vault case, profile, topic and daily-question page's own title, description, preview image and content into the page before it's sent |
+| `netlify/edge-functions/sitemap.js` | Serves an always-current `glitchcommons.com/sitemap.xml` |
+| `netlify/shared/site.js` | Settings both functions share. If you rename a topic or change the daily questions in `index.html`, change them here too |
+| `robots.txt` | Tells search engines which pages to skip and where the sitemap is |
+| `og-default.png` | The preview image used when a page has no photo of its own |
+
+Netlify picks up the `netlify/edge-functions` folder automatically on every deploy.
+If Supabase is ever unreachable, pages are served normally without the extra details.
+
 ## Making changes later
 
 - Edit `index.html` on GitHub (open the file, click the pencil icon, **Commit changes**). Netlify republishes automatically in about a minute.

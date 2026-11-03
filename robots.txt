@@ -1,0 +1,10 @@
+User-agent: *
+Allow: /
+Disallow: /messages
+Disallow: /notifications
+Disallow: /edit
+Disallow: /welcome
+Disallow: /reset
+Disallow: /vault/new
+
+Sitemap: https://glitchcommons.com/sitemap.xml

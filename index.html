@@ -8,6 +8,11 @@
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Glitch Commons">
 <meta property="og:url" content="https://glitchcommons.com/">
+<meta property="og:image" content="https://glitchcommons.com/og-default.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="robots" content="index, follow">
 <meta name="description" content="The ideas the mainstream won't touch. Post them, vote on the most compelling, and explore them with people who actually think.">
 <meta property="og:title" content="Glitch Commons: Reality has cracks. We live in them.">
 <meta property="og:description" content="Post them, vote on the most compelling, and explore them with people who actually think.">
@@ -287,6 +292,18 @@ html,body{overflow-x:clip}
 .hero[hidden] + .grid{margin-top:26px}
 .av.wing{background:var(--glow);color:var(--accent)}
 .av.wing svg{width:70%;height:auto;--wf:transparent}
+/* readable copy written into the page by the edge function, shown until the site loads */
+.prerender{display:grid;gap:14px}
+.prerender a{text-decoration:none}
+.prerender .post .body p,.prerender .reply p{margin:0 0 8px;white-space:pre-wrap;overflow-wrap:anywhere}
+.prerender .pr-img{display:block;max-width:min(100%,560px);border-radius:10px;border:1px solid var(--line)}
+.prerender .pr-name{margin:0;font-family:var(--display);font-weight:800;font-size:clamp(1.6rem,4vw,2.2rem);text-wrap:balance;overflow-wrap:anywhere}
+.prerender .pr-h2{margin:10px 0 4px;font-family:var(--display);font-weight:600;font-size:1.15rem}
+.prerender .pr-h4{margin:8px 0 0;font-size:11px;font-family:var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--muted);font-weight:500}
+.pr-list{list-style:none;margin:0;padding:0;display:grid;gap:10px}
+.pr-list li{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:12px 14px;min-width:0}
+.pr-list li a{font-weight:600;color:var(--fg);overflow-wrap:anywhere}
+.pr-list li p{margin:4px 0 0;color:var(--muted);font-size:14px;overflow-wrap:anywhere}
 footer.site{display:flex;align-items:center;gap:10px}
 footer.site .mark{height:16px;margin:0;opacity:.7}
 /* ---------- the vault ---------- */
@@ -1480,7 +1497,8 @@ function viewNotFound() {
 
 // ---------- start up ----------
 async function boot() {
-  render();
+  // Pages the edge function filled in already show their content; keep it on screen until data loads.
+  if (!$("#pageView").hasAttribute("data-prerendered")) render();
   let booted = false, lastUid = null;
   sb.auth.onAuthStateChange((event, session) => {
     if (event === "PASSWORD_RECOVERY") { setTimeout(() => go("/reset"), 0); return }
