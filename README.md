@@ -93,6 +93,8 @@ so it stays hidden too.
 | `netlify/shared/site.js` | Settings both functions share. If you rename a topic or change the daily questions in `index.html`, change them here too |
 | `robots.txt` | Tells search engines which pages to skip and where the sitemap is |
 | `og-default.png` | The preview image used when a page has no photo of its own |
+| `favicon.ico`, `favicon.svg` | The wings icon in browser tabs (Safari and Google search results use the .ico) |
+| `apple-touch-icon.png`, `icon-192.png`, `icon-512.png`, `site.webmanifest` | The icon used when someone adds Glitch Commons to their phone's home screen |
 
 Netlify picks up the `netlify/edge-functions` folder automatically on every deploy.
 If Supabase is ever unreachable, pages are served normally without the extra details.
