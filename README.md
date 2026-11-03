@@ -74,6 +74,16 @@ Some new features come with an update script. Run each one once, in number order
 
 If you ever rebuild the database from scratch, run `setup.sql` first, then each update file in order.
 
+## Page addresses (`_redirects`)
+
+The site uses real addresses like `/post/…`, `/vault/case-0007`, `/u/handle` and `/topics/…`.
+The `_redirects` file tells Netlify to load the site for every address, and keeps the
+README and SQL files in this repo from being shown to visitors. It must sit next to
+`index.html` and be named exactly `_redirects`, with no file extension.
+
+When you add a new `update-XX-….sql` file, add a matching line near the top of `_redirects`
+so it stays hidden too.
+
 ## Making changes later
 
 - Edit `index.html` on GitHub (open the file, click the pencil icon, **Commit changes**). Netlify republishes automatically in about a minute.

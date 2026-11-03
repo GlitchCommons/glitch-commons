@@ -1,0 +1,11 @@
+# Netlify address rules for glitchcommons.com
+
+# Keep the database notes in the GitHub repo from being served to visitors
+/README.md                          /index.html  404!
+/setup.sql                          /index.html  404!
+/update-01-votes-notifications.sql  /index.html  404!
+/update-02-vault.sql                /index.html  404!
+/update-03-vault-20-photos.sql      /index.html  404!
+
+# Every other address loads the site, which then shows the right page
+/*                                  /index.html  200

@@ -3,7 +3,11 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>Glitch Commons</title>
+<title>Glitch Commons: Reality has cracks. We live in them.</title>
+<link rel="canonical" href="https://glitchcommons.com/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Glitch Commons">
+<meta property="og:url" content="https://glitchcommons.com/">
 <meta name="description" content="The ideas the mainstream won't touch. Post them, vote on the most compelling, and explore them with people who actually think.">
 <meta property="og:title" content="Glitch Commons: Reality has cracks. We live in them.">
 <meta property="og:description" content="Post them, vote on the most compelling, and explore them with people who actually think.">
@@ -308,7 +312,11 @@ footer.site .mark{height:16px;margin:0;opacity:.7}
 .case-card .body{margin:0;font-size:14px;color:var(--muted);display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;overflow-wrap:anywhere}
 .case-foot{display:flex;flex-wrap:wrap;justify-content:space-between;gap:4px 10px;font-size:12px;color:var(--muted);font-family:var(--mono);margin-top:auto;padding-top:4px}
 .metoo-count{color:var(--accent);font-family:var(--mono);font-size:12px}
-.post h3.case-title{font-size:clamp(1.3rem,3.4vw,1.7rem)}
+.post h1.case-title,.post h1.post-title{margin:0;font-family:var(--display);font-weight:600;line-height:1.2;text-wrap:balance;overflow-wrap:anywhere;font-size:clamp(1.3rem,3.4vw,1.7rem)}
+.post h3 a.title-link{color:inherit;text-decoration:none}
+.post h3 a.title-link:hover{text-decoration:underline;text-decoration-color:var(--accent);text-underline-offset:3px}
+.post h3 a.title-link:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:4px}
+a.ptag:hover{text-decoration:underline}
 .case-full h4{margin:8px 0 0;font-size:11px;font-family:var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--muted);font-weight:500}
 .facts{display:grid;grid-template-columns:max-content minmax(0,1fr);gap:6px 16px;margin:4px 0;font-size:14px}
 .facts dt{color:var(--muted)}
@@ -336,17 +344,17 @@ a.casechip:focus-visible{outline:2px solid var(--accent)}
 <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs><symbol id="wings-sm" viewBox="0 0 252 79"><g transform="translate(15.0,-1.0)"><g fill="var(--wf,#fff)" stroke="currentColor" stroke-width="4" stroke-linejoin="round"><path d="M40.0 4.0Q10.1 9.7 -12.0 34.0Q20.1 27.1 40.0 4.0Z"/><path d="M55.2 6.3Q28.7 15.6 12.5 41.1Q40.7 30.3 55.2 6.3Z"/><path d="M68.4 11.6Q45.8 23.6 35.1 49.0Q59.1 35.5 68.4 11.6Z"/><path d="M79.7 20.1Q61.0 33.6 55.6 57.7Q75.2 42.6 79.7 20.1Z"/><path d="M88.9 31.6Q74.3 45.6 73.5 67.2Q88.7 51.8 88.9 31.6Z"/><path d="M96.2 46.2Q85.2 59.4 88.2 77.5Q99.5 63.0 96.2 46.2Z"/><path d="M100 58Q86 6 40 4" fill="none" stroke-linecap="round"/></g></g><g transform="translate(251.9,0) scale(-1,1)"><g transform="translate(15.0,-1.0)"><g fill="var(--wf,#fff)" stroke="currentColor" stroke-width="4" stroke-linejoin="round"><path d="M40.0 4.0Q10.1 9.7 -12.0 34.0Q20.1 27.1 40.0 4.0Z"/><path d="M55.2 6.3Q28.7 15.6 12.5 41.1Q40.7 30.3 55.2 6.3Z"/><path d="M68.4 11.6Q45.8 23.6 35.1 49.0Q59.1 35.5 68.4 11.6Z"/><path d="M79.7 20.1Q61.0 33.6 55.6 57.7Q75.2 42.6 79.7 20.1Z"/><path d="M88.9 31.6Q74.3 45.6 73.5 67.2Q88.7 51.8 88.9 31.6Z"/><path d="M96.2 46.2Q85.2 59.4 88.2 77.5Q99.5 63.0 96.2 46.2Z"/><path d="M100 58Q86 6 40 4" fill="none" stroke-linecap="round"/></g></g></g><path d="M126.0 17.0l-5 14 8 9-6 14 4 10" fill="none" stroke="currentColor" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/></symbol></defs></svg>
 <div class="wrap">
   <header class="topbar">
-    <a class="brand" href="#" aria-label="Glitch Commons home"><svg class="mark" viewBox="0 0 252 79" aria-hidden="true" focusable="false"><use href="#wings-sm"/></svg>Glitch&nbsp;<span>Commons</span></a>
+    <a class="brand" href="/" aria-label="Glitch Commons home"><svg class="mark" viewBox="0 0 252 79" aria-hidden="true" focusable="false"><use href="#wings-sm"/></svg>Glitch&nbsp;<span>Commons</span></a>
     <nav class="mast-btns" id="navOut" aria-label="Account">
-      <a class="btn vault-link" href="#vault">The Vault</a>
-      <a class="btn" href="#login">Log in</a>
-      <a class="btn primary" href="#join">Join free</a>
+      <a class="btn vault-link" href="/vault">The Vault</a>
+      <a class="btn" href="/login">Log in</a>
+      <a class="btn primary" href="/join">Join free</a>
     </nav>
     <nav class="mast-btns" id="navIn" aria-label="Account" hidden>
-      <a class="btn vault-link" href="#vault">The Vault</a>
-      <a class="btn" href="#messages" id="msgBtn">Messages</a>
-      <a class="btn bell" href="#notifications" id="bellBtn" aria-label="Notifications"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg><span class="badge" id="bellBadge" hidden>0</span></a>
-      <a class="btn" href="#" id="meBtn">My profile</a>
+      <a class="btn vault-link" href="/vault">The Vault</a>
+      <a class="btn" href="/messages" id="msgBtn">Messages</a>
+      <a class="btn bell" href="/notifications" id="bellBtn" aria-label="Notifications"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg><span class="badge" id="bellBadge" hidden>0</span></a>
+      <a class="btn" href="/login" id="meBtn">My profile</a>
     </nav>
   </header>
 
@@ -488,7 +496,7 @@ function niceError(e) {
   if (e && e.code === "23505") return "That handle is taken. Try another.";
   return m || "Something went wrong. Try again in a moment.";
 }
-function needMember() { if (state.me) return true; toast("Join free or log in to do that."); location.hash = state.user ? "#welcome" : "#join"; return false }
+function needMember() { if (state.me) return true; toast("Join free or log in to do that."); go(state.user ? "/welcome" : "/join"); return false }
 
 // ---------- people ----------
 const prof = id => state.profiles.get(id) || null;
@@ -500,15 +508,45 @@ function avatar(id, size = 22) {
   else a.textContent = n[0] || "?";
   return a;
 }
-const whoLink = id => el("a", { class: "who", href: "#u/" + id }, avatar(id), el("span", { text: "@" + nameOf(id) }));
+const whoLink = id => el("a", { class: "who", href: profilePath(id) }, avatar(id), el("span", { text: "@" + nameOf(id) }));
+
+// ---------- page addresses ----------
+const slugify = t => String(t || "").toLowerCase().normalize("NFKD").replace(/[\u0300-\u036f]/g, "").replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "").slice(0, 60).replace(/-+$/, "");
+const postPath = (id, title) => "/post/" + id + (slugify(title) ? "/" + slugify(title) : "");
+const casePath = no => "/vault/case-" + String(no || 0).padStart(4, "0");
+const profilePath = id => { const p = prof(id); return "/u/" + (p ? encodeURIComponent(p.handle) : id) };
+const realmSlug = id => slugify(realmName(id));
+const topicPath = id => id === "all" ? "/" : "/topics/" + realmSlug(id);
+function go(path, replace = false) {
+  if (path !== location.pathname + location.search) history[replace ? "replaceState" : "pushState"](null, "", path);
+  route();
+}
+function resolveProfileId(arg) {
+  if (state.profiles.has(arg)) return arg;
+  const lo = String(arg).toLowerCase();
+  for (const p of state.profiles.values()) if (p.handle.toLowerCase() === lo) return p.id;
+  return null;
+}
+// Links shared before real addresses existed used "#post/…" style. Send them to the new address.
+function legacyPath(h) {
+  const [n, a] = h.split("/");
+  if (n === "post" && a) return "/post/" + a;
+  if (n === "case" && a) { const c = state.cases.find(x => x.id === a); return c ? casePath(c.case_no) : "/vault" }
+  if (n === "u" && a) return "/u/" + a;
+  if (n === "dm" && a) return "/messages/" + a;
+  if (n === "vault") return a === "new" ? "/vault/new" : "/vault";
+  if (["login", "join", "forgot", "reset", "welcome", "edit", "messages", "notifications", "me"].includes(n)) return "/" + n;
+  return "/";
+}
 
 // ---------- daily prompt ----------
 function dayKey(d = new Date()) { return d.getFullYear() + "-" + String(d.getMonth() + 1).padStart(2, "0") + "-" + String(d.getDate()).padStart(2, "0") }
-function todaysPrompt() {
-  const now = new Date(), start = new Date(2026, 9, 26);
-  const days = Math.round((new Date(now.getFullYear(), now.getMonth(), now.getDate()) - start) / 864e5);
+function promptFor(key) {
+  const [y, m, d] = key.split("-").map(Number), start = new Date(2026, 9, 26);
+  const days = Math.round((new Date(y, m - 1, d) - start) / 864e5);
   return PROMPTS[((days % PROMPTS.length) + PROMPTS.length) % PROMPTS.length];
 }
+function todaysPrompt() { return promptFor(dayKey()) }
 let shownDay = "";
 function renderDaily() {
   const k = dayKey();
@@ -573,7 +611,7 @@ async function setUser(user) {
   } else { stopInbox(); state.myVotes = new Map(); state.myMetoo = new Set() }
   $("#navOut").hidden = !!user; $("#navIn").hidden = !user;
   $("#pageView").dataset.route = "";
-  if (user && !state.me && !["#reset"].includes(location.hash)) location.hash = "#welcome";
+  if (user && !state.me && location.pathname !== "/reset" && location.pathname !== "/welcome") { history.replaceState(null, "", "/welcome") }
   render();
 }
 
@@ -582,14 +620,29 @@ function cleanupSubs() {
   if (chatSub) { sb.removeChannel(chatSub); chatSub = null }
   if (dmSub) { sb.removeChannel(dmSub); dmSub = null }
 }
+function parsePath() {
+  const seg = location.pathname.split("/").filter(Boolean).map(x => { try { return decodeURIComponent(x) } catch (e) { return x } });
+  const [a = "", b = ""] = seg;
+  state.realm = "all";
+  if (!a) return { name: "feed", arg: "" };
+  if (a === "post" && b) return { name: "post", arg: b };
+  if (a === "vault" && !b) return { name: "vault", arg: "" };
+  if (a === "vault" && b === "new") return { name: "vault", arg: "new" };
+  if (a === "vault" && /^case-\d+$/.test(b)) return { name: "case", arg: String(parseInt(b.slice(5), 10)) };
+  if (a === "u" && b) return { name: "u", arg: b };
+  if (a === "messages") return b ? { name: "dm", arg: b } : { name: "messages", arg: "" };
+  if (a === "topics" && b) { const r = REALMS.find(x => realmSlug(x[0]) === b); if (r) { state.realm = r[0]; return { name: "feed", arg: "" } } }
+  if (a === "question" && /^\d{4}-\d{2}-\d{2}$/.test(b)) { state.realm = "prompt:" + b; return { name: "feed", arg: "" } }
+  if (["login", "join", "forgot", "reset", "welcome", "edit", "notifications", "me"].includes(a) && seg.length === 1) return { name: a, arg: "" };
+  return { name: "notfound", arg: "" };
+}
 function route() {
   cleanupSubs();
   $("#pageView").dataset.route = "";
-  const h = location.hash.replace(/^#/, "");
-  const [name, arg] = h.split("/");
-  state.view = { name: name || "feed", arg: arg || "" };
+  state.view = parsePath();
+  const arg = state.view.arg;
   if (state.view.name !== "notifications") state.freshIds = null;
-  if (state.view.name === "me") { location.replace(state.user ? "#u/" + state.user.id : "#login"); return }
+  if (state.view.name === "me") { go(state.user ? profilePath(state.user.id) : "/login", true); return }
   render();
   window.scrollTo({ top: 0 });
   if (state.view.name === "dm" && arg) openDm(arg);
@@ -599,7 +652,16 @@ function route() {
   if (state.view.name === "case" && arg) openCase(arg);
   if (state.view.name === "feed" && state.pendingCompose) { state.pendingCompose = false; openComposer() }
 }
-window.addEventListener("hashchange", route);
+window.addEventListener("popstate", route);
+// Internal links change the page without a full reload
+document.addEventListener("click", e => {
+  if (e.defaultPrevented || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+  const a = e.target.closest && e.target.closest("a[href]");
+  if (!a || (a.target && a.target !== "_self") || a.hasAttribute("download")) return;
+  const url = new URL(a.getAttribute("href"), location.href);
+  if (url.origin !== location.origin || url.hash) return;
+  e.preventDefault(); go(url.pathname + url.search);
+});
 
 // ---------- rendering ----------
 function renderRealms() {
@@ -607,13 +669,13 @@ function renderRealms() {
   const count = id => id === "all" ? state.posts.length : state.posts.filter(p => p.realm === id).length;
   [["all", "All topics"], ...REALMS].forEach(([id, name]) => {
     const on = state.view.name === "feed" && state.realm === id;
-    nav.append(el("button", { class: "realm", type: "button", "aria-pressed": String(on), onclick: () => { state.realm = id; if (location.hash && location.hash !== "#") location.hash = ""; else render() } },
+    nav.append(el("button", { class: "realm", type: "button", "aria-pressed": String(on), onclick: () => go(topicPath(id)) },
       el("span", { text: name }), el("span", { class: "n", text: String(count(id)) })));
   });
 }
 function render() {
   $("#stPosts").textContent = state.posts.length;
-  $("#meBtn").href = state.user ? "#u/" + state.user.id : "#login";
+  $("#meBtn").href = state.user ? profilePath(state.user.id) : "/login";
   const mb = $("#msgBtn"); mb.textContent = "Messages"; if (state.unread) mb.append(el("span", { class: "badge", text: String(state.unread) }));
   const bb = $("#bellBadge"); bb.hidden = !state.notifUnread; bb.textContent = state.notifUnread > 99 ? "99+" : String(state.notifUnread);
   $("#bellBtn").setAttribute("aria-label", state.notifUnread ? `Notifications, ${state.notifUnread} unread` : "Notifications");
@@ -626,19 +688,51 @@ function render() {
   renderMain();
   for (const [id, v] of Object.entries(keep)) { const i = document.getElementById(id); if (i) i.value = v }
   if (focusId && focusId.startsWith("reply-")) { const i = document.getElementById(focusId); if (i && document.activeElement !== i) i.focus() }
+  setMeta();
+}
+
+// ---------- page titles and descriptions (for browser tabs, Google and link previews) ----------
+const SITE = "Glitch Commons";
+const clip = (t, n = 155) => { t = String(t || "").replace(/\s+/g, " ").trim(); return t.length > n ? t.slice(0, n - 1).replace(/\s+\S*$/, "") + "…" : t };
+function metaTag(attr, key, content) {
+  let m = document.head.querySelector(`meta[${attr}="${key}"]`);
+  if (!m) { m = document.createElement("meta"); m.setAttribute(attr, key); document.head.append(m) }
+  m.setAttribute("content", content);
+}
+function setMeta() {
+  const v = state.view, home = "Share what you've seen. Say what you suspect. Find out you're not alone.";
+  let title = SITE + ": Reality has cracks. We live in them.", desc = "The ideas the mainstream won't touch. " + home, index = true;
+  if (v.name === "feed" && state.realm === "all") { /* home page: keep the defaults */ }
+  else if (v.name === "feed" && state.realm.startsWith("prompt:")) { const q = promptFor(state.realm.slice(7)); title = `“${q}” · Answers · ${SITE}`; desc = "Glitch Commons members answer today's forbidden question: " + q }
+  else if (v.name === "feed" && state.realm !== "all") { const n = realmName(state.realm); title = `${n} · ${SITE}`; desc = `Ideas and first-hand experiences about ${n.toLowerCase()}: the questions the mainstream won't touch, voted up by the Glitch Commons community.` }
+  else if (v.name === "post") { const p = state.posts.find(x => x.id === v.arg); if (p) { title = `${p.title} · ${SITE}`; desc = clip(p.body || p.title) } else if (state.postMissing === v.arg) { title = "Post not found · " + SITE; index = false } }
+  else if (v.name === "case") { const c = state.cases.find(x => x.case_no === Number(v.arg)); if (c) { title = `${c.title} · ${caseNo(c.case_no)} · The Vault`; desc = clip(c.account) } else if (state.caseMissing === Number(v.arg)) { title = "Case not found · The Vault"; index = false } }
+  else if (v.name === "vault") { title = v.arg === "new" ? "Log evidence · The Vault" : "The Vault: evidence of the weird and unexplainable · " + SITE; desc = "First-hand evidence of synchronicities, glitches, sightings and premonitions, logged case by case by the Glitch Commons community."; if (v.arg === "new") index = false }
+  else if (v.name === "u") { const id = resolveProfileId(v.arg), p = id && prof(id); if (p) { title = `@${p.handle} · ${SITE}`; desc = clip(p.bio || `${p.handle} explores the ideas the mainstream won't touch on Glitch Commons.`) } else { title = "Profile not found · " + SITE; index = false } }
+  else if (v.name === "notfound") { title = "Page not found · " + SITE; index = false }
+  else { title = ({ login: "Log in", join: "Join free", forgot: "Reset password", reset: "Set a new password", welcome: "Welcome", edit: "Edit profile", messages: "Messages", dm: "Messages", notifications: "Notifications" }[v.name] || SITE) + " · " + SITE; index = v.name === "join" }
+  document.title = title;
+  metaTag("name", "description", desc);
+  metaTag("property", "og:title", title);
+  metaTag("property", "og:description", desc);
+  metaTag("property", "og:url", location.origin + location.pathname);
+  metaTag("name", "robots", index ? "index, follow" : "noindex");
+  let link = document.head.querySelector('link[rel="canonical"]');
+  if (!link) { link = document.createElement("link"); link.rel = "canonical"; document.head.append(link) }
+  link.href = location.origin + location.pathname;
 }
 function renderMain() {
   const isFeed = state.view.name === "feed";
   $("#feedView").hidden = !isFeed; $("#pageView").hidden = isFeed; $("#hero").hidden = !isFeed;
   if (isFeed) return renderFeed();
   const v = $("#pageView");
-  const views = { login: viewLogin, join: viewJoin, forgot: viewForgot, reset: viewReset, welcome: viewWelcome, u: viewProfile, edit: viewEdit, messages: viewInbox, dm: viewDm, post: viewPost, notifications: viewNotifs, vault: viewVault, case: viewCase };
+  const views = { login: viewLogin, join: viewJoin, forgot: viewForgot, reset: viewReset, welcome: viewWelcome, u: viewProfile, edit: viewEdit, messages: viewInbox, dm: viewDm, post: viewPost, notifications: viewNotifs, vault: viewVault, case: viewCase, notfound: viewNotFound };
   const fn = views[state.view.name];
-  if (!fn) { location.hash = ""; return }
+  if (!fn) return go("/", true);
   // most views keep their own content (typed text, live chat); profiles rebuild to show fresh data
   const rebuild = ["u", "post", "notifications", "case"].includes(state.view.name);
-  if (!rebuild && v.dataset.route === location.hash) return refreshLiveView();
-  v.dataset.route = location.hash; v.textContent = "";
+  if (!rebuild && v.dataset.route === location.pathname) return refreshLiveView();
+  v.dataset.route = location.pathname; v.textContent = "";
   v.append(fn());
 }
 
@@ -653,7 +747,7 @@ function renderFeed() {
     sort = "top";
   }
   const sortName = { week: "Top ideas this week", new: "Newest ideas", top: "All-time top ideas" }[state.sort];
-  $("#feedTitle").textContent = promptView ? "Answers to today's question" : state.realm === "all" ? sortName : realmName(state.realm);
+  $("#feedTitle").textContent = promptView ? (state.realm.slice(7) === dayKey() ? "Answers to today's question" : "Answers: " + promptFor(state.realm.slice(7))) : state.realm === "all" ? sortName : realmName(state.realm);
   list.sort(sort === "top" ? (a, b) => ((b.score || 0) - (a.score || 0)) || (new Date(b.created_at) - new Date(a.created_at)) : (a, b) => new Date(b.created_at) - new Date(a.created_at));
   const feed = $("#feed"); feed.textContent = "";
   if (REALM_NOTES[state.realm]) feed.append(el("div", { class: "notice", text: REALM_NOTES[state.realm] }));
@@ -694,27 +788,27 @@ async function castVote(type, item, dir) {
     : await sb.from("votes").delete().eq("target_type", type).eq("target_id", item.id).eq("user_id", state.user.id);
   if (error) { undo(); toast(niceError(error)) }
 }
-function sharePost(p) { return shareLink("#post/" + p.id) }
+function sharePost(p) { return shareLink(postPath(p.id, p.title)) }
 function citedCases(p) {
   const list = (p.post_cases || []).filter(x => x && x.vault_cases);
   if (!list.length) return null;
   return el("div", { class: "cited" }, el("span", { class: "lbl", text: "Evidence" }),
-    list.map(x => el("a", { class: "casechip", href: "#case/" + x.case_id, title: x.vault_cases.title }, caseNo(x.vault_cases.case_no) + " · " + x.vault_cases.title)));
+    list.map(x => el("a", { class: "casechip", href: casePath(x.vault_cases.case_no), title: x.vault_cases.title }, caseNo(x.vault_cases.case_no) + " · " + x.vault_cases.title)));
 }
 function postCard(p, mode = "feed") {
   const compact = mode === "compact", single = mode === "single";
   const open = single || (mode === "feed" && state.open.has(p.id));
   const imgs = (p.images || []).filter(isPath).slice(0, MAX_IMG);
   const card = el("article", { class: "post" },
-    el("div", { class: "meta" }, el("span", { class: "tag", text: realmName(p.realm) }), p.prompt_day ? el("span", { class: "ptag", text: "Daily question" }) : null,
+    el("div", { class: "meta" }, el("span", { class: "tag", text: realmName(p.realm) }), p.prompt_day ? el("a", { class: "ptag", href: "/question/" + p.prompt_day, style: "text-decoration:none", text: "Daily question" }) : null,
       compact ? null : whoLink(p.author_id), el("span", { text: ago(p.created_at) })),
-    el("h3", { text: p.title }),
+    single ? el("h1", { class: "post-title", text: p.title }) : el("h3", {}, el("a", { class: "title-link", href: postPath(p.id, p.title), text: p.title })),
     p.body ? el("p", { class: "body" + (open ? "" : " clamp"), text: p.body }) : null,
     imgs.length ? gallery(imgs) : null,
     citedCases(p));
   const acts = el("div", { class: "actions" },
     voteBox("post", p),
-    single ? null : compact ? el("a", { class: "chip", href: "#post/" + p.id, style: "text-decoration:none" }, el("span", { text: `Replies ${p.replyCount || ""}`.trim() }))
+    single ? null : compact ? el("a", { class: "chip", href: postPath(p.id, p.title), style: "text-decoration:none" }, el("span", { text: `Replies ${p.replyCount || ""}`.trim() }))
       : el("button", { class: "chip", type: "button", "aria-expanded": String(open), onclick: async () => { if (open) state.open.delete(p.id); else { state.open.add(p.id); if (!state.threads[p.id]) await loadReplies(p.id) } render() } },
         el("span", { text: open ? "Close thread" : `Replies ${p.replyCount || ""}`.trim() })),
     el("button", { class: "chip", type: "button", onclick: () => sharePost(p) }, el("span", { text: "Share" })));
@@ -731,7 +825,7 @@ function postCard(p, mode = "feed") {
     if (state.me) {
       const inp = el("input", { class: "field", id: "reply-" + p.id, maxlength: "2000", placeholder: "Add to the thread…", "aria-label": "Reply" });
       th.append(el("form", { class: "reply-form", onsubmit: e => { e.preventDefault(); sendReply(p.id, inp) } }, inp, el("button", { class: "btn", type: "submit", text: "Reply" })));
-    } else th.append(el("div", { class: "hint" }, el("a", { class: "link", href: "#join", text: "Join" }), " or ", el("a", { class: "link", href: "#login", text: "log in" }), " to reply."));
+    } else th.append(el("div", { class: "hint" }, el("a", { class: "link", href: "/join", text: "Join" }), " or ", el("a", { class: "link", href: "/login", text: "log in" }), " to reply."));
     card.append(th);
   }
   return card;
@@ -856,16 +950,16 @@ $("#answerBtn").addEventListener("click", () => {
   $("#composer").scrollIntoView({ behavior: "smooth", block: "start" }); $("#body").focus({ preventScroll: true });
 });
 $("#cancelAnswer").addEventListener("click", stopAnswer);
-$("#seeBtn").addEventListener("click", () => { state.realm = "prompt:" + dayKey(); render(); $("#feedTitle").scrollIntoView({ behavior: "smooth", block: "start" }) });
+$("#seeBtn").addEventListener("click", () => { go("/question/" + dayKey()); $("#feedTitle").scrollIntoView({ behavior: "smooth", block: "start" }) });
 document.querySelectorAll("#feedView .seg button").forEach(b => b.addEventListener("click", () => {
   state.sort = b.dataset.sort; document.querySelectorAll("#feedView .seg button").forEach(x => x.setAttribute("aria-pressed", String(x === b))); render();
 }));
 
 // ---------- auth views ----------
-const back = () => el("a", { class: "back", href: "#", text: "← Back to the ideas" });
+const back = () => el("a", { class: "back", href: "/", text: "← Back to the ideas" });
 function field(label, attrs) { const i = el(attrs.tag || "input", { class: "field", ...attrs, tag: null }); return [el("label", {}, label, i), i] }
 function viewLogin() {
-  if (state.me) { setTimeout(() => location.hash = ""); return el("div") }
+  if (state.me) { setTimeout(() => go("/", true)); return el("div") }
   const [lE, email] = field("Email", { type: "email", id: "lEmail", autocomplete: "email", required: true });
   const [lP, pw] = field("Password", { type: "password", id: "lPw", autocomplete: "current-password", required: true });
   const err = el("div", { class: "err", role: "alert" }), btn = el("button", { class: "btn primary", type: "submit", text: "Log in" });
@@ -873,12 +967,12 @@ function viewLogin() {
     e.preventDefault(); btn.disabled = true; err.textContent = "";
     const { error } = await sb.auth.signInWithPassword({ email: email.value.trim(), password: pw.value });
     btn.disabled = false; if (error) { err.textContent = niceError(error); return }
-    toast("Welcome back"); location.hash = "";
+    toast("Welcome back"); go("/");
   } }, el("h2", { text: "Log in" }), el("p", { text: "Welcome back." }), lE, lP, err, btn,
-    el("div", { class: "alt" }, el("a", { class: "link", href: "#forgot", text: "Forgot password?" }), el("span", {}, "New here? ", el("a", { class: "link", href: "#join", text: "Join free" })))));
+    el("div", { class: "alt" }, el("a", { class: "link", href: "/forgot", text: "Forgot password?" }), el("span", {}, "New here? ", el("a", { class: "link", href: "/join", text: "Join free" })))));
 }
 function viewJoin() {
-  if (state.me) { setTimeout(() => location.hash = ""); return el("div") }
+  if (state.me) { setTimeout(() => go("/", true)); return el("div") }
   const [lH, handle] = field("Handle (how others see you)", { id: "jHandle", maxlength: "32", placeholder: "starseed_77", required: true, autocomplete: "username" });
   const [lE, email] = field("Email", { type: "email", id: "jEmail", autocomplete: "email", required: true });
   const [lP, pw] = field("Password (at least 8 characters)", { type: "password", id: "jPw", minlength: "8", autocomplete: "new-password", required: true });
@@ -890,12 +984,12 @@ function viewJoin() {
     if ([...state.profiles.values()].some(p => p.handle.toLowerCase() === h.toLowerCase())) { err.textContent = "That handle is taken. Try another."; return }
     btn.disabled = true;
     store("gc_pending_handle", h);
-    const { data, error } = await sb.auth.signUp({ email: email.value.trim(), password: pw.value, options: { data: { handle: h }, emailRedirectTo: location.origin + location.pathname } });
+    const { data, error } = await sb.auth.signUp({ email: email.value.trim(), password: pw.value, options: { data: { handle: h }, emailRedirectTo: location.origin + "/" } });
     btn.disabled = false; if (error) { err.textContent = niceError(error); return }
-    if (data.session) { location.hash = "#welcome"; return }
+    if (data.session) { go("/welcome"); return }
     form.replaceChildren(el("h2", { text: "Check your email" }), el("div", { class: "ok", text: `We sent a confirmation link to ${email.value.trim()}. Click it to activate your account, then you'll land back here.` }), el("p", { class: "hint", text: "Don't see it? Check your spam folder." }));
   } }, el("h2", { text: "Join Glitch Commons" }), el("p", { text: "Free. Post the ideas the mainstream won't touch, vote on the best, and explore them with people who actually think." }), lH, lE, lP, err, btn,
-    el("div", { class: "alt" }, el("span", {}, "Already a member? ", el("a", { class: "link", href: "#login", text: "Log in" }))));
+    el("div", { class: "alt" }, el("span", {}, "Already a member? ", el("a", { class: "link", href: "/login", text: "Log in" }))));
   return el("div", {}, back(), form);
 }
 function viewForgot() {
@@ -903,7 +997,7 @@ function viewForgot() {
   const err = el("div", { class: "err", role: "alert" }), btn = el("button", { class: "btn primary", type: "submit", text: "Send reset link" });
   const form = el("form", { class: "auth", onsubmit: async e => {
     e.preventDefault(); btn.disabled = true; err.textContent = "";
-    const { error } = await sb.auth.resetPasswordForEmail(email.value.trim(), { redirectTo: location.origin + location.pathname });
+    const { error } = await sb.auth.resetPasswordForEmail(email.value.trim(), { redirectTo: location.origin + "/" });
     btn.disabled = false; if (error) { err.textContent = niceError(error); return }
     form.replaceChildren(el("h2", { text: "Check your email" }), el("div", { class: "ok", text: "If that email has an account, a reset link is on its way." }));
   } }, el("h2", { text: "Reset your password" }), el("p", { text: "We'll email you a link to set a new one." }), lE, err, btn);
@@ -916,12 +1010,12 @@ function viewReset() {
     e.preventDefault(); btn.disabled = true;
     const { error } = await sb.auth.updateUser({ password: pw.value });
     btn.disabled = false; if (error) { err.textContent = niceError(error); return }
-    toast("Password updated"); location.hash = "";
+    toast("Password updated"); go("/");
   } }, el("h2", { text: "Set a new password" }), lP, err, btn);
 }
 function viewWelcome() {
-  if (!state.user) { setTimeout(() => location.hash = "#login"); return el("div") }
-  if (state.me) { setTimeout(() => location.hash = ""); return el("div") }
+  if (!state.user) { setTimeout(() => go("/login", true)); return el("div") }
+  if (state.me) { setTimeout(() => go("/", true)); return el("div") }
   const meta = (state.user.user_metadata && state.user.user_metadata.handle) || store("gc_pending_handle") || "";
   const [lH, handle] = field("Your handle", { id: "wHandle", maxlength: "32", placeholder: "starseed_77", required: true });
   handle.value = meta;
@@ -933,13 +1027,14 @@ function viewWelcome() {
     btn.disabled = true;
     const { error } = await sb.from("profiles").insert({ id: state.user.id, handle: h });
     btn.disabled = false; if (error) { err.textContent = niceError(error); return }
-    await loadProfiles(); toast("Welcome to Glitch Commons"); location.hash = "#edit";
+    await loadProfiles(); toast("Welcome to Glitch Commons"); go("/edit");
   } }, el("h2", { text: "Welcome in" }), el("p", { text: "Confirm the handle other members will see. Next you can add a picture and bio." }), lH, err, btn);
 }
 
 // ---------- profiles ----------
 function viewProfile() {
-  const id = state.view.arg, p = prof(id), mine = state.user && state.user.id === id;
+  const id = resolveProfileId(state.view.arg), p = id && prof(id), mine = state.user && state.user.id === id;
+  if (p && location.pathname !== profilePath(id)) history.replaceState(null, "", profilePath(id));
   if (!p) return el("div", {}, back(), el("div", { class: "empty" }, el("strong", { text: "Profile not found." }), "This member may have left the commons."));
   const posts = state.posts.filter(x => x.author_id === id);
   const points = posts.reduce((n, x) => n + (x.score || 0), 0);
@@ -951,8 +1046,8 @@ function viewProfile() {
         el("span", {}, el("b", { text: String(posts.length) }), posts.length === 1 ? " idea" : " ideas"),
         el("span", {}, el("b", { text: String(state.cases.filter(c => c.author_id === id).length) }), state.cases.filter(c => c.author_id === id).length === 1 ? " case" : " cases"), el("span", {}, el("b", { text: fmtScore(points) }), " points"))),
     el("div", { class: "mast-btns" },
-      mine ? el("a", { class: "btn primary", href: "#edit", text: "Edit profile" }) : null,
-      mine ? el("button", { class: "btn", type: "button", text: "Log out", onclick: async () => { await sb.auth.signOut(); toast("Logged out"); location.hash = "" } }) : null,
+      mine ? el("a", { class: "btn primary", href: "/edit", text: "Edit profile" }) : null,
+      mine ? el("button", { class: "btn", type: "button", text: "Log out", onclick: async () => { await sb.auth.signOut(); toast("Logged out"); go("/") } }) : null,
       !mine && state.me ? el("button", { class: "btn primary", type: "button", text: "Send message", onclick: () => startDm(id) }) : null));
   const wrap = el("div", { class: "profile" }, back(), head);
   const hidden = p.show_posts === false;
@@ -964,7 +1059,7 @@ function viewProfile() {
   wrap.append(list);
   const cases = state.cases.filter(c => c.author_id === id);
   if (cases.length || mine) {
-    wrap.append(el("div", { class: "toolbar" }, el("h2", { text: mine ? "Your Vault cases" : "Vault cases" }), mine ? el("a", { class: "btn", href: "#vault/new", text: "Log evidence" }) : null));
+    wrap.append(el("div", { class: "toolbar" }, el("h2", { text: mine ? "Your Vault cases" : "Vault cases" }), mine ? el("a", { class: "btn", href: "/vault/new", text: "Log evidence" }) : null));
     const g = el("div", { class: "case-grid" });
     if (!cases.length) g.append(el("div", { class: "empty" }, el("strong", { text: "No cases logged yet." }), "Saw something you can't explain? Log it in the Vault."));
     cases.sort((a, b) => b.case_no - a.case_no).forEach(c => g.append(caseCard(c)));
@@ -973,7 +1068,7 @@ function viewProfile() {
   return wrap;
 }
 function viewEdit() {
-  if (!state.me) { setTimeout(() => location.hash = state.user ? "#welcome" : "#login"); return el("div") }
+  if (!state.me) { setTimeout(() => go(state.user ? "/welcome" : "/login", true)); return el("div") }
   const p = state.me, picked = new Set(p.realms || []); let newAvatar = null;
   const prev = el("span", {}); const showPrev = () => { prev.textContent = ""; if (newAvatar) { const a = el("span", { class: "av", style: "--s:64px" }); a.append(el("img", { src: URL.createObjectURL(newAvatar), alt: "" })); prev.append(a) } else prev.append(avatar(p.id, 64)) }; showPrev();
   const hIn = el("input", { class: "field", id: "pHandle", maxlength: "32" }); hIn.value = p.handle;
@@ -984,7 +1079,7 @@ function viewEdit() {
   const fileIn = el("input", { type: "file", id: "pAvatar", accept: OK_TYPES.join(","), style: "position:absolute;width:1px;height:1px;opacity:0" });
   fileIn.addEventListener("change", () => { const f = fileIn.files[0]; if (f && OK_TYPES.includes(f.type)) { newAvatar = f; showPrev() } else if (f) toast("Use PNG, JPEG, GIF or WebP.") });
   const err = el("div", { class: "err", role: "alert" }), saveBtn = el("button", { class: "btn primary", type: "submit", text: "Save profile" });
-  return el("div", { class: "profile" }, el("a", { class: "back", href: "#u/" + p.id, text: "← Back to my profile" }),
+  return el("div", { class: "profile" }, el("a", { class: "back", href: profilePath(p.id), text: "← Back to my profile" }),
     el("form", { class: "edit", onsubmit: async e => {
       e.preventDefault(); err.textContent = "";
       const h = hIn.value.trim().replace(/^@/, "");
@@ -995,7 +1090,7 @@ function viewEdit() {
         if (newAvatar) { upd.avatar_path = await uploadImage(newAvatar, "avatar-") }
         const { error } = await sb.from("profiles").update(upd).eq("id", p.id); if (error) throw error;
         if (newAvatar && isPath(p.avatar_path)) sb.storage.from("images").remove([p.avatar_path]);
-        await loadProfiles(); toast("Profile saved"); location.hash = "#u/" + p.id;
+        await loadProfiles(); toast("Profile saved"); go(profilePath(p.id));
       } catch (ex) { err.textContent = niceError(ex) } finally { saveBtn.disabled = false }
     } },
       el("div", { class: "eyebrow", text: "Edit your profile" }),
@@ -1005,7 +1100,7 @@ function viewEdit() {
       el("label", { class: "l" }, "Bio", bioIn),
       el("div", { class: "l" }, el("span", { class: "hint", text: "Topics you're drawn to" }), picks),
       el("label", { class: "switch", for: "pShow" }, showIn, el("div", {}, el("b", { text: "Show my posts on my profile" }), el("span", { text: "When off, other members can see your profile but not your list of ideas. Your ideas still appear in the main feed." }))),
-      err, el("div", { class: "row" }, saveBtn, el("a", { class: "btn", href: "#u/" + p.id, text: "Cancel" }))));
+      err, el("div", { class: "row" }, saveBtn, el("a", { class: "btn", href: profilePath(p.id), text: "Cancel" }))));
 }
 
 // ---------- message list (used by private messages) ----------
@@ -1072,13 +1167,13 @@ function viewInbox() {
   return wrap;
 }
 async function renderInbox() {
-  if (!state.user) { location.hash = "#login"; return }
+  if (!state.user) { go("/login", true); return }
   await loadInbox();
   const box = $("#inbox"); if (!box) return; box.textContent = "";
   if (!inbox.length) { box.append(el("div", { class: "empty" }, el("strong", { text: "No conversations yet." }), "Open a member's profile and tap Send message.")); return }
   inbox.forEach(t => {
     const unread = t.last.sender_id !== state.user.id && new Date(t.last.created_at).getTime() > Number(store(seenKey(t.id)) || 0);
-    box.append(el("a", { class: "thread-row" + (unread ? " unread" : ""), href: "#dm/" + t.id, style: "text-decoration:none;color:inherit" }, avatar(t.other, 40),
+    box.append(el("a", { class: "thread-row" + (unread ? " unread" : ""), href: "/messages/" + t.id, style: "text-decoration:none;color:inherit" }, avatar(t.other, 40),
       el("div", { class: "c" }, el("div", { class: "t", text: "@" + nameOf(t.other) }), el("div", { class: "s", text: (t.last.sender_id === state.user.id ? "You: " : "") + t.last.body })),
       el("time", { class: "hint", text: ago(t.last.created_at) })));
   });
@@ -1092,10 +1187,10 @@ async function startDm(otherId) {
     if (r.error) { const again = await sb.from("dm_threads").select("id").eq("user_a", a).eq("user_b", b).maybeSingle(); data = again.data; if (!data) return toast(niceError(r.error)) }
     else data = r.data;
   }
-  location.hash = "#dm/" + data.id;
+  go("/messages/" + data.id);
 }
 function viewDm() {
-  if (!state.user) { setTimeout(() => location.hash = "#login"); return el("div") }
+  if (!state.user) { setTimeout(() => go("/login", true)); return el("div") }
   const list = el("div", { class: "msgs", id: "msgs", "aria-live": "polite" }, el("div", { class: "chat-empty", text: "Loading…" }));
   const inp = el("input", { class: "field", id: "dmInput", maxlength: "2000", placeholder: "Write a private message…", autocomplete: "off" });
   const form = el("form", { class: "chat-form", onsubmit: async e => {
@@ -1104,7 +1199,7 @@ function viewDm() {
     if (error) { inp.value = body; return toast(niceError(error)) }
     if (!dmMsgs.some(x => x.id === data.id)) { dmMsgs.push(data); renderMsgs(dmMsgs, "dm") } inp.focus();
   } }, inp, el("button", { class: "btn primary", type: "submit", text: "Send" }));
-  return el("div", { class: "chat" }, el("a", { class: "back", href: "#messages", text: "← All messages" }),
+  return el("div", { class: "chat" }, el("a", { class: "back", href: "/messages", text: "← All messages" }),
     el("div", { class: "chat-head" }, el("div", { id: "dmHead" }, el("div", { class: "eyebrow", text: "Private conversation" }), el("h2", { text: "…" }))),
     el("div", { class: "chat-box" }, list, form),
     el("div", { class: "private-note", text: "🔒 Only the two of you can read this conversation." }));
@@ -1114,7 +1209,7 @@ async function openDm(threadId) {
   const { data: t } = await sb.from("dm_threads").select("id,user_a,user_b").eq("id", threadId).maybeSingle();
   if (!t) { $("#msgs") && $("#msgs").replaceChildren(el("div", { class: "chat-empty", text: "This conversation isn't available." })); return }
   const other = t.user_a === state.user.id ? t.user_b : t.user_a;
-  const head = $("#dmHead"); if (head) head.replaceChildren(el("div", { class: "eyebrow", text: "Private conversation" }), el("h2", {}, el("a", { href: "#u/" + other, style: "color:inherit;text-decoration:none", text: "@" + nameOf(other) })));
+  const head = $("#dmHead"); if (head) head.replaceChildren(el("div", { class: "eyebrow", text: "Private conversation" }), el("h2", {}, el("a", { href: profilePath(other), style: "color:inherit;text-decoration:none", text: "@" + nameOf(other) })));
   const { data } = await sb.from("dm_messages").select("id,thread_id,sender_id,body,created_at").eq("thread_id", threadId).order("created_at", { ascending: false }).limit(300);
   dmMsgs = (data || []).reverse(); renderMsgs(dmMsgs, "dm");
   store(seenKey(threadId), Date.now()); await loadInbox(); render();
@@ -1125,6 +1220,7 @@ function viewPost() {
   const id = state.view.arg, p = state.posts.find(x => x.id === id);
   const wrap = el("div", { class: "profile" }, back());
   if (!p) { wrap.append(el("div", { class: "empty" }, el("strong", { text: state.postMissing === id ? "This post isn't here anymore." : "Loading…" }), state.postMissing === id ? "It may have been deleted." : "")); return wrap }
+  if (location.pathname !== postPath(p.id, p.title)) history.replaceState(null, "", postPath(p.id, p.title));
   wrap.append(postCard(p, "single"));
   return wrap;
 }
@@ -1157,7 +1253,7 @@ function notifText(n) {
   return m === 1 ? `Your post ${title} got its first upvote` : `Your post ${title} reached ${m} points`;
 }
 function viewNotifs() {
-  if (!state.user) { setTimeout(() => location.hash = "#login"); return el("div") }
+  if (!state.user) { setTimeout(() => go("/login", true)); return el("div") }
   const wrap = el("div", { class: "chat" }, back(),
     el("div", { class: "chat-head" }, el("div", {}, el("div", { class: "eyebrow", text: "Activity" }), el("h2", { text: "Notifications" }),
       el("p", { text: "Replies to your posts and threads, and milestones when your ideas and evidence take off." })),
@@ -1167,7 +1263,7 @@ function viewNotifs() {
       } }) : null));
   const list = el("div", { class: "inbox" });
   if (!state.notifs.length) list.append(el("div", { class: "empty" }, el("strong", { text: "Nothing yet." }), "When someone replies to you, your post gets upvotes or people say “me too” on your Vault case, you'll see it here."));
-  state.notifs.forEach(n => list.append(el("a", { class: "thread-row" + (n.read && !(state.freshIds && state.freshIds.has(n.id)) ? "" : " unread"), href: n.type === "metoo" ? "#case/" + n.case_id : "#post/" + n.post_id, style: "text-decoration:none;color:inherit" },
+  state.notifs.forEach(n => list.append(el("a", { class: "thread-row" + (n.read && !(state.freshIds && state.freshIds.has(n.id)) ? "" : " unread"), href: n.type === "metoo" ? (n.vault_cases ? casePath(n.vault_cases.case_no) : "/vault") : postPath(n.post_id, n.posts && n.posts.title), style: "text-decoration:none;color:inherit" },
     n.type === "milestone" || n.type === "metoo" ? wingBadge(40) : avatar(n.actor_id, 40),
     el("div", { class: "c" }, el("div", { class: "t", text: notifText(n) }), el("div", { class: "s", text: ago(n.created_at) })))));
   wrap.append(list); return wrap;
@@ -1206,16 +1302,18 @@ async function loadMyMetoo() {
   (data || []).forEach(r => state.myMetoo.add(r.case_id));
 }
 const refreshCases = debounce(async () => { await loadCases(); if (state.composing) fillCasePick(); render() }, 400);
-async function openCase(id) {
-  if (state.cases.some(x => x.id === id)) return;
-  const { data } = await sb.from("vault_cases").select(CASE_COLS).eq("id", id).maybeSingle();
-  if (data) state.cases.push(data); else state.caseMissing = id;
+async function openCase(no) {
+  const n = Number(no);
+  if (location.pathname !== casePath(n)) history.replaceState(null, "", casePath(n));
+  if (state.cases.some(x => x.case_no === n)) return;
+  const { data } = await sb.from("vault_cases").select(CASE_COLS).eq("case_no", n).maybeSingle();
+  if (data) state.cases.push(data); else state.caseMissing = n;
   render();
 }
 
 function caseCard(c) {
   const img = (c.images || []).filter(isPath)[0];
-  return el("a", { class: "case-card", href: "#case/" + c.id },
+  return el("a", { class: "case-card", href: casePath(c.case_no) },
     img ? el("div", { class: "case-thumb" }, el("img", { src: imgUrl(img), alt: "", loading: "lazy" }),
       (c.images || []).length > 1 ? el("span", { class: "photo-count", text: (c.images || []).length + " photos" }) : null) : null,
     el("div", { class: "case-body" },
@@ -1240,7 +1338,7 @@ function viewVault() {
   const wrap = el("div", { class: "vault" }, back(),
     el("div", { class: "chat-head" }, el("div", {}, el("div", { class: "eyebrow", text: "Evidence archive" }), el("h2", { text: "The Vault" }),
       el("p", { text: "First-hand evidence of the weird and unexplainable, logged case by case. If it happened to you too, say so." })),
-      el("a", { class: "btn primary", href: state.me ? "#vault/new" : "#join", text: "Log evidence" })),
+      el("a", { class: "btn primary", href: state.me ? "/vault/new" : "/join", text: "Log evidence" })),
     el("div", { class: "vault-tools" }, search, seg), types, grid);
   renderCaseGrid(grid);
   return wrap;
@@ -1261,10 +1359,10 @@ function renderCaseGrid(grid = $("#caseGrid")) {
 }
 
 function viewCase() {
-  const id = state.view.arg, c = state.cases.find(x => x.id === id);
-  const wrap = el("div", { class: "profile" }, el("a", { class: "back", href: "#vault", text: "← Back to the Vault" }));
+  const no = Number(state.view.arg), c = state.cases.find(x => x.case_no === no);
+  const wrap = el("div", { class: "profile" }, el("a", { class: "back", href: "/vault", text: "← Back to the Vault" }));
   if (!c) {
-    const gone = state.caseMissing === id;
+    const gone = state.caseMissing === no;
     wrap.append(el("div", { class: "empty" }, el("strong", { text: gone ? "This case isn't in the Vault anymore." : "Opening the case…" }), gone ? "It may have been removed." : ""));
     return wrap;
   }
@@ -1273,11 +1371,11 @@ function viewCase() {
   const metooBtn = el("button", { class: "btn " + (me ? "on" : "primary"), type: "button", "aria-pressed": String(me), disabled: mine,
     title: mine ? "You can't say “me too” on your own case" : "", onclick: () => toggleMetoo(c), text: me ? "✓ This happened to me too" : "This happened to me too" });
   const acts = el("div", { class: "actions" }, metooBtn, el("span", { class: "metoo-count", text: metooLabel(c.metoo_count) }),
-    el("button", { class: "chip", type: "button", text: "Share", onclick: () => shareLink("#case/" + c.id) }));
+    el("button", { class: "chip", type: "button", text: "Share", onclick: () => shareLink(casePath(c.case_no)) }));
   if (state.user && (mine || state.isAdmin)) acts.append(el("button", { class: "chip del", type: "button", text: "Delete case", onclick: e => delCase(c, e.currentTarget) }));
   wrap.append(el("article", { class: "post case-full" },
     el("div", { class: "case-top" }, el("span", { class: "case-no big", text: caseNo(c.case_no) }), el("span", { class: "tag", text: caseTypeName(c.type) })),
-    el("h3", { class: "case-title", text: c.title }),
+    el("h1", { class: "case-title", text: c.title }),
     el("dl", { class: "facts" },
       el("dt", { text: "When it happened" }), el("dd", { text: c.happened_on ? fmtDay(c.happened_on) : "Not given" }),
       el("dt", { text: "Witnesses" }), el("dd", { text: c.witnessed === "others" ? "Others were there too" : "Just me" }),
@@ -1302,21 +1400,21 @@ async function toggleMetoo(c) {
   const { error } = had ? await sb.from("case_metoo").delete().eq("case_id", c.id).eq("user_id", state.user.id) : await sb.from("case_metoo").insert({ case_id: c.id });
   if (error) { flip(); render(); toast(niceError(error)) }
 }
-async function shareLink(hash) {
-  const url = location.origin + location.pathname + hash;
+async function shareLink(path) {
+  const url = location.origin + path;
   try { await navigator.clipboard.writeText(url); toast("Link copied") } catch (e) { window.prompt("Copy this link:", url) }
 }
-function discussCase(id) { if (!needMember()) return; state.attach = [id]; state.pendingCompose = true; location.hash = "" }
+function discussCase(id) { if (!needMember()) return; state.attach = [id]; state.pendingCompose = true; go("/") }
 async function delCase(c, btn) {
   if (!btn.dataset.confirm) { btn.dataset.confirm = "1"; btn.textContent = "Tap again to delete"; setTimeout(() => { if (btn.isConnected) { delete btn.dataset.confirm; btn.textContent = "Delete case" } }, 4000); return }
   const { error } = await sb.from("vault_cases").delete().eq("id", c.id);
   if (error) return toast(niceError(error));
   const imgs = (c.images || []).filter(isPath); if (imgs.length) sb.storage.from("images").remove(imgs);
-  state.cases = state.cases.filter(x => x.id !== c.id); toast("Case removed from the Vault"); location.hash = "#vault";
+  state.cases = state.cases.filter(x => x.id !== c.id); toast("Case removed from the Vault"); go("/vault");
 }
 
 function viewLogCase() {
-  if (!state.me) { setTimeout(() => location.hash = state.user ? "#welcome" : "#join"); return el("div") }
+  if (!state.me) { setTimeout(() => go(state.user ? "/welcome" : "/join", true)); return el("div") }
   const lf = (text, input) => el("label", { class: "l" }, text, input);
   const type = el("select", { class: "field", id: "cType", required: true }, el("option", { value: "", text: "Choose a type" }), CASE_TYPES.map(([v, n]) => el("option", { value: v, text: n })));
   const title = el("input", { class: "field", id: "cTitle", maxlength: "140", required: true, placeholder: "Saw 11:11 on three different clocks in one hour" });
@@ -1339,7 +1437,7 @@ function viewLogCase() {
     fileIn.value = ""; drawThumbs();
   });
   const err = el("div", { class: "err", role: "alert" }), btn = el("button", { class: "btn primary", type: "submit", text: "Log it in the Vault" });
-  return el("div", { class: "profile" }, el("a", { class: "back", href: "#vault", text: "← Back to the Vault" }),
+  return el("div", { class: "profile" }, el("a", { class: "back", href: "/vault", text: "← Back to the Vault" }),
     el("form", { class: "edit", onsubmit: async e => {
       e.preventDefault(); err.textContent = "";
       const v = video.value.trim();
@@ -1359,7 +1457,7 @@ function viewLogCase() {
         if (v) row.video_url = v;
         const { data, error } = await sb.from("vault_cases").insert(row).select(CASE_COLS).single();
         if (error) throw error;
-        state.cases.unshift(data); toast("Logged as " + caseNo(data.case_no)); location.hash = "#case/" + data.id;
+        state.cases.unshift(data); toast("Logged as " + caseNo(data.case_no)); go(casePath(data.case_no));
       } catch (ex) {
         if (uploaded.length) sb.storage.from("images").remove(uploaded);
         err.textContent = niceError(ex);
@@ -1373,7 +1471,11 @@ function viewLogCase() {
       el("div", { class: "l" }, el("span", { class: "hint", text: "Photos (optional, up to " + MAX_CASE_IMG + ")" }), el("div", { class: "row", style: "align-items:center" }, el("label", { class: "btn", for: "cImg" }, "Add photos", fileIn)), thumbs),
       lf("Video link (optional)", video),
       el("p", { class: "form-note", text: "Photos are cleaned of hidden location data before they upload. Please leave out other people's faces, license plates and addresses." }),
-      err, el("div", { class: "row" }, btn, el("a", { class: "btn", href: "#vault", text: "Cancel" }))));
+      err, el("div", { class: "row" }, btn, el("a", { class: "btn", href: "/vault", text: "Cancel" }))));
+}
+
+function viewNotFound() {
+  return el("div", {}, back(), el("div", { class: "empty" }, el("strong", { text: "This page doesn't exist." }), "It may have been moved, or the link has a typo."));
 }
 
 // ---------- start up ----------
@@ -1381,7 +1483,7 @@ async function boot() {
   render();
   let booted = false, lastUid = null;
   sb.auth.onAuthStateChange((event, session) => {
-    if (event === "PASSWORD_RECOVERY") { setTimeout(() => { location.hash = "#reset" }, 0); return }
+    if (event === "PASSWORD_RECOVERY") { setTimeout(() => go("/reset"), 0); return }
     const uid = session && session.user ? session.user.id : null;
     if (!booted || uid === lastUid) return;
     lastUid = uid;
@@ -1392,7 +1494,9 @@ async function boot() {
   lastUid = session && session.user ? session.user.id : null;
   booted = true;
   await setUser(session && session.user);
-  if (/access_token|error_description/.test(location.hash)) history.replaceState(null, "", location.pathname + location.search);
+  const oldHash = location.hash.replace(/^#/, "");
+  if (/access_token|error_description|refresh_token/.test(oldHash)) history.replaceState(null, "", location.pathname + location.search);
+  else if (oldHash) history.replaceState(null, "", legacyPath(oldHash));
   route();
   sb.channel("public-feed")
     .on("postgres_changes", { event: "*", schema: "public", table: "posts" }, refreshFeed)
