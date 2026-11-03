@@ -70,6 +70,7 @@ Some new features come with an update script. Run each one once, in number order
 |---|---|
 | `update-01-votes-notifications.sql` | Upvotes/downvotes and the notification bell |
 | `update-02-vault.sql` | The Vault: evidence cases, "me too," and citing cases in ideas |
+| `update-03-vault-20-photos.sql` | Up to 20 photos per Vault case |
 
 If you ever rebuild the database from scratch, run `setup.sql` first, then each update file in order.
 
